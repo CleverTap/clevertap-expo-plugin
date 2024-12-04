@@ -1,0 +1,75 @@
+{
+  "name": "clevertap-expo-plugin",
+  "version": "0.1.0",
+  "description": "The CleverTap Expo Plugin enables integration of the CleverTap SDK into your Expo projects, to leverage CleverTap's features in your React Native applications.",
+  "main": "./app.plugin.js",
+  "scripts": {
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "start": "expo start --dev-client"
+  },
+  "keywords": [
+    "expo",
+    "clevertap",
+    "push",
+    "notifications",
+    "EAS"
+  ],
+  "author": "Clevertap",
+  "license": "MIT",
+  "homepage": "https://github.com/CleverTap/clevertap-react-native#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.25.9",
+    "@babel/core": "^7.20.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-typescript": "^7.26.0",
+    "@types/node": "^22.8.2",
+    "@types/react": "^18.0.25",
+    "@types/react-native": "^0.73.0",
+    "babel-plugin-module-resolver": "^5.0.2",
+    "expo": "~51.0.28",
+    "expo-module-scripts": "^3.5.2",
+    "expo-modules-core": "^1.12.24",
+    "jest": "^29.2.1",
+    "jest-expo": "^48.0.1",
+    "react-test-renderer": "18.2.0",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@expo/config-plugins": "^8.0.10",
+    "@expo/metro-runtime": "^3.1.1",
+    "@expo/vector-icons": "^13.0.0",
+    "@react-navigation/bottom-tabs": "^6.0.5",
+    "@react-navigation/native": "^6.0.2",
+    "@react-navigation/native-stack": "^6.1.0",
+    "clevertap-react-native": "^3.0.0",
+    "expo": "~51.0.28",
+    "expo-asset": "~8.10.1",
+    "expo-build-properties": "^0.12.5",
+    "expo-constants": "~15.4.5",
+    "expo-dev-client": "~4.0.28",
+    "expo-file-system": "^16.0.7",
+    "expo-linking": "~6.2.2",
+    "expo-module-scripts": "^3.5.2",
+    "expo-notifications": "~0.27.6",
+    "expo-splash-screen": "~0.26.3",
+    "expo-status-bar": "~1.6.0",
+    "expo-system-ui": "~2.9.3",
+    "expo-web-browser": "~12.8.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-native": "0.74.5",
+    "react-native-radio-buttons-group": "^3.0.1",
+    "react-native-safe-area-context": "4.8.2",
+    "react-native-screens": "~3.29.0",
+    "react-native-web": "~0.19.6"
+  },
+  "private": true,
+  "expo": {
+    "autolinking": {
+      "nativeModulesDir": ".."
+    }
+  }
+}
