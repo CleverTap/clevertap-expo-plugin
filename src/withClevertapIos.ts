@@ -314,7 +314,7 @@ import {
       // Add development teams to both your target and the original project      
       xcodeProject.addTargetAttribute("DevelopmentTeam", clevertapProps?.devTeam, nceTarget);
       xcodeProject.addTargetAttribute("DevelopmentTeam", clevertapProps?.devTeam);
-      CleverTapLog.log('Added NotificationContentExtension target');
+      CleverTapLog.log('Added CTNotificationContentExtension target');
       return newConfig;
     })
   };

@@ -1,4 +1,4 @@
-build/
+
 node_modules/
 .DS_Store
 
@@ -6,3 +6,5 @@ node_modules/
 #plugin
 package-lock.json
 
+ios/
+android/
