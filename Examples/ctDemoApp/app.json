@@ -35,12 +35,18 @@
         {
           "accountId": "W9R-486-4W5Z",
           "accountToken": "6b4-2c0",
+          "accountRegion": "eu1",
           "logLevel": 2,
-          "region": "eu1",
-          "enableCleverTapServiceExtension": true,
-          "enableCleverTapContentExtension": true,
           "devTeam": "A5J34NR598",
-          "iPhoneDeploymentTarget": "15.1"
+          "iPhoneDeploymentTarget": "15.1",
+          "enableRichMedia": true,
+          "enablePushImpression": true,
+          "enablePushTemplate": true,
+          "profileProps": {
+            "name": "test3",
+            "identity": 123455,
+            "email": "test3@gmail.com"
+          }
         }
       ],
       [

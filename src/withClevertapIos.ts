@@ -24,7 +24,7 @@ import {
     NCE_PODFILE_REGEX,
     NCE_PODFILE_SNIPPET
   } from "../support/IOSConstants";
-  import { CleverTapPluginProps } from "../types/types";
+  import { Profile, CleverTapPluginProps } from "../types/types";
   import { CleverTapLog } from "../support/CleverTapLog";
   import { FileManager } from "../support/FileManager";
   import  NSUpdaterManager from "../support/NSUpdaterManager";
@@ -112,7 +112,7 @@ import {
         }
 
         // Add CTNotificationServiceExtension if it doesn't already exist
-        if (clevertapProps.enableCleverTapServiceExtension && !podfileContents.match(NSE_PODFILE_REGEX)) {
+        if ((clevertapProps.enableRichMedia || clevertapProps.enablePushImpression) && !podfileContents.match(NSE_PODFILE_REGEX)) {
           fs.appendFile(podfilePath, NSE_PODFILE_SNIPPET, (err) => {
             if (err) {
               CleverTapLog.error("Error writing CTNotificationServiceExtension to Podfile");
@@ -121,7 +121,7 @@ import {
 
 
           // Add CTNotificationContentExtension if it doesn't already exist
-        if (clevertapProps.enableCleverTapContentExtension && !podfileContents.match(NCE_PODFILE_REGEX)) {
+        if (clevertapProps.enablePushTemplate && !podfileContents.match(NCE_PODFILE_REGEX)) {
           fs.appendFile(podfilePath, NCE_PODFILE_SNIPPET, (err) => {
             if (err) {
               CleverTapLog.error("Error writing CTNotificationContentExtension to Podfile");
@@ -158,10 +158,6 @@ import {
     return withXcodeProject(config, newConfig => {
       const xcodeProject = newConfig.modResults
   
-      // if (!clevertapProps.enableCleverTapServiceExtension) {
-      //   CleverTapLog.log("Set `enableCleverTapServiceExtension` flag to enable CTNotificationServiceExtension");
-      //   return newConfig;
-      // }
       if (!!xcodeProject.pbxTargetByName(NSE_TARGET_NAME)) {
         CleverTapLog.log(`${NSE_TARGET_NAME} already exists in project. Skipping...`);
         return newConfig;
@@ -353,10 +349,108 @@ import {
         await nseUpdater.updateNEBundleVersion(config.ios?.buildNumber ?? DEFAULT_BUNDLE_VERSION);
         await nseUpdater.updateNEBundleShortVersion(config?.version ?? DEFAULT_BUNDLE_SHORT_VERSION);
         CleverTapLog.log('Added NotificationServiceExtension files into target folder');
+        //Adds push impression code
+        if (clevertapProps.enablePushImpression) {
+          updatePushImpressionNSE(iosPath, clevertapProps);
+        }
+        
+        //Adds Rich media code
+        if (clevertapProps.enableRichMedia) {
+          updateRichMediaNSE(iosPath, clevertapProps);        
+        }
         return config;
       },
     ]);
   };
+
+/**
+ * Update NotificationServiceExtension with CleverTap code to enable rich media
+ */
+  function updateRichMediaNSE(
+    iosPath: string,
+    clevertapProps: CleverTapPluginProps
+  ): void {
+    const filePath = `${iosPath}/${NSE_TARGET_NAME}/${NSE_SOURCE_FILE}`;
+    // Check if the service file exists
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`Could not locate NotificationServiceExtension file at ${filePath}`);
+    }
+  
+    let notificationServiceContent = fs.readFileSync(filePath, 'utf-8');
+  
+    // Add CleverTap integration if not already present
+    if (!notificationServiceContent.includes('CTNotificationService')) {
+      //Update import
+      notificationServiceContent = notificationServiceContent.replace(
+       `import UserNotifications`,
+       `import CTNotificationService`
+     )
+
+      //Update Base class
+      notificationServiceContent = notificationServiceContent.replace(
+       `UNNotificationServiceExtension`,
+        `CTNotificationServiceExtension`);
+
+      console.log(notificationServiceContent, filePath)
+      fs.writeFileSync(filePath, notificationServiceContent);
+      console.log('Updated NotificationServiceExtension successfully.');
+     } else {
+         console.log("CTNotificationService already exists, not updating the code");
+     }
+  }
+
+/**
+ * Update NotificationServiceExtension with CleverTap code to enable push impressions
+ */
+  function updatePushImpressionNSE(
+    iosPath: string,
+    clevertapProps: CleverTapPluginProps
+  ): void {
+    const filePath = `${iosPath}/${NSE_TARGET_NAME}/${NSE_SOURCE_FILE}`;
+    // Check if the service file exists
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`Could not locate NotificationServiceExtension file at ${filePath}`);
+    }
+  
+    let notificationServiceContent = fs.readFileSync(filePath, 'utf-8');
+    const profile = clevertapProps.profileProps;
+  
+    // Validate profile properties
+    if (!(profile?.name && profile.identity && profile.email)) {
+      throw new Error(`Some or all properties are missing from profile: ${JSON.stringify(profile)}`);
+    }
+  
+    // Add CleverTap integration if not already present
+    if (!notificationServiceContent.includes('recordNotificationViewedEvent')) {
+      console.log('Adding CleverTap integration to NotificationServiceExtension.');
+  
+      // Update import
+      notificationServiceContent = notificationServiceContent.replace(
+        `import UserNotifications`,
+        `import UserNotifications
+         import CleverTapSDK`
+      );
+  
+      // Add CleverTap event tracking code
+      notificationServiceContent = notificationServiceContent.replace(
+        `super.didReceive(request, withContentHandler: contentHandler)`,
+        `let profile: Dictionary<String, AnyObject> = [
+         "Name": "${profile.name}" as AnyObject,
+         "Identity": ${profile.identity} as AnyObject,
+         "Email": "${profile.email}" as AnyObject]
+        
+         CleverTap.sharedInstance()?.profilePush(profile)
+         CleverTap.sharedInstance()?.recordNotificationViewedEvent(withData: request.content.userInfo)
+         super.didReceive(request, withContentHandler: contentHandler)`
+      );
+  
+      // Write the updated content back to the file
+      fs.writeFileSync(filePath, notificationServiceContent, 'utf-8');
+      console.log('Updated NotificationServiceExtension successfully.');
+    } else {
+      console.log('recordNotificationViewedEvent already exists, not updating the code.');
+    }
+  }
 
  /**
  * Copy NotificationContentExtension with CleverTap code files into target folder
@@ -398,23 +492,17 @@ import {
     ]);
   };
 
-
 export const withCleverTapIos: ConfigPlugin<CleverTapPluginProps> = (config, clevertapProps) => {
     config = withRemoteNotificationsPermissions(config, clevertapProps);
 
-    if (clevertapProps.enableCleverTapContentExtension) {
+    if (clevertapProps.enablePushTemplate) {
       config = withCleverTapNCE(config, clevertapProps);
       config = withCleverTapXcodeProjectNCE(config, clevertapProps);
-    } else {
-      CleverTapLog.log("Set `enableCleverTapContentExtension` flag to enable CTNotificationContentExtension");
-    }
-
-    if (clevertapProps.enableCleverTapServiceExtension) {
+    } 
+    if (clevertapProps.enableRichMedia || clevertapProps.enablePushImpression) {
       config = withCleverTapNSE(config, clevertapProps);
       config = withCleverTapXcodeProjectNSE(config, clevertapProps);
-    } else {
-      CleverTapLog.log("Set `enableCleverTapServiceExtension` flag to enable CTNotificationServiceExtension");
-    }
+    } 
 
     config = withCleverTapPod(config, clevertapProps);
     config = withCleverTapInfoPlist(config, clevertapProps);
