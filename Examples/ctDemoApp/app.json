@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "ctDemoApp",
-    "slug": "ctDemoApp",
+    "slug": "ctdemoapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
