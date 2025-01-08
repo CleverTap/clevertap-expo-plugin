@@ -46,6 +46,21 @@
             "name": "test3",
             "identity": 123455,
             "email": "test3@gmail.com"
+          },
+          "templateIdentifier": "templates",
+          "enableURLDelegate": true,
+          "notificationCategory": {
+            "identifier": "CTNotification",
+            "actions": [
+              {
+                "identifier": "action1",
+                "title": "title1"
+              },
+              {
+                "identifier": "action2",
+                "title": "title2"
+              }
+            ]
           }
         }
       ],

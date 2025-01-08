@@ -58,8 +58,29 @@ export type CleverTapPluginProps = {
       * (optional) This value should be set to push client profile properties to record `Push Impression`.
  .    */
      profileProps?: Profile;
+     /**
+      * (optional) This value should be set when client wants to use notification category.
+      */
+     notificationCategory?: NotificationCategory;
+     /**
+      * (optional) This value should be set when client wants to use Custom Templates.
+      */
+     templateIdentifier?: string;
+     /**
+      * (optional) This value should be set when client wants to handle custom deeplink / external URL.
+      */
+     enableURLDelegate?: boolean;
    };
 
+   export type NotificationCategory = {
+     identifier: string;
+     actions: [NotificationAction];
+    }
+    export type NotificationAction = {
+     identifier: string;
+     title: string;
+    }
+ 
    export type Profile = {
      name: string;
      identity: number;
