@@ -3,7 +3,8 @@ import {
     withInfoPlist,
     withAppDelegate,
     withXcodeProject,
-    withDangerousMod
+    withDangerousMod,
+    withEntitlementsPlist
   } from "@expo/config-plugins";
   import * as fs from 'fs';
   import * as path from 'path';
@@ -253,7 +254,7 @@ import {
           buildSettingsObj.DEVELOPMENT_TEAM = clevertapProps?.devTeam;
           buildSettingsObj.IPHONEOS_DEPLOYMENT_TARGET = clevertapProps?.iPhoneDeploymentTarget ?? IPHONEOS_DEPLOYMENT_TARGET;
           buildSettingsObj.TARGETED_DEVICE_FAMILY = clevertapProps?.deviceFamily ?? TARGETED_DEVICE_FAMILY;
-          // buildSettingsObj.CODE_SIGN_ENTITLEMENTS = `${NSE_TARGET_NAME}/${NSE_TARGET_NAME}.entitlements`;
+          buildSettingsObj.CODE_SIGN_ENTITLEMENTS = `${NSE_TARGET_NAME}/${NSE_TARGET_NAME}.entitlements`;
           buildSettingsObj.CODE_SIGN_STYLE = "Automatic";
           buildSettingsObj.SWIFT_VERSION = '5.0';
         }
@@ -380,8 +381,8 @@ import {
         await FileManager.copyFile(`${sourcePath}`, targetFile);
         
         /* MODIFY COPIED EXTENSION FILES */
-        const nseUpdater = new NSUpdaterManager(`${iosPath}/${NSE_TARGET_NAME}`,`${NSE_TARGET_NAME}-Info.plist`);
-        // await nseUpdater.updateNSEEntitlements(`group.${config.ios?.bundleIdentifier}.clevertap`)
+        const nseUpdater = new NSUpdaterManager(`${iosPath}/${NSE_TARGET_NAME}`,`${NSE_TARGET_NAME}-Info.plist`, `${NSE_TARGET_NAME}.entitlements`);
+        await nseUpdater.updateNSEEntitlements(`group.${config.ios?.bundleIdentifier}.clevertap`)
         await nseUpdater.updateNEBundleVersion(config.ios?.buildNumber ?? DEFAULT_BUNDLE_VERSION);
         await nseUpdater.updateNEBundleShortVersion(config?.version ?? DEFAULT_BUNDLE_SHORT_VERSION);
         CleverTapLog.log('Added NotificationServiceExtension files into target folder');
@@ -516,7 +517,7 @@ import {
         await FileManager.copyFile(`${sourcePath}`, targetFile);
         
         /* MODIFY COPIED EXTENSION FILES */
-        const nseUpdater = new NSUpdaterManager(`${iosPath}/${NCE_TARGET_NAME}`,`${NCE_TARGET_NAME}-Info.plist`);
+        const nseUpdater = new NSUpdaterManager(`${iosPath}/${NCE_TARGET_NAME}`,`${NCE_TARGET_NAME}-Info.plist`, );
         // await nseUpdater.updateNSEEntitlements(`group.${config.ios?.bundleIdentifier}.clevertap`)
         await nseUpdater.updateNEBundleVersion(config.ios?.buildNumber ?? DEFAULT_BUNDLE_VERSION);
         await nseUpdater.updateNEBundleShortVersion(config?.version ?? DEFAULT_BUNDLE_SHORT_VERSION);

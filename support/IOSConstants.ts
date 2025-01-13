@@ -13,7 +13,8 @@ export const BUNDLE_VERSION_TEMPLATE_REGEX = /{{BUNDLE_VERSION}}/gm;
 export const NSE_TARGET_NAME = "CTNotificationServiceExtension";
 export const NSE_SOURCE_FILE = "NotificationService.swift"
 export const NSE_EXT_FILES = [
-  `${NSE_TARGET_NAME}-Info.plist`
+  `${NSE_TARGET_NAME}-Info.plist`,
+  `${NSE_TARGET_NAME}.entitlements`
 ];
 export const NSE_PODFILE_SNIPPET = `
 target 'CTNotificationServiceExtension' do
