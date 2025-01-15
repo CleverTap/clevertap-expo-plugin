@@ -25,17 +25,21 @@ import {
     NCE_PODFILE_REGEX,
     NCE_PODFILE_SNIPPET
   } from "../support/IOSConstants";
-  import { Profile, NotificationAction, CleverTapPluginProps } from "../types/types";
+  import { CleverTapPluginProps } from "../types/types";
   import { CleverTapLog } from "../support/CleverTapLog";
   import { FileManager } from "../support/FileManager";
   import  NSUpdaterManager from "../support/NSUpdaterManager";
+  import {addCleverTapImportsAutoIntegrate, 
+          addCleverTapAutoIntegrate,
+          addCleverTapImportsTemplates,
+          addCleverTapTemplates,
+          addCleverTapNotificationCategory,
+          addCleverTapURLDelegate } from "../support/UpdateAppDelegate";
 
  /**
  * Add "Background Modes -> Remote notifications"
  */
-  const withRemoteNotificationsPermissions: ConfigPlugin<CleverTapPluginProps> = (
-    config
-  ) => {
+  const withRemoteNotificationsPermissions: ConfigPlugin<CleverTapPluginProps> = ( config ) => {
     const BACKGROUND_MODE_KEYS = ["remote-notification"];
     return withInfoPlist(config, (newConfig) => {
       if (!Array.isArray(newConfig.modResults.UIBackgroundModes)) {
@@ -46,7 +50,6 @@ import {
           newConfig.modResults.UIBackgroundModes.push(key);
         }
       }
-  
       return newConfig;
     });
   };
@@ -60,66 +63,27 @@ import {
       let appDelegate = config.modResults.contents;
       // Adds imports at the top
       if (!appDelegate.includes('[CleverTap autoIntegrate]')) {
-        config.modResults.contents = appDelegate.replace(
-          `#import "AppDelegate.h"`,
-          `#import "AppDelegate.h"
-           #import <UserNotifications/UserNotifications.h>
-           #import "CleverTap.h"
-           #import "CleverTapReactManager.h"`
-        );
-
-        appDelegate = config.modResults.contents;
-        // Adds CleverTap autoIntegrate
-        config.modResults.contents = appDelegate.replace(
-          `return [super application:application didFinishLaunchingWithOptions:launchOptions];`,
-          `#ifdef DEBUG
-            [CleverTap setDebugLevel:CleverTapLogDebug];
-            #endif
-            [CleverTap autoIntegrate];
-            [[CleverTapReactManager sharedInstance] applicationDidLaunchWithOptions:launchOptions];
-            return [super application:application didFinishLaunchingWithOptions:launchOptions];`
-        );
+        config.modResults.contents =  addCleverTapImportsAutoIntegrate(appDelegate)
+        appDelegate =  addCleverTapAutoIntegrate(appDelegate)
       }
       
       // Adds Custom template
       appDelegate = config.modResults.contents;
       if (!appDelegate.includes('registerCustomTemplates') && clevertapProps.templateIdentifier) {
-        config.modResults.contents = appDelegate.replace(
-        `[CleverTap autoIntegrate];`,
-        `[CleverTapReactCustomTemplates registerCustomTemplates:@"${clevertapProps.templateIdentifier}", nil];
-         [CleverTap autoIntegrate];`
-        );
+        config.modResults.contents = addCleverTapImportsTemplates(appDelegate)
         appDelegate = config.modResults.contents;
-        config.modResults.contents = appDelegate.replace(
-          `#import "CleverTapReactManager.h"`,
-          `#import "CleverTapReactManager.h"
-           #import "CleverTapReactCustomTemplates.h"`
-        );
+        config.modResults.contents = addCleverTapTemplates(appDelegate, clevertapProps.templateIdentifier)
       }
      // Adds UNNotificationCategory code
-     appDelegate = config.modResults.contents;
       if (!appDelegate.includes('UNNotificationCategory') && clevertapProps.notificationCategory?.identifier && clevertapProps.notificationCategory?.actions.length) {
-        const notificationSetupCode = generateNotificationSetupCode(clevertapProps.notificationCategory?.identifier, clevertapProps.notificationCategory?.actions);
-        config.modResults.contents = appDelegate.replace(
-        `[[CleverTapReactManager sharedInstance] applicationDidLaunchWithOptions:launchOptions];`,
-        `${notificationSetupCode}\n [[CleverTapReactManager sharedInstance] applicationDidLaunchWithOptions:launchOptions];`
-        );
+        appDelegate = config.modResults.contents;
+        config.modResults.contents =  addCleverTapNotificationCategory(appDelegate, clevertapProps.notificationCategory?.identifier, clevertapProps.notificationCategory?.actions)
       }
 
      // Adds CleverTapURLDelegate code
-     appDelegate = config.modResults.contents;
       if (!appDelegate.includes('CleverTapURLDelegate.h') && clevertapProps.enableURLDelegate) {
-        config.modResults.contents = appDelegate.replace(
-          `@implementation AppDelegate`,
-          `@implementation AppDelegate \n - (BOOL)shouldHandleCleverTapURL:(NSURL *)url forChannel:(CleverTapChannel)channel { \n  return YES; \n } \n`
-         );
         appDelegate = config.modResults.contents;
-        config.modResults.contents = appDelegate.replace(
-         `@implementation AppDelegate`,
-         `#import "CleverTapURLDelegate.h"
-          @interface AppDelegate () <CleverTapURLDelegate> {  }  @end
-          \n@implementation AppDelegate`
-        );
+        config.modResults.contents = addCleverTapURLDelegate(appDelegate)
       }
       return config;
     });
@@ -128,8 +92,7 @@ import {
  /**
  * Add pod for CleverTap, CTNotificationServiceExtension and CTNotificationContentExtension
  */
-  const withCleverTapPod: ConfigPlugin<CleverTapPluginProps> = (config,
-    clevertapProps) => {
+  const withCleverTapPod: ConfigPlugin<CleverTapPluginProps> = (config, clevertapProps) => {
     return withDangerousMod(config, [
       'ios',
       async (config) => {
@@ -160,7 +123,6 @@ import {
             }
           })}
 
-
           // Add CTNotificationContentExtension if it doesn't already exist
         if (clevertapProps.enablePushTemplate && !podfileContents.match(NCE_PODFILE_REGEX)) {
           fs.appendFile(podfilePath, NCE_PODFILE_SNIPPET, (err) => {
@@ -187,7 +149,6 @@ import {
       if (clevertapProps.accountRegion) {
         config.modResults.CleverTapRegion = clevertapProps.accountRegion;
       }
-  
       return config;
     });
   };
@@ -529,28 +490,29 @@ import {
   };
 
 /**
- * Update AppDelegate with required CleverTap's notification category code 
+ * Update NSE's entitlement file with App group
  */
-
- const generateNotificationSetupCode = (categoryIdentifier: string, actions: [NotificationAction] ): string => {
-  // Generate action definitions
-  const actionsCode = actions.map(
-  (action, index) =>
-    `UNNotificationAction *action${index + 1} = [UNNotificationAction actionWithIdentifier:@"${action.identifier}" title:@"${action.title}" options:UNNotificationActionOptionNone];`
-   ).join("\n    ");
-
-   // Combine actions into a category
-  const actionIdentifiers = actions.map(
-    (_, index) => 
-      `action${index + 1}`
-  ).join(", ");
-
-  const categoryCode = `UNNotificationCategory *category = [UNNotificationCategory categoryWithIdentifier:@"${categoryIdentifier}" actions:@[${actionIdentifiers}] intentIdentifiers:@[] options:UNNotificationCategoryOptionNone];`;
-  return `${actionsCode}\n    ${categoryCode}\n    [[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:[NSSet setWithObject:category]];`;
+const withAppGroupPermissions: ConfigPlugin<CleverTapPluginProps> = (
+  config
+) => {
+  const APP_GROUP_KEY = "com.apple.security.application-groups";
+  return withEntitlementsPlist(config, config => {
+    if (!Array.isArray(config.modResults[APP_GROUP_KEY])) {
+      config.modResults[APP_GROUP_KEY] = [];
+    }
+    const appGroups = config.modResults[APP_GROUP_KEY];
+    const entitlement = `group.${config?.ios?.bundleIdentifier || ""}`;
+    if (!appGroups.includes(entitlement)) {
+      appGroups.push(entitlement);
+    }
+    config.modResults[APP_GROUP_KEY] = appGroups;
+    return config;
+  });
 };
 
 export const withCleverTapIos: ConfigPlugin<CleverTapPluginProps> = (config, clevertapProps) => {
     config = withRemoteNotificationsPermissions(config, clevertapProps);
+    config = withAppGroupPermissions(config, clevertapProps);
 
     if (clevertapProps.enablePushTemplate) {
       config = withCleverTapNCE(config, clevertapProps);
@@ -560,10 +522,9 @@ export const withCleverTapIos: ConfigPlugin<CleverTapPluginProps> = (config, cle
       config = withCleverTapNSE(config, clevertapProps);
       config = withCleverTapXcodeProjectNSE(config, clevertapProps);
     } 
-
     config = withCleverTapPod(config, clevertapProps);
     config = withCleverTapInfoPlist(config, clevertapProps);
     config = withCleverTapAppDelegate(config, clevertapProps);
 
     return config;
-  };
+};
