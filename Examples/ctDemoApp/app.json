@@ -42,6 +42,7 @@
           "enableRichMedia": true,
           "enablePushImpression": true,
           "enablePushTemplate": true,
+          "enablePushInForeground": true,
           "profileProps": {
             "name": "test3",
             "identity": 123455,

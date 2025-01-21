@@ -34,7 +34,8 @@ import {
           addCleverTapImportsTemplates,
           addCleverTapTemplates,
           addCleverTapNotificationCategory,
-          addCleverTapURLDelegate } from "../support/UpdateAppDelegate";
+          addCleverTapURLDelegate,
+          addEnablePushInForeground } from "../support/UpdateAppDelegate";
 
  /**
  * Add "Background Modes -> Remote notifications"
@@ -64,12 +65,13 @@ import {
       // Adds imports at the top
       if (!appDelegate.includes('[CleverTap autoIntegrate]')) {
         config.modResults.contents =  addCleverTapImportsAutoIntegrate(appDelegate)
-        appDelegate =  addCleverTapAutoIntegrate(appDelegate)
+        appDelegate = config.modResults.contents;
+        config.modResults.contents =  addCleverTapAutoIntegrate(appDelegate, clevertapProps.logLevel ?? -1)
       }
-      
+
       // Adds Custom template
-      appDelegate = config.modResults.contents;
       if (!appDelegate.includes('registerCustomTemplates') && clevertapProps.templateIdentifier) {
+        appDelegate = config.modResults.contents;
         config.modResults.contents = addCleverTapImportsTemplates(appDelegate)
         appDelegate = config.modResults.contents;
         config.modResults.contents = addCleverTapTemplates(appDelegate, clevertapProps.templateIdentifier)
@@ -84,6 +86,12 @@ import {
       if (!appDelegate.includes('CleverTapURLDelegate.h') && clevertapProps.enableURLDelegate) {
         appDelegate = config.modResults.contents;
         config.modResults.contents = addCleverTapURLDelegate(appDelegate)
+      }
+
+      // Adds willPresentNotification function
+      if (!appDelegate.includes('willPresentNotification') && clevertapProps.enablePushInForeground) {
+        appDelegate = config.modResults.contents;
+        config.modResults.contents = addEnablePushInForeground(appDelegate)
       }
       return config;
     });

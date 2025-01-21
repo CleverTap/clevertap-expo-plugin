@@ -70,6 +70,10 @@ export type CleverTapPluginProps = {
       * (optional) This value should be set when client wants to handle custom deeplink / external URL.
       */
      enableURLDelegate?: boolean;
+     /**
+      * (optional) This value should be set when client wants to receive push notifications in the foreground.
+      */
+     enablePushInForeground?: boolean;
    };
 
    export type NotificationCategory = {

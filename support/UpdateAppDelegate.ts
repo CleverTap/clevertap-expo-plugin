@@ -13,13 +13,11 @@ export const addCleverTapImportsAutoIntegrate = (appDelegate: string): string =>
     );
     return appDelegate;
 }
-export const addCleverTapAutoIntegrate = (appDelegate: string): string => {
+export const addCleverTapAutoIntegrate = (appDelegate: string, debugLevel: number): string => {
     // Adds CleverTap autoIntegrate
     appDelegate = appDelegate.replace(
           `return [super application:application didFinishLaunchingWithOptions:launchOptions];`,
-          `#ifdef DEBUG
-            [CleverTap setDebugLevel:CleverTapLogDebug];
-            #endif
+          ` [CleverTap setDebugLevel:${debugLevel}];
             [CleverTap autoIntegrate];
             [[CleverTapReactManager sharedInstance] applicationDidLaunchWithOptions:launchOptions];
             return [super application:application didFinishLaunchingWithOptions:launchOptions];`
@@ -50,13 +48,26 @@ export const addCleverTapTemplates = (appDelegate: string, templateIdentifier: s
 /**
  * Adds CleverTapURLDelegate code 
  */
+
 export const addCleverTapURLDelegate = (appDelegate: string): string => {
+  if (appDelegate.includes('@interface AppDelegate () <')) {
     appDelegate = appDelegate.replace(
-        `@implementation AppDelegate`,
-         `#import "CleverTapURLDelegate.h"
-          @interface AppDelegate () <CleverTapURLDelegate> {  }  @end
-          \n@implementation AppDelegate \n - (BOOL)shouldHandleCleverTapURL:(NSURL *)url forChannel:(CleverTapChannel)channel { \n  return YES; \n } \n`
-  );
+      `@interface AppDelegate () <`,
+      `#import "CleverTapURLDelegate.h"
+      @interface AppDelegate () < CleverTapURLDelegate, `
+    );
+  } else {
+    appDelegate = appDelegate.replace(
+      `@implementation AppDelegate`,
+       `#import "CleverTapURLDelegate.h"
+        @interface AppDelegate () <CleverTapURLDelegate> {  }  @end
+        @implementation AppDelegate\n`
+      );
+  }
+  appDelegate = appDelegate.replace(
+    `@implementation AppDelegate`,
+    `\n@implementation AppDelegate \n - (BOOL)shouldHandleCleverTapURL:(NSURL *)url forChannel:(CleverTapChannel)channel { \n  return YES; \n } \n`
+  )
   return appDelegate;
 }
 
@@ -86,5 +97,28 @@ export const addCleverTapNotificationCategory = (appDelegate: string, categoryId
     `[[CleverTapReactManager sharedInstance] applicationDidLaunchWithOptions:launchOptions];`,
     `${notificationSetupCode}\n [[CleverTapReactManager sharedInstance] applicationDidLaunchWithOptions:launchOptions];`
     );
+  return appDelegate;
+}
+
+/**
+ * Adds willPresentNotification function
+ */
+export const addEnablePushInForeground = (appDelegate: string): string => {
+  if (appDelegate.includes('@interface AppDelegate () <')) {
+    appDelegate = appDelegate.replace(
+      `@interface AppDelegate () <`,
+      `@interface AppDelegate () < UNUserNotificationCenterDelegate, `
+    );
+  } else {
+    appDelegate = appDelegate.replace(
+      `@implementation AppDelegate`,
+      `@interface AppDelegate () <UNUserNotificationCenterDelegate> {  }  @end
+      @implementation AppDelegate\n`
+      );
+  }
+  appDelegate = appDelegate.replace(
+    `@implementation AppDelegate`,
+    `\n @implementation AppDelegate \n - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler{\n completionHandler(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge);\n }\n`
+  );
   return appDelegate;
 }
