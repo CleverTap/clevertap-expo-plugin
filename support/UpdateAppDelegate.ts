@@ -1,9 +1,9 @@
-import { NotificationAction } from "../types/types";
+import { NotificationAction, NotificationCategory } from "../types/types";
 
 /**
  * Adds CleverTap's auto integrate code 
  */
-export const addCleverTapImportsAutoIntegrate = (appDelegate: string): string => {
+export const addCleverTapImportsForAutoIntegrate = (appDelegate: string): string => {
     appDelegate = appDelegate.replace(
           `#import "AppDelegate.h"`,
           `#import "AppDelegate.h"
@@ -24,7 +24,6 @@ export const addCleverTapAutoIntegrate = (appDelegate: string, debugLevel: numbe
     );
     return appDelegate;
 }
-
 /**
  * Adds CleverTap's custom template code 
  */
@@ -44,11 +43,9 @@ export const addCleverTapTemplates = (appDelegate: string, templateIdentifier: s
         );
   return appDelegate;
 }
-
 /**
  * Adds CleverTapURLDelegate code 
  */
-
 export const addCleverTapURLDelegate = (appDelegate: string): string => {
   if (appDelegate.includes('@interface AppDelegate () <')) {
     appDelegate = appDelegate.replace(
@@ -70,38 +67,48 @@ export const addCleverTapURLDelegate = (appDelegate: string): string => {
   )
   return appDelegate;
 }
-
 /**
  * Update AppDelegate with required CleverTap's notification category code 
  */
-const generateNotificationSetupCode = (categoryIdentifier: string, actions: [NotificationAction]): string => {
-    // Generate action definitions
-    const actionsCode = actions.map(
-    (action, index) =>
-      `UNNotificationAction *action${index + 1} = [UNNotificationAction actionWithIdentifier:@"${action.identifier}" title:@"${action.title}" options:UNNotificationActionOptionNone];`
-     ).join("\n    ");
-  
-     // Combine actions into a category
-    const actionIdentifiers = actions.map(
-      (_, index) => 
-        `action${index + 1}`
-    ).join(", ");
-  
-    const categoryCode = `UNNotificationCategory *category = [UNNotificationCategory categoryWithIdentifier:@"${categoryIdentifier}" actions:@[${actionIdentifiers}] intentIdentifiers:@[] options:UNNotificationCategoryOptionNone];`;
-    return `${actionsCode}\n    ${categoryCode}\n    [[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:[NSSet setWithObject:category]];`;
-};
-
-export const addCleverTapNotificationCategory = (appDelegate: string, categoryIdentifier: string, actions: [NotificationAction]): string => {
-    const notificationSetupCode = generateNotificationSetupCode(categoryIdentifier, actions);
-    appDelegate = appDelegate.replace(
+export const addCleverTapNotificationCategory = (appDelegate: string, categories?: [NotificationCategory]): string => {
+  const notificationSetupCode = generateNotificationCategoriesCode(categories ?? [])
+  appDelegate = appDelegate.replace( 
     `[[CleverTapReactManager sharedInstance] applicationDidLaunchWithOptions:launchOptions];`,
     `${notificationSetupCode}\n [[CleverTapReactManager sharedInstance] applicationDidLaunchWithOptions:launchOptions];`
     );
   return appDelegate;
 }
 
+function generateNotificationCategoriesCode(categories: NotificationCategory[]): string {
+  let categoriesCode = "";
+
+  categories.forEach((category, categoryIndex) => {
+    const actionVariables: string[] = [];
+
+    // Generate actions
+    category.actions?.forEach((action, actionIndex) => {
+      const actionVar = `action${categoryIndex + 1}${actionIndex + 1}`;
+      categoriesCode += `UNNotificationAction *${actionVar} = [UNNotificationAction actionWithIdentifier:@"${action.identifier}" title:@"${action.title}" options:UNNotificationActionOptionNone];\n`;
+      actionVariables.push(actionVar);
+    });
+
+    // Generate category
+    const categoryVar = `category${categoryIndex + 1}`;
+    categoriesCode += `UNNotificationCategory *${categoryVar} = [UNNotificationCategory categoryWithIdentifier:@"${category.identifier}" actions:@[${actionVariables.join(
+      ", "
+    )}] intentIdentifiers:@[] options:UNNotificationCategoryOptionNone];\n\n`;
+  });
+
+  // Set categories
+  const categoryVariables = categories
+    .map((_, index) => `category${index + 1}`)
+    .join(", ");
+  categoriesCode += `[[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:[NSSet setWithObjects:${categoryVariables}, nil]];\n`;
+
+  return categoriesCode;
+}
 /**
- * Adds willPresentNotification function
+ * Update AppDelegate with willPresentNotification function
  */
 export const addEnablePushInForeground = (appDelegate: string): string => {
   if (appDelegate.includes('@interface AppDelegate () <')) {

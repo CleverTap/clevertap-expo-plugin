@@ -61,7 +61,7 @@ export type CleverTapPluginProps = {
      /**
       * (optional) This value should be set when client wants to use notification category.
       */
-     notificationCategory?: NotificationCategory;
+     notificationCategories?: [NotificationCategory];
      /**
       * (optional) This value should be set when client wants to use Custom Templates.
       */
@@ -78,7 +78,7 @@ export type CleverTapPluginProps = {
 
    export type NotificationCategory = {
      identifier: string;
-     actions: [NotificationAction];
+     actions?: [NotificationAction];
     }
     export type NotificationAction = {
      identifier: string;

@@ -29,7 +29,7 @@ import {
   import { CleverTapLog } from "../support/CleverTapLog";
   import { FileManager } from "../support/FileManager";
   import  NSUpdaterManager from "../support/NSUpdaterManager";
-  import {addCleverTapImportsAutoIntegrate, 
+  import {addCleverTapImportsForAutoIntegrate, 
           addCleverTapAutoIntegrate,
           addCleverTapImportsTemplates,
           addCleverTapTemplates,
@@ -64,7 +64,7 @@ import {
       let appDelegate = config.modResults.contents;
       // Adds imports at the top
       if (!appDelegate.includes('[CleverTap autoIntegrate]')) {
-        config.modResults.contents =  addCleverTapImportsAutoIntegrate(appDelegate)
+        config.modResults.contents =  addCleverTapImportsForAutoIntegrate(appDelegate)
         appDelegate = config.modResults.contents;
         config.modResults.contents =  addCleverTapAutoIntegrate(appDelegate, clevertapProps.logLevel ?? -1)
       }
@@ -77,9 +77,9 @@ import {
         config.modResults.contents = addCleverTapTemplates(appDelegate, clevertapProps.templateIdentifier)
       }
      // Adds UNNotificationCategory code
-      if (!appDelegate.includes('UNNotificationCategory') && clevertapProps.notificationCategory?.identifier && clevertapProps.notificationCategory?.actions.length) {
+      if (!appDelegate.includes('UNNotificationCategory') && (clevertapProps.notificationCategories?.length ?? 0 > 0)) {
         appDelegate = config.modResults.contents;
-        config.modResults.contents =  addCleverTapNotificationCategory(appDelegate, clevertapProps.notificationCategory?.identifier, clevertapProps.notificationCategory?.actions)
+        config.modResults.contents = addCleverTapNotificationCategory(appDelegate, clevertapProps.notificationCategories)
       }
 
      // Adds CleverTapURLDelegate code

@@ -1,6 +1,8 @@
 .expo/
 node_modules/
 .DS_Store
+src/dist/
+build/
 
 
 #plugin
