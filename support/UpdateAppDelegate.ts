@@ -7,9 +7,9 @@ export const addCleverTapImportsForAutoIntegrate = (appDelegate: string): string
     appDelegate = appDelegate.replace(
           `#import "AppDelegate.h"`,
           `#import "AppDelegate.h"
-           #import <UserNotifications/UserNotifications.h>
-           #import "CleverTap.h"
-           #import "CleverTapReactManager.h"`
+#import <UserNotifications/UserNotifications.h>
+#import "CleverTap.h"
+#import "CleverTapReactManager.h"`
     );
     return appDelegate;
 }
@@ -17,10 +17,10 @@ export const addCleverTapAutoIntegrate = (appDelegate: string, debugLevel: numbe
     // Adds CleverTap autoIntegrate
     appDelegate = appDelegate.replace(
           `return [super application:application didFinishLaunchingWithOptions:launchOptions];`,
-          ` [CleverTap setDebugLevel:${debugLevel}];
-            [CleverTap autoIntegrate];
-            [[CleverTapReactManager sharedInstance] applicationDidLaunchWithOptions:launchOptions];
-            return [super application:application didFinishLaunchingWithOptions:launchOptions];`
+          `[CleverTap setDebugLevel:${debugLevel}];
+ [CleverTap autoIntegrate];
+ [[CleverTapReactManager sharedInstance] applicationDidLaunchWithOptions:launchOptions];
+ return [super application:application didFinishLaunchingWithOptions:launchOptions];`
     );
     return appDelegate;
 }
@@ -31,7 +31,7 @@ export const addCleverTapImportsTemplates = (appDelegate: string): string => {
     appDelegate = appDelegate.replace(
         `#import "CleverTapReactManager.h"`,
         `#import "CleverTapReactManager.h"
-         #import "CleverTapReactCustomTemplates.h"`
+#import "CleverTapReactCustomTemplates.h"`
   );
   return appDelegate;
 }
@@ -39,7 +39,7 @@ export const addCleverTapTemplates = (appDelegate: string, templateIdentifier: s
     appDelegate = appDelegate.replace(
         `[CleverTap autoIntegrate];`,
         `[CleverTapReactCustomTemplates registerCustomTemplates:@"${templateIdentifier}", nil];
-         [CleverTap autoIntegrate];`
+ [CleverTap autoIntegrate];`
         );
   return appDelegate;
 }
@@ -51,19 +51,19 @@ export const addCleverTapURLDelegate = (appDelegate: string): string => {
     appDelegate = appDelegate.replace(
       `@interface AppDelegate () <`,
       `#import "CleverTapURLDelegate.h"
-      @interface AppDelegate () < CleverTapURLDelegate, `
+@interface AppDelegate () < CleverTapURLDelegate, `
     );
   } else {
     appDelegate = appDelegate.replace(
       `@implementation AppDelegate`,
-       `#import "CleverTapURLDelegate.h"
-        @interface AppDelegate () <CleverTapURLDelegate> {  }  @end
-        @implementation AppDelegate\n`
+       `#import "CleverTapURLDelegate.h"\n
+@interface AppDelegate () <CleverTapURLDelegate> {  }  @end\n
+@implementation AppDelegate\n`
       );
   }
   appDelegate = appDelegate.replace(
     `@implementation AppDelegate`,
-    `\n@implementation AppDelegate \n - (BOOL)shouldHandleCleverTapURL:(NSURL *)url forChannel:(CleverTapChannel)channel { \n  return YES; \n } \n`
+    `@implementation AppDelegate \n - (BOOL)shouldHandleCleverTapURL:(NSURL *)url forChannel:(CleverTapChannel)channel { \n  return YES; \n }`
   )
   return appDelegate;
 }
@@ -119,13 +119,14 @@ export const addEnablePushInForeground = (appDelegate: string): string => {
   } else {
     appDelegate = appDelegate.replace(
       `@implementation AppDelegate`,
-      `@interface AppDelegate () <UNUserNotificationCenterDelegate> {  }  @end
-      @implementation AppDelegate\n`
+      `@interface AppDelegate () <UNUserNotificationCenterDelegate> {  }  @end\n
+@implementation AppDelegate\n`
       );
   }
   appDelegate = appDelegate.replace(
     `@implementation AppDelegate`,
-    `\n @implementation AppDelegate \n - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler{\n completionHandler(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge);\n }\n`
+    `@implementation AppDelegate \n
+ - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler{\n completionHandler(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge);\n }\n`
   );
   return appDelegate;
 }
