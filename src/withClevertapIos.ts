@@ -4,9 +4,10 @@ import {
     withAppDelegate,
     withXcodeProject,
     withDangerousMod,
-    withEntitlementsPlist
+    withEntitlementsPlist,
+    IOSConfig
   } from "@expo/config-plugins";
-  import * as fs from 'fs';
+  import * as fs from "fs-extra";
   import * as path from 'path';
   import {
     DEFAULT_BUNDLE_SHORT_VERSION,
@@ -66,15 +67,15 @@ import {
       if (!appDelegate.includes('[CleverTap autoIntegrate]')) {
         config.modResults.contents =  addCleverTapImportsForAutoIntegrate(appDelegate)
         appDelegate = config.modResults.contents;
-        config.modResults.contents =  addCleverTapAutoIntegrate(appDelegate, clevertapProps.logLevel ?? -1)
+        config.modResults.contents =  addCleverTapAutoIntegrate(appDelegate, clevertapProps.logLevel ?? 0)
       }
 
       // Adds Custom template
-      if (!appDelegate.includes('registerCustomTemplates') && clevertapProps.templateIdentifier) {
+      if (!appDelegate.includes('registerCustomTemplates') && clevertapProps.templateIdentifiers?.templates) {
         appDelegate = config.modResults.contents;
         config.modResults.contents = addCleverTapImportsTemplates(appDelegate)
         appDelegate = config.modResults.contents;
-        config.modResults.contents = addCleverTapTemplates(appDelegate, clevertapProps.templateIdentifier)
+        config.modResults.contents = addCleverTapTemplates(appDelegate, clevertapProps.templateIdentifiers)
       }
      // Adds UNNotificationCategory code
       if (!appDelegate.includes('UNNotificationCategory') && (clevertapProps.notificationCategories?.length ?? 0 > 0)) {
@@ -83,9 +84,9 @@ import {
       }
 
      // Adds CleverTapURLDelegate code
-      if (!appDelegate.includes('CleverTapURLDelegate.h') && clevertapProps.enableURLDelegate) {
+      if (!appDelegate.includes('CleverTapURLDelegate.h') && clevertapProps.enableURLDelegateChannels) {
         appDelegate = config.modResults.contents;
-        config.modResults.contents = addCleverTapURLDelegate(appDelegate)
+        config.modResults.contents = addCleverTapURLDelegate(appDelegate, clevertapProps.enableURLDelegateChannels)
       }
 
       // Adds willPresentNotification function
@@ -321,6 +322,48 @@ import {
     })
   };
 
+/**
+ * Copy Custom Template files into iOS main bundle
+ */
+  const addCustomTemplateFilesToBundle: ConfigPlugin<CleverTapPluginProps> = (config, clevertapProps) => {
+    // support for monorepos where node_modules can be above the project directory.    
+    return withDangerousMod(config, [
+      'ios',
+      async config => {
+      // Get the root directory of the Expo project
+      const projectRoot = config.modRequest.projectRoot;
+      const projectName = config.modRequest.projectName;
+
+      const sourcePath = path.resolve(projectRoot, clevertapProps.templateIdentifiers?.source ?? "assets"); // e.g., "./assets"
+      const iosPath = path.join(projectRoot, "ios");
+      const destPath = path.join(iosPath, projectName ?? "", clevertapProps.templateIdentifiers?.destination ?? ""); // iOS main bundle
+  
+      // Ensure the destination directory exists and copy files
+      fs.ensureDirSync(destPath);
+      
+      // Read all JSON files from the directory
+      const jsonFiles = fs.readdirSync(sourcePath).filter(file => file.endsWith(".json"));
+
+      // Filter only the JSON files that match specificFiles1
+      const filteredFiles = jsonFiles.filter(file => 
+        clevertapProps.templateIdentifiers?.templates.includes(path.basename(file, ".json")) // Remove .json and check against the list
+      );
+      if (filteredFiles.length == 0) {
+        CleverTapLog.error("To enable using custom templates, add json files");
+        return config;
+      }
+      CleverTapLog.log(`Adding template files from: ${sourcePath} to iOS bundle: ${destPath}`);
+      filteredFiles.forEach(file => {
+        CleverTapLog.log(file);
+        const srcFile = path.join(sourcePath, file);
+        const destFile = path.join(destPath, file);
+        fs.copySync(srcFile, destFile, { overwrite: true });
+      });
+    return config;
+    },
+    ]);
+  };
+
  /**
  * Copy NotificationServiceExtension with CleverTap code files into target folder
  */
@@ -521,6 +564,7 @@ const withAppGroupPermissions: ConfigPlugin<CleverTapPluginProps> = (
 export const withCleverTapIos: ConfigPlugin<CleverTapPluginProps> = (config, clevertapProps) => {
     config = withRemoteNotificationsPermissions(config, clevertapProps);
     config = withAppGroupPermissions(config, clevertapProps);
+    config = addCustomTemplateFilesToBundle(config, clevertapProps);
 
     if (clevertapProps.enablePushTemplate) {
       config = withCleverTapNCE(config, clevertapProps);

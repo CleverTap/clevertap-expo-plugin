@@ -43,13 +43,22 @@
           "enablePushImpression": true,
           "enablePushTemplate": true,
           "enablePushInForeground": true,
+          "templateIdentifiers": {
+            "source": "assets",
+            "destination": "Resources",
+            "templates": [
+              "templates"
+            ]
+          },
           "profileProps": {
             "name": "test3",
             "identity": 123455,
             "email": "test3@gmail.com"
           },
-          "templateIdentifier": "templates",
-          "enableURLDelegate": true,
+          "enableURLDelegateChannels": [
+            0,
+            1
+          ],
           "notificationCategories": [
             {
               "identifier": "CTNotification",

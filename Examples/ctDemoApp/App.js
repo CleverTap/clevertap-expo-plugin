@@ -28,7 +28,7 @@ export default class App extends Component {
     }
 
     // Enable debug logs
-    // CleverTap.setDebugLevel(3);
+    CleverTap.setDebugLevel(3);
 
     // Add CleverTap listeners
     AppUtils.addCleverTapAPIListeners(false);
@@ -841,10 +841,10 @@ export default class App extends Component {
         CleverTap.clearInAppResources(true);
         break;
       case Actions.SYNC_CUSTOM_TEMPLATES:
-        // CleverTap.syncCustomTemplates();
+        CleverTap.syncCustomTemplates();
         break;
       case Actions.SYNC_CUSTOM_TEMPLATES_PROD:
-        // CleverTap.syncCustomTemplatesInProd(true);
+        CleverTap.syncCustomTemplatesInProd(true);
         break;
       default:
         console.warn('Action not recognized:', item.action);

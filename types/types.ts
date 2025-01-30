@@ -65,16 +65,22 @@ export type CleverTapPluginProps = {
      /**
       * (optional) This value should be set when client wants to use Custom Templates.
       */
-     templateIdentifier?: string;
+     templateIdentifiers?: CustomTemplate;
      /**
       * (optional) This value should be set when client wants to handle custom deeplink / external URL.
       */
-     enableURLDelegate?: boolean;
+     enableURLDelegateChannels?: [number];
      /**
       * (optional) This value should be set when client wants to receive push notifications in the foreground.
       */
      enablePushInForeground?: boolean;
    };
+
+   export type CustomTemplate = {
+    source: string;
+    destination: string;
+    templates: [string];
+   }
 
    export type NotificationCategory = {
      identifier: string;

@@ -1,4 +1,4 @@
-import { NotificationAction, NotificationCategory } from "../types/types";
+import { CustomTemplate, NotificationAction, NotificationCategory } from "../types/types";
 
 /**
  * Adds CleverTap's auto integrate code 
@@ -35,18 +35,20 @@ export const addCleverTapImportsTemplates = (appDelegate: string): string => {
   );
   return appDelegate;
 }
-export const addCleverTapTemplates = (appDelegate: string, templateIdentifier: string): string => {
+export const addCleverTapTemplates = (appDelegate: string, templateIdentifiers: CustomTemplate): string => {
+  // Generate the custom templates string
+  const templatesString = templateIdentifiers.templates.map(id => `@"${id}"`).join(", ") + ", nil";
     appDelegate = appDelegate.replace(
         `[CleverTap autoIntegrate];`,
-        `[CleverTapReactCustomTemplates registerCustomTemplates:@"${templateIdentifier}", nil];
- [CleverTap autoIntegrate];`
+        ` [CleverTapReactCustomTemplates registerCustomTemplates:${templatesString}];
+   [CleverTap autoIntegrate];`
         );
   return appDelegate;
 }
 /**
  * Adds CleverTapURLDelegate code 
  */
-export const addCleverTapURLDelegate = (appDelegate: string): string => {
+export const addCleverTapURLDelegate = (appDelegate: string, channels:[number]): string => {
   if (appDelegate.includes('@interface AppDelegate () <')) {
     appDelegate = appDelegate.replace(
       `@interface AppDelegate () <`,
@@ -61,9 +63,27 @@ export const addCleverTapURLDelegate = (appDelegate: string): string => {
 @implementation AppDelegate\n`
       );
   }
+
+  appDelegate = appDelegate.replace(
+    `[CleverTap autoIntegrate];`,
+    `[[CleverTap sharedInstance] setUrlDelegate:self];
+  [CleverTap autoIntegrate];`
+    );
+
+  // Generate the `case` statements dynamically based on the channels array
+  const caseStatements = channels
+  .map(channel => `\n    case ${channel}: return true;`)
+  .join("");
+
+  const method = `
+- (BOOL)shouldHandleCleverTapURL:(NSURL *)url forChannel:(CleverTapChannel)channel {
+  switch (channel) {${caseStatements}
+   default: return false;
+  }\n }`;
+
   appDelegate = appDelegate.replace(
     `@implementation AppDelegate`,
-    `@implementation AppDelegate \n - (BOOL)shouldHandleCleverTapURL:(NSURL *)url forChannel:(CleverTapChannel)channel { \n  return YES; \n }`
+    `@implementation AppDelegate \n ${method}`
   )
   return appDelegate;
 }
@@ -88,13 +108,13 @@ function generateNotificationCategoriesCode(categories: NotificationCategory[]):
     // Generate actions
     category.actions?.forEach((action, actionIndex) => {
       const actionVar = `action${categoryIndex + 1}${actionIndex + 1}`;
-      categoriesCode += `UNNotificationAction *${actionVar} = [UNNotificationAction actionWithIdentifier:@"${action.identifier}" title:@"${action.title}" options:UNNotificationActionOptionNone];\n`;
+      categoriesCode += `  UNNotificationAction *${actionVar} = [UNNotificationAction actionWithIdentifier:@"${action.identifier}" title:@"${action.title}" options:UNNotificationActionOptionNone];\n`;
       actionVariables.push(actionVar);
     });
 
     // Generate category
     const categoryVar = `category${categoryIndex + 1}`;
-    categoriesCode += `UNNotificationCategory *${categoryVar} = [UNNotificationCategory categoryWithIdentifier:@"${category.identifier}" actions:@[${actionVariables.join(
+    categoriesCode += `  UNNotificationCategory *${categoryVar} = [UNNotificationCategory categoryWithIdentifier:@"${category.identifier}" actions:@[${actionVariables.join(
       ", "
     )}] intentIdentifiers:@[] options:UNNotificationCategoryOptionNone];\n\n`;
   });
@@ -103,7 +123,7 @@ function generateNotificationCategoriesCode(categories: NotificationCategory[]):
   const categoryVariables = categories
     .map((_, index) => `category${index + 1}`)
     .join(", ");
-  categoriesCode += `[[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:[NSSet setWithObjects:${categoryVariables}, nil]];\n`;
+  categoriesCode += `  [[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:[NSSet setWithObjects:${categoryVariables}, nil]];\n`;
 
   return categoriesCode;
 }
