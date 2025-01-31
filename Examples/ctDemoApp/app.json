@@ -33,6 +33,7 @@
       [
         "clevertap-expo-plugin",
         {
+          //TODO: Remove these credentials later
           "accountId": "W9R-486-4W5Z",
           "accountToken": "6b4-2c0",
           "accountRegion": "eu1",

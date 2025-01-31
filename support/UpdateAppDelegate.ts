@@ -66,7 +66,7 @@ export const addCleverTapURLDelegate = (appDelegate: string, channels:[number]):
 
   appDelegate = appDelegate.replace(
     `[CleverTap autoIntegrate];`,
-    `[[CleverTap sharedInstance] setUrlDelegate:self];
+    ` [[CleverTap sharedInstance] setUrlDelegate:self];
   [CleverTap autoIntegrate];`
     );
 
