@@ -10,24 +10,24 @@ export const BUNDLE_VERSION_TEMPLATE_REGEX = /{{BUNDLE_VERSION}}/gm;
 
 
 //iOS Notification Service Extension
-export const NSE_TARGET_NAME = "CTNotificationServiceExtension";
+export const NSE_TARGET_NAME = "NotificationService";
 export const NSE_SOURCE_FILE = "NotificationService.swift"
 export const NSE_EXT_FILES = [
   `${NSE_TARGET_NAME}-Info.plist`,
   `${NSE_TARGET_NAME}.entitlements`
 ];
 export const NSE_PODFILE_SNIPPET = `
-target 'CTNotificationServiceExtension' do
+target 'NotificationService' do
 pod 'CleverTap-iOS-SDK', :modular_headers => true
 pod 'CTNotificationService', :modular_headers => true
 use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
 end`;
-export const NSE_PODFILE_REGEX = /target 'CTNotificationServiceExtension'/;
+export const NSE_PODFILE_REGEX = /target 'NotificationService'/;
 
 //iOS Notification Content Extension
-export const NCE_TARGET_NAME = "CTNotificationContentExtension";
+export const NCE_TARGET_NAME = "NotificationContent";
 export const NCE_PODFILE_SNIPPET = `
-target 'CTNotificationContentExtension' do
+target 'NotificationContent' do
 pod 'CleverTap-iOS-SDK', :modular_headers => true
 pod 'CTNotificationContent'
 use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
@@ -37,4 +37,4 @@ export const NCE_EXT_FILES = [
   `MainInterface.storyboard`,
   `${NCE_TARGET_NAME}-Info.plist`
 ];
-export const NCE_PODFILE_REGEX = /target 'CTNotificationContentExtension'/;
+export const NCE_PODFILE_REGEX = /target 'NotificationContent'/;
