@@ -441,7 +441,7 @@ import {
         `CTNotificationServiceExtension`);
 
       fs.writeFileSync(filePath, notificationServiceContent);
-      console.log('Updated NotificationServiceExtension successfully.');
+      console.log('Updated NotificationServiceExtension for rich media support successfully.');
      } else {
          console.log("CTNotificationService already exists, not updating the code");
      }
@@ -494,7 +494,7 @@ import {
   
       // Write the updated content back to the file
       fs.writeFileSync(filePath, notificationServiceContent, 'utf-8');
-      console.log('Updated NotificationServiceExtension successfully.');
+      console.log('Updated NotificationServiceExtension for push impression support successfully.');
     } else {
       console.log('recordNotificationViewedEvent already exists, not updating the code.');
     }

@@ -19,12 +19,14 @@
   "author": "Clevertap",
   "license": "MIT",
   "homepage": "https://github.com/CleverTap/clevertap-expo-plugin#readme",
-  "dependencies": {},
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
     "@types/react": "~18.3.12",
-    "expo-module-scripts": "^4.0.3",
     "expo": "~52.0.0",
+    "expo-build-properties": "^0.13.2",
+    "expo-module-scripts": "^4.0.3",
+    "expo-modules-core": "^2.2.1",
+    "fs-extra": "^11.3.0",
     "react-native": "0.76.0"
   },
   "peerDependencies": {
