@@ -1,3 +1,4 @@
+import { Android } from "./androidTypes";
 /**
  * CleverTapPluginProps refer to the properties set by the user in their app config file (e.g: app.json)
  */
@@ -74,6 +75,7 @@ export type CleverTapPluginProps = {
       * (optional) This value should be set when client wants to receive push notifications in the foreground.
       */
      enablePushInForeground?: boolean;
+     android:Android;
    };
 
    export type CustomTemplate = {
