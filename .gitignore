@@ -9,4 +9,5 @@ build/
 package-lock.json
 
 ios/
-android/
+Examples/ctDemoApp/android/
+.idea
