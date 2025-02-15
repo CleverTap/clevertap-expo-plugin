@@ -74,7 +74,13 @@
                 }
               ]
             }
-          ]
+          ],
+          "android":{
+            "backgroundSync":"1",
+            "features":{
+              "enableGoogleAdId":true
+            }
+          }
         }
       ],
       [
