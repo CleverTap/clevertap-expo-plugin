@@ -78,7 +78,9 @@
           "android":{
             "backgroundSync":"1",
             "features":{
-              "enableGoogleAdId":true
+              "enableGoogleAdId":true,
+              "enableHmsPush":true,
+              "enablePush":true
             }
           }
         }
