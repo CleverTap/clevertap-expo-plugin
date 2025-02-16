@@ -97,10 +97,9 @@ export const pushevent = () => {
     showToast('Event Recorded');
 
     // Recording an Event
-    // CleverTap.recordEvent('testEvent');
+    CleverTap.recordEvent('testEvent');
     // CleverTap.recordEvent('Send Basic Push');
     // CleverTap.recordEvent('testEventWithProps', {start: new Date(), foo: 'bar'});
-    CleverTap.recordEvent('SCEnd');
 };
 
 export const pushChargedEvent = () => {

@@ -15,7 +15,11 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.clevertap.demo"
+      "bundleIdentifier": "com.clevertap.expoDemo",
+      "appleTeamId": "A5J34NR598",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -33,48 +37,56 @@
       [
         "clevertap-expo-plugin",
         {
-          //TODO: Remove these credentials later
           "accountId": "W9R-486-4W5Z",
           "accountToken": "6b4-2c0",
           "accountRegion": "eu1",
+          "disableAppLaunchedEvent": false,
+          "enableFileProtection": true,
+          "encryptionLevel": 1,
           "logLevel": 2,
-          "devTeam": "A5J34NR598",
-          "iPhoneDeploymentTarget": "15.1",
-          "enableRichMedia": true,
-          "enablePushImpression": true,
-          "enablePushTemplate": true,
-          "enablePushInForeground": true,
-          "templateIdentifiers": {
-            "source": "assets",
-            "destination": "Resources",
-            "templates": [
-              "templates"
-            ]
+          "ios": {
+            "mode": "development",
+            "deploymentTarget": "11",
+            "deviceFamily": "1,2",
+            "notifications": {
+              "enableRichMedia": true,
+              "enablePushImpression": true,
+              "enablePushTemplate": true,
+              "enablePushInForeground": true,
+              "notificationCategories": [
+                {
+                  "identifier": "CTNotification",
+                  "actions": [
+                    {
+                      "identifier": "action1",
+                      "title": "title1"
+                    },
+                    {
+                      "identifier": "action2",
+                      "title": "title2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "enableURLDelegateChannels": [
+              0,
+              1,
+              2
+            ],
+            "templateIdentifiers": {
+              "source": "assets",
+              "destination": "Resources",
+              "templates": [
+                "templates"
+              ]
+            }
           },
           "profileProps": {
             "name": "test3",
             "identity": 123455,
             "email": "test3@gmail.com"
-          },
-          "enableURLDelegateChannels": [
-            0,
-            1
-          ],
-          "notificationCategories": [
-            {
-              "identifier": "CTNotification",
-              "actions": [
-                {
-                  "identifier": "action1",
-                  "title": "title1"
-                },
-                {
-                  "identifier": "action2",
-                  "title": "title2"
-                }
-              ]
-            }
-          ]
+          }
         }
       ],
       [
@@ -95,8 +107,14 @@
     },
     "extra": {
       "eas": {
-        "projectId": "e81ab7dc-71ca-4fb1-8b3c-38c53788ac79"
+        "projectId": "dbe8cccc-ad80-427c-83c3-78aec505b08f"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/dbe8cccc-ad80-427c-83c3-78aec505b08f"
     }
   }
 }
