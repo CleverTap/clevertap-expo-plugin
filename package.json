@@ -41,10 +41,5 @@
     "react": "*",
     "react-native": "*"
   },
-  "private": true,
-  "expo": {
-    "autolinking": {
-      "nativeModulesDir": ".."
-    }
-  }
+  "private": true
 }
