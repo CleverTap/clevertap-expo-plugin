@@ -13,6 +13,7 @@ export interface Android{
     handshakeDomain?: string;
     disableAppLaunched?: string;  // "0" or "1"
     intentServiceName?: string;
+    registerActivityLifecycleCallbacks?: boolean;
 }
 export interface Features {
     
