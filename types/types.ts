@@ -76,7 +76,7 @@ export type iOSFeatures = {
   /**
   * (optional) This value should be set when client wants to configure remote Push Notifications.
   */
-  notifications: NotificationFeature;
+  notifications?: NotificationFeature;
   /**
    * (optional) This value should be set to push client profile properties to record `Push Impression`.
 .  */
