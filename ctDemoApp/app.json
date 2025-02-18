@@ -27,7 +27,8 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.clevertap.expo.demo",
-      "googleServicesFile":"./assets/google-services.json"
+      "googleServicesFile":"./assets/google-services.json",
+      "permissions": ["android.permission.ACCESS_NETWORK_STATE","android.permission.INTERNET","android.permission.POST_NOTIFICATIONS"]
     },
     "web": {
       "bundler": "metro",
@@ -38,8 +39,8 @@
       [
         "../app.plugin.js",
         {
-          "accountId": "W9R-486-4W5Z",
-          "accountToken": "6b4-2c0",
+          "accountId": "TEST-46W-WWR-R85Z",
+          "accountToken": "TEST-200-064",
           "accountRegion": "eu1",
           "disableAppLaunchedEvent": false,
           "enableFileProtection": true,
@@ -85,7 +86,6 @@
           },
           "android":{
             "customNotificationSound":"expo_sound.mp3",
-            "encryptionLevel":"2",
             "registerActivityLifecycleCallbacks":true,
             "features":{
               "enablePush":true
