@@ -66,8 +66,8 @@ export const addCleverTapURLDelegate = (appDelegate: string, channels:[number]):
 
   appDelegate = appDelegate.replace(
     `[CleverTap autoIntegrate];`,
-    ` [[CleverTap sharedInstance] setUrlDelegate:self];
-  [CleverTap autoIntegrate];`
+    ` [CleverTap autoIntegrate];
+  [[CleverTap sharedInstance] setUrlDelegate:self];`
     );
 
   // Generate the `case` statements dynamically based on the channels array
