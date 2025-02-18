@@ -1,4 +1,4 @@
-export const IPHONEOS_DEPLOYMENT_TARGET = "11.0"; //Used as default value
+export const DEPLOYMENT_TARGET = "11.0"; //Used as default value
 export const TARGETED_DEVICE_FAMILY = `"1,2"`; //Used as default value
 
 export const DEFAULT_BUNDLE_VERSION = '1';
