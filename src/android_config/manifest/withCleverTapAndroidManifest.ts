@@ -91,15 +91,15 @@ const METADATA_CONFIGS: MetadataConfig[] = [
     },
     {
         key: 'CLEVERTAP_PROXY_DOMAIN',
-        getValue: (props) => props.android?.proxyDomain
+        getValue: (props) => props.proxyDomain
     },
     {
         key: 'CLEVERTAP_SPIKY_PROXY_DOMAIN',
-        getValue: (props) => props.android?.spikyProxyDomain
+        getValue: (props) => props.spikyProxyDomain
     },
     {
         key: 'CLEVERTAP_ENCRYPTION_LEVEL',
-        getValue: (props) => props.android?.encryptionLevel?.toString()
+        getValue: (props) => props.encryptionLevel?.toString()
     },
     {
         key: 'CLEVERTAP_SSL_PINNING',
@@ -111,11 +111,11 @@ const METADATA_CONFIGS: MetadataConfig[] = [
     },
     {
         key: 'CLEVERTAP_HANDSHAKE_DOMAIN',
-        getValue: (props) => props.android?.handshakeDomain
+        getValue: (props) => props.handshakeDomain
     },
     {
         key: 'CLEVERTAP_DISABLE_APP_LAUNCHED',
-        getValue: (props) => props.android?.disableAppLaunched?.toString()
+        getValue: (props) => props.disableAppLaunchedEvent? "1":"0"
     },
     {
         key: 'CLEVERTAP_INTENT_SERVICE',
