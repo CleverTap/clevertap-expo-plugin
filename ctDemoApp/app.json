@@ -26,7 +26,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.clevertap.demo"
+      "package": "com.clevertap.expo.demo",
+      "googleServicesFile":"./assets/google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -35,7 +36,7 @@
     },
     "plugins": [
       [
-        "clevertap-expo-plugin",
+        "../app.plugin.js",
         {
           "accountId": "W9R-486-4W5Z",
           "accountToken": "6b4-2c0",
@@ -80,6 +81,14 @@
               "templates": [
                 "templates"
               ]
+            }
+          },
+          "android":{
+            "customNotificationSound":"expo_sound.mp3",
+            "encryptionLevel":"2",
+            "registerActivityLifecycleCallbacks":true,
+            "features":{
+              "enablePush":true
             }
           },
           "profileProps": {
