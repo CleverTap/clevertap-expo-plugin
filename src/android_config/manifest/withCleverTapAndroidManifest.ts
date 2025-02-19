@@ -138,18 +138,30 @@ const addMetadataIfValid = (
 };
 
 const addFCMService = (mainApplication: AndroidConfig.Manifest.ManifestApplication) => {
+    const FCM_SERVICE_NAME = 'com.clevertap.android.sdk.pushnotification.fcm.FcmMessageListenerService';
+    
     mainApplication.service = mainApplication.service || [];
-    mainApplication.service.push({
-        $: {
-            'android:name': 'com.clevertap.android.sdk.pushnotification.fcm.FcmMessageListenerService',
-            'android:exported': 'true'
-        },
-        'intent-filter': [{
-            action: [{
-                $: {
-                    'android:name': 'com.google.firebase.MESSAGING_EVENT'
-                }
+    
+    const serviceExists = mainApplication.service.some(service => 
+        service.$?.['android:name'] === FCM_SERVICE_NAME
+    );
+
+    if (!serviceExists) {
+        mainApplication.service.push({
+            $: {
+                'android:name': FCM_SERVICE_NAME,
+                'android:exported': 'true'
+            },
+            'intent-filter': [{
+                action: [{
+                    $: {
+                        'android:name': 'com.google.firebase.MESSAGING_EVENT'
+                    }
+                }]
             }]
-        }]
-    });
+        });
+        CleverTapLog.log('Added FCM Message Listener Service to AndroidManifest.xml');
+    } else {
+        CleverTapLog.log('FCM Message Listener Service already exists in AndroidManifest.xml');
+    }
 };
