@@ -5,8 +5,9 @@ import { CleverTapLog } from "../../../support/CleverTapLog";
 
 
 // Using helpers keeps error messages unified and helps cut down on XML format changes.
-const { addMetaDataItemToMainApplication, getMainApplicationOrThrow } = AndroidConfig.Manifest;
-const { addPermission } = AndroidConfig.Permissions
+const { addMetaDataItemToMainApplication, getMainApplicationOrThrow, removeMetaDataItemFromMainApplication } = AndroidConfig.Manifest;
+const { addPermission, removePermissions } = AndroidConfig.Permissions
+const FCM_SERVICE_NAME = 'com.clevertap.android.sdk.pushnotification.fcm.FcmMessageListenerService';
 
 export const withCleverTapAndroidManifest: ConfigPlugin<CleverTapPluginProps> = (config, props) => {
     return withAndroidManifest(config, async config => {
@@ -22,12 +23,14 @@ async function setManifestConfigAsync(
     const mainApplication = getMainApplicationOrThrow(androidManifest);
     // Add all metadata configurations
     METADATA_CONFIGS.forEach(metadataConfig => {
-        addMetadataIfValid(mainApplication, androidManifest, metadataConfig, props, config);
+        handleMetadata(mainApplication, androidManifest, metadataConfig, props, config);
     });
 
     // Add FCM service if push is enabled
     if (props.android?.features?.enablePush) {
         addFCMService(mainApplication);
+    } else {
+        removeFCMService(mainApplication);
     }
 
     return androidManifest;
@@ -37,6 +40,7 @@ interface MetadataConfig {
     key: string;
     getValue: (props: CleverTapPluginProps, config?: ExpoConfig) => string | undefined;
     onAdd?: (props: CleverTapPluginProps, androidManifest: AndroidConfig.Manifest.AndroidManifest) => void;
+    onRemove?: (androidManifest: AndroidConfig.Manifest.AndroidManifest) => void;
 }
 
 const METADATA_CONFIGS: MetadataConfig[] = [
@@ -67,6 +71,9 @@ const METADATA_CONFIGS: MetadataConfig[] = [
         getValue: (props) => props.android?.features?.enableGoogleAdId ? "1" : undefined,
         onAdd: (_, androidManifest) => {
             addPermission(androidManifest, "com.google.android.gms.permission.AD_ID");
+        },
+        onRemove: (androidManifest) => {
+            removePermissions(androidManifest, ["com.google.android.gms.permission.AD_ID"])
         }
     },
     {
@@ -125,7 +132,7 @@ const METADATA_CONFIGS: MetadataConfig[] = [
     }
 ];
 
-const addMetadataIfValid = (
+const handleMetadata = (
     mainApplication: AndroidConfig.Manifest.ManifestApplication,
     androidManifest: AndroidConfig.Manifest.AndroidManifest,
     metaDataConfig: MetadataConfig,
@@ -136,12 +143,14 @@ const addMetadataIfValid = (
     if (value) {
         addMetaDataItemToMainApplication(mainApplication, metaDataConfig.key, value);
         metaDataConfig.onAdd?.(props, androidManifest);
+    } else {
+        removeMetaDataItemFromMainApplication(mainApplication, metaDataConfig.key);
+        metaDataConfig.onRemove?.(androidManifest);
     }
 };
 
 const addFCMService = (mainApplication: AndroidConfig.Manifest.ManifestApplication) => {
-    const FCM_SERVICE_NAME = 'com.clevertap.android.sdk.pushnotification.fcm.FcmMessageListenerService';
-    
+     
     mainApplication.service = mainApplication.service || [];
     
     const serviceExists = mainApplication.service.some(service => 
@@ -165,5 +174,15 @@ const addFCMService = (mainApplication: AndroidConfig.Manifest.ManifestApplicati
         CleverTapLog.log('Added FCM Message Listener Service to AndroidManifest.xml');
     } else {
         CleverTapLog.log('FCM Message Listener Service already exists in AndroidManifest.xml');
+    }
+};
+
+const removeFCMService = (mainApplication: AndroidConfig.Manifest.ManifestApplication) => {
+    
+    if (mainApplication.service) {
+        mainApplication.service = mainApplication.service.filter(service => 
+            service.$?.['android:name'] !== FCM_SERVICE_NAME
+        );
+        CleverTapLog.log('Removed FCM Message Listener Service from AndroidManifest.xml');
     }
 };
