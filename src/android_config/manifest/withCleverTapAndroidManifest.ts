@@ -115,7 +115,9 @@ const METADATA_CONFIGS: MetadataConfig[] = [
     },
     {
         key: 'CLEVERTAP_DISABLE_APP_LAUNCHED',
-        getValue: (props) => props.disableAppLaunchedEvent? "1":"0"
+        getValue: (props) => typeof props.disableAppLaunchedEvent !== 'undefined' ? 
+        (props.disableAppLaunchedEvent ? "1" : "0") : 
+        undefined
     },
     {
         key: 'CLEVERTAP_INTENT_SERVICE',
