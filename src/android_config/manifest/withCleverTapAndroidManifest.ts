@@ -46,21 +46,11 @@ interface MetadataConfig {
 const METADATA_CONFIGS: MetadataConfig[] = [
     {
         key: 'CLEVERTAP_ACCOUNT_ID',
-        getValue: (props) => props.accountId,
-        onAdd: (props) => {
-            if (!props.accountId) {
-                CleverTapLog.log("accountId is not defined in config.");
-            }
-        }
+        getValue: (props) => props.accountId
     },
     {
         key: 'CLEVERTAP_TOKEN',
-        getValue: (props) => props.accountToken,
-        onAdd: (props) => {
-            if (!props.accountToken) {
-                CleverTapLog.log("accountToken is not defined in config.");
-            }
-        }
+        getValue: (props) => props.accountToken
     },
     {
         key: 'CLEVERTAP_REGION',
