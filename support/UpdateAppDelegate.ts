@@ -1,4 +1,4 @@
-import { CustomTemplate, NotificationAction, NotificationCategory } from "../types/types";
+import { CustomTemplate, NotificationCategory } from "../types/iOSTypes";
 
 /**
  * Adds CleverTap's auto integrate code 
