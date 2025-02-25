@@ -103,10 +103,6 @@ const METADATA_CONFIGS: MetadataConfig[] = [
         getValue: (props) => props.android?.sslPinning?.toString()
     },
     {
-        key: 'CLEVERTAP_USE_CUSTOM_ID',
-        getValue: (props) => props.android?.useCustomId?.toString()
-    },
-    {
         key: 'CLEVERTAP_HANDSHAKE_DOMAIN',
         getValue: (props) => props.handshakeDomain
     },
