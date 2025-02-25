@@ -11,7 +11,7 @@
     "clean": "expo-module clean",
     "lint": "expo-module lint",
     "test": "expo-module test",
-    "prepare": "expo-module prepare",
+    "prepare": "expo-module prepare && cp -a support/serviceExtensionFiles build/support/ && cp -a support/contentExtensionFiles build/support/",
     "prepublishOnly": "expo-module prepublishOnly",
     "expo-module": "expo-module",
     "open:ios": "xed example/ios",
