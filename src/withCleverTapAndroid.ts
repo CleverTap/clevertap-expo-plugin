@@ -10,9 +10,8 @@ export const withCleverTapAndroid: ConfigPlugin<CleverTapPluginProps> = (config,
     if (props.android?.features?.enableHmsPush) {
         config = withHuaweiConfig(config, props);
     }
-    if (props.android?.customNotificationSound) {
-        config = withCustomNotificationSound(config, props);
-    }
+    
+    config = withCustomNotificationSound(config, props);
     config = withCleverTapAndroidResources(config, props);
     config = withCleverTapAndroidManifest(config, props);
     config = withClevertapAndroidAppBuildGradle(config, props)

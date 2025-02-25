@@ -1,6 +1,6 @@
 export interface Android{
     features : Features;
-    customNotificationSound?: string;
+    customNotificationSound?: string | string[];
     customIdentifiers?: string;  // e.g., "Email,Phone"
     backgroundSync?: string;
     defaultNotificationChannelId?: string;
