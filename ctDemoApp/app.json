@@ -37,7 +37,7 @@
     },
     "plugins": [
       [
-        "../app.plugin.js",
+        "clevertap-expo-plugin",
         {
           "accountId": "TEST-46W-WWR-R85Z",
           "accountToken": "TEST-200-064",
@@ -49,7 +49,11 @@
           "ios": {
             "mode": "development",
             "deploymentTarget": "11",
-            "deviceFamily": "1,2",
+            "profileProps": {
+              "name": "test3",
+              "identity": 123455,
+              "email": "test3@gmail.com"
+            },
             "notifications": {
               "enableRichMedia": true,
               "enablePushImpression": true,
@@ -84,17 +88,12 @@
               ]
             }
           },
-          "android":{
-            "customNotificationSound":"expo_sound.mp3",
-            "registerActivityLifecycleCallbacks":true,
-            "features":{
-              "enablePush":true
+          "android": {
+            "customNotificationSound": "expo_sound.mp3",
+            "registerActivityLifecycleCallbacks": true,
+            "features": {
+              "enablePush": true
             }
-          },
-          "profileProps": {
-            "name": "test3",
-            "identity": 123455,
-            "email": "test3@gmail.com"
           }
         }
       ],

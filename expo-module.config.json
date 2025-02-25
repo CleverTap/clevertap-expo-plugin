@@ -1,7 +1,10 @@
 {
   "platforms": [
-    "apple",
+    "ios",
     "android",
     "web"
-  ]
+  ],
+  "ios": {
+    "appDelegateSubscribers": ["CleverTapAppDelegate"]
+  }
 }

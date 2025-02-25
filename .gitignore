@@ -8,8 +8,8 @@ build/
 #plugin
 package-lock.json
 
-ios/
-Examples/ctDemoApp/android/
+ctDemoApp/android/
+ctDemoApp/ios/
 .idea
 local.properties
 .gradle
