@@ -111,10 +111,6 @@ const METADATA_CONFIGS: MetadataConfig[] = [
         getValue: (props) => typeof props.disableAppLaunchedEvent !== 'undefined' ? 
         (props.disableAppLaunchedEvent ? "1" : "0") : 
         undefined
-    },
-    {
-        key: 'CLEVERTAP_INTENT_SERVICE',
-        getValue: (props) => props.android?.intentServiceName
     }
 ];
 
