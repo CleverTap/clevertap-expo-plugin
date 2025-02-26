@@ -79,14 +79,7 @@
               0,
               1,
               2
-            ],
-            "templateIdentifiers": {
-              "source": "assets",
-              "destination": "Resources",
-              "templates": [
-                "templates"
-              ]
-            }
+            ]
           },
           "android": {
             "customNotificationSound": "expo_sound.mp3",

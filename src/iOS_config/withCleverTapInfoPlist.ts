@@ -1,9 +1,14 @@
 import {
-    ConfigPlugin,
-    withInfoPlist
-  } from "@expo/config-plugins";
+  ConfigPlugin,
+  withInfoPlist
+} from "@expo/config-plugins";
 import { CleverTapPluginProps } from "../../types/types";
 import { CleverTapLog } from "../../support/CleverTapLog";
+import { NotificationCategory } from "../../types/iOSTypes";
+
+interface NotificationProps {
+  [key: string]: any;  // Allow dynamic keys with any value type
+}
 
 /**
 * Add CleverTap credentials in Info.plist
@@ -48,6 +53,43 @@ export const withCleverTapInfoPlist: ConfigPlugin<CleverTapPluginProps> = (
       config.modResults.CleverTapEnableFileProtection = clevertapProps.ios?.enableFileProtection;
       CleverTapLog.log(`Setting file protection value: ${clevertapProps.ios?.enableFileProtection}`);
     }
+
+    //CTExpo internal props
+    if (!config.modResults.NotificationProps) {
+      config.modResults.NotificationProps = {};
+    }
+
+    if (clevertapProps.ios?.notifications?.enablePushInForeground) {
+      const enablePushInForeground = clevertapProps.ios?.notifications?.enablePushInForeground;
+
+      // Add or update the NotificationProps key with your value
+      (config.modResults.NotificationProps as NotificationProps)[
+        "EnablePushInForeground"
+      ] = enablePushInForeground;
+      CleverTapLog.log(`Enabling push in foreground`);
+    }
+
+    if (clevertapProps.ios?.notifications?.notificationCategories != null) {
+      const notificationCategories = clevertapProps.ios?.notifications?.notificationCategories as [NotificationCategory];
+
+      (config.modResults.NotificationProps as NotificationProps)[
+        "NotificationCategories"
+      ] = notificationCategories;
+      CleverTapLog.log(`Setting notification categories`);
+    }
+
+    if (clevertapProps.ios?.templateIdentifiers?.templates != null) {
+      const customTemplate = clevertapProps.ios?.templateIdentifiers;
+      config.modResults.CTExpoCustomTemplate = customTemplate;
+      CleverTapLog.log(`Setting custom template`);
+    }
+
+    if (clevertapProps.ios?.enableURLDelegateChannels != null) {
+      const enableURLDelegateChannels = clevertapProps.ios?.enableURLDelegateChannels;
+      config.modResults.CTExpoURLDelegateChannels = enableURLDelegateChannels as [number];
+      CleverTapLog.log(`Handling url delegate for these channels: ${enableURLDelegateChannels}`);
+    }
+
     return config;
   });
 };

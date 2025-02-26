@@ -34,7 +34,8 @@
     "expo-module-scripts": "^4.0.3",
     "expo-modules-core": "^2.2.1",
     "fs-extra": "^11.3.0",
-    "react-native": "0.76.0"
+    "react-native": "0.76.0",
+    "@expo/config-plugins": "^9.0.15"
   },
   "peerDependencies": {
     "expo": "*",
