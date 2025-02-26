@@ -32,7 +32,7 @@ export const CLEVERTAP_GRADLE_PROPERTIES_KEYS = {
 
 export const CLEVERTAP_DEPENDENCIES_DEFAULT_VERSIONS: Dependencies = {
     clevertapCore: {
-        clevertapSdkVersion: '7.1.2',
+        clevertapCoreSdkVersion: '7.1.2',
         androidxCoreVersion: '1.9.0'
     },
     pushNotifications: {

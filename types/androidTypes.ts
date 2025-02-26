@@ -21,7 +21,7 @@ export interface Features {
 }
 export interface Dependencies {
     clevertapCore: {
-        clevertapSdkVersion: string;
+        clevertapCoreSdkVersion: string;
         androidxCoreVersion: string;
     };
     pushNotifications: {

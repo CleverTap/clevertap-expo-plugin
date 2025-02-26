@@ -11,7 +11,7 @@ const getVersionProperty = (propertyKey: string): string => {
     // Map property keys to their default values
     switch (propertyKey) {
         case KEYS.CLEVERTAP_SDK_VERSION:
-            defaultValue = VERSIONS.clevertapCore?.clevertapSdkVersion || '';
+            defaultValue = VERSIONS.clevertapCore?.clevertapCoreSdkVersion || '';
             break;
         case KEYS.ANDROIDX_CORE_VERSION:
             defaultValue = VERSIONS.clevertapCore?.androidxCoreVersion || '';
