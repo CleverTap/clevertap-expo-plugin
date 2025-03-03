@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import com.clevertap.android.pushtemplates.PushTemplateNotificationHandler
+import com.clevertap.android.pushtemplates.TemplateRenderer
 import com.clevertap.android.sdk.ActivityLifecycleCallback
 import com.clevertap.android.sdk.CleverTapAPI
 import com.clevertap.android.sdk.Logger
@@ -40,6 +41,7 @@ class CleverTapReactApplicationLifecycleListener : ApplicationLifecycleListener 
         if (enablePushTemplates) {
             try {
                 CleverTapAPI.setNotificationHandler(PushTemplateNotificationHandler() as NotificationHandler)
+                TemplateRenderer.debugLevel = logLevel
             } catch (t: Throwable) {
                 Logger.v("Unable to set push templates notification handler",t.message)
             }
