@@ -28,7 +28,7 @@ export interface Dependencies {
         firebaseMessagingVersion: string;
     };
     pushTemplates: {
-        pushTemplatesVersion: string;
+        clevertapPushTemplatesSdkVersion: string;
     };
     inApp: {
         appCompatVersion: string;

@@ -39,7 +39,7 @@ export const CLEVERTAP_DEPENDENCIES_DEFAULT_VERSIONS: Dependencies = {
         firebaseMessagingVersion: '23.0.6'
     },
     pushTemplates: {
-        pushTemplatesVersion: '1.2.4'
+        clevertapPushTemplatesSdkVersion: '1.2.4'
     },
     inApp: {
         appCompatVersion: '1.6.0-rc01',

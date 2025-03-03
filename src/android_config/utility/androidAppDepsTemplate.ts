@@ -20,7 +20,7 @@ const getVersionProperty = (propertyKey: string): string => {
             defaultValue = VERSIONS.pushNotifications?.firebaseMessagingVersion || '';
             break;
         case KEYS.PUSH_TEMPLATES_VERSION:
-            defaultValue = VERSIONS.pushTemplates?.pushTemplatesVersion || '';
+            defaultValue = VERSIONS.pushTemplates?.clevertapPushTemplatesSdkVersion || '';
             break;
         case KEYS.APP_COMPAT_VERSION:
             defaultValue = VERSIONS.inApp?.appCompatVersion || VERSIONS.inbox?.appCompatVersion || '';
