@@ -44,7 +44,7 @@ const getVersionProperty = (propertyKey: string): string => {
             defaultValue = VERSIONS.media3?.media3Version || '';
             break;
         case KEYS.INSTALL_REFERRER_VERSION:
-            defaultValue = VERSIONS.installReferrer?.version || '';
+            defaultValue = VERSIONS.installReferrer?.installReferrerVersion || '';
             break;
         case KEYS.CLEVERTAP_HMS_SDK_VERSION:
             defaultValue = VERSIONS.hmsPush?.clevertapHmsSdkVersion || '';
@@ -53,7 +53,7 @@ const getVersionProperty = (propertyKey: string): string => {
             defaultValue = VERSIONS.hmsPush?.hmsPushVersion || '';
             break;
         case KEYS.PLAY_SERVICES_ADS_VERSION:
-            defaultValue = VERSIONS.googleAdId?.version || '';
+            defaultValue = VERSIONS.googleAdId?.playServicesAdsVersion || '';
             break;
     }
 

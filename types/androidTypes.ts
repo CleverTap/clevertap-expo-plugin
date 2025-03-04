@@ -46,13 +46,13 @@ export interface Dependencies {
         media3Version: string;
     };
     installReferrer: {
-        version: string;
+        installReferrerVersion: string;
     };
     hmsPush: {
         clevertapHmsSdkVersion: string;
         hmsPushVersion: string;
     };
     googleAdId: {
-        version: string;
+        playServicesAdsVersion: string;
     };
 }

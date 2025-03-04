@@ -58,13 +58,13 @@ export const CLEVERTAP_DEPENDENCIES_DEFAULT_VERSIONS: Dependencies = {
         media3Version: '1.1.1'
     },
     installReferrer: {
-        version: '2.2'
+        installReferrerVersion: '2.2'
     },
     hmsPush: {
         clevertapHmsSdkVersion: '1.3.4',
         hmsPushVersion: '6.11.0.300'
     },
     googleAdId: {
-        version: '23.6.0'
+        playServicesAdsVersion: '23.6.0'
     }
 };
