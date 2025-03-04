@@ -55,7 +55,7 @@ export const CLEVERTAP_DEPENDENCIES_DEFAULT_VERSIONS: Dependencies = {
 
     },
     media3: {
-        version: '1.1.1'
+        media3Version: '1.1.1'
     },
     installReferrer: {
         version: '2.2'

@@ -43,7 +43,7 @@ export interface Dependencies {
         fragmentVersion: string;
     };
     media3: {
-        version: string;
+        media3Version: string;
     };
     installReferrer: {
         version: string;
