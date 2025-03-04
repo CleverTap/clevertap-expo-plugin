@@ -63,7 +63,12 @@ const METADATA_CONFIGS: MetadataConfig[] = [
         key: 'CLEVERTAP_USE_GOOGLE_AD_ID',
         getValue: (props) => props.android?.features?.enableGoogleAdId ? "1" : undefined,
         onAdd: (_, androidManifest) => {
-            addPermission(androidManifest, "com.google.android.gms.permission.AD_ID");
+            const permissionExists = androidManifest.manifest?.['uses-permission']?.some(
+                permission => permission.$?.['android:name'] === "com.google.android.gms.permission.AD_ID"
+            );
+            if (!permissionExists) {
+                addPermission(androidManifest, "com.google.android.gms.permission.AD_ID");
+            }
         },
         onRemove: (androidManifest) => {
             removePermissions(androidManifest, ["com.google.android.gms.permission.AD_ID"])
