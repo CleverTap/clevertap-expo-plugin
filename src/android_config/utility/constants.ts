@@ -65,6 +65,6 @@ export const CLEVERTAP_DEPENDENCIES_DEFAULT_VERSIONS: Dependencies = {
         hmsPushVersion: '6.11.0.300'
     },
     googleAdId: {
-        playServicesAdsVersion: '23.6.0'
+        playServicesAdsVersion: '18.2.0'
     }
 };

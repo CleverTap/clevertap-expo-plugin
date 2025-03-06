@@ -119,7 +119,7 @@ const generateHmsPushDependencies = () => `
 const generateGoogleAdIdDependencies = () => `
     // Google Ad ID
     if (${getPropertyCheck(KEYS.GOOGLE_AD_ID_ENABLED)}) {
-        implementation("com.google.android.gms:play-services-ads:${getVersionProperty(KEYS.PLAY_SERVICES_ADS_VERSION)}")
+        implementation("com.google.android.gms:play-services-ads-identifier:${getVersionProperty(KEYS.PLAY_SERVICES_ADS_VERSION)}")
     }`;
 
 export const generateDependenciesTemplate = (): string => {
