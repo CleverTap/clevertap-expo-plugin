@@ -39,9 +39,7 @@ export type CleverTapPluginProps = {
    * (optional) Use to set encryption level for PII data.
    */
   encryptionLevel?: CleverTapEncryptionLevel;
-  /**
-   * (optional) Use to set encryption level for PII data.
-   */
+  customIdentifiers?: string;  // e.g., "Email,Phone"
   ios?: iOSFeatures;
   android:Android;
 };
