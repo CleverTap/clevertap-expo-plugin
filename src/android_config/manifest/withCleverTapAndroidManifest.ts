@@ -8,6 +8,7 @@ import { CleverTapLog } from "../../../support/CleverTapLog";
 const { addMetaDataItemToMainApplication, getMainApplicationOrThrow, removeMetaDataItemFromMainApplication } = AndroidConfig.Manifest;
 const { addPermission, removePermissions } = AndroidConfig.Permissions
 const FCM_SERVICE_NAME = 'com.clevertap.android.sdk.pushnotification.fcm.FcmMessageListenerService';
+const CT_INTENT_SERVICE_NAME = 'com.clevertap.android.sdk.pushnotification.CTNotificationIntentService';
 
 export const withCleverTapAndroidManifest: ConfigPlugin<CleverTapPluginProps> = (config, props) => {
     return withAndroidManifest(config, async config => {
@@ -29,8 +30,10 @@ async function setManifestConfigAsync(
     // Add FCM service if push is enabled
     if (props.android?.features?.enablePush) {
         addFCMService(mainApplication);
+        addCTNotificationIntentService(mainApplication);
     } else {
         removeFCMService(mainApplication);
+        removeCTNotificationIntentService(mainApplication);
     }
 
     return androidManifest;
@@ -103,10 +106,6 @@ const METADATA_CONFIGS: MetadataConfig[] = [
         getValue: (props) => props.android?.sslPinning?.toString()
     },
     {
-        key: 'CLEVERTAP_USE_CUSTOM_ID',
-        getValue: (props) => props.android?.useCustomId?.toString()
-    },
-    {
         key: 'CLEVERTAP_HANDSHAKE_DOMAIN',
         getValue: (props) => props.handshakeDomain
     },
@@ -115,10 +114,6 @@ const METADATA_CONFIGS: MetadataConfig[] = [
         getValue: (props) => typeof props.disableAppLaunchedEvent !== 'undefined' ? 
         (props.disableAppLaunchedEvent ? "1" : "0") : 
         undefined
-    },
-    {
-        key: 'CLEVERTAP_INTENT_SERVICE',
-        getValue: (props) => props.android?.intentServiceName
     }
 ];
 
@@ -174,5 +169,43 @@ const removeFCMService = (mainApplication: AndroidConfig.Manifest.ManifestApplic
             service.$?.['android:name'] !== FCM_SERVICE_NAME
         );
         CleverTapLog.log('Removed FCM Message Listener Service from AndroidManifest.xml');
+    }
+};
+
+const addCTNotificationIntentService = (mainApplication: AndroidConfig.Manifest.ManifestApplication) => {
+    
+    mainApplication.service = mainApplication.service || [];
+    
+    const serviceExists = mainApplication.service.some(service => 
+        service.$?.['android:name'] === CT_INTENT_SERVICE_NAME
+    );
+
+    if (!serviceExists) {
+        mainApplication.service.push({
+            $: {
+                'android:name': CT_INTENT_SERVICE_NAME,
+                'android:exported': 'false'
+            },
+            'intent-filter': [{
+                action: [{
+                    $: {
+                        'android:name': 'com.clevertap.PUSH_EVENT'
+                    }
+                }]
+            }]
+        });
+        CleverTapLog.log('Added CT Notification Intent Service to AndroidManifest.xml');
+    } else {
+        CleverTapLog.log('CT Notification Intent Service already exists in AndroidManifest.xml');
+    }
+};
+
+const removeCTNotificationIntentService = (mainApplication: AndroidConfig.Manifest.ManifestApplication) => {
+    
+    if (mainApplication.service) {
+        mainApplication.service = mainApplication.service.filter(service => 
+            service.$?.['android:name'] !== CT_INTENT_SERVICE_NAME
+        );
+        CleverTapLog.log('Removed CT Notification Intent Service from AndroidManifest.xml');
     }
 };

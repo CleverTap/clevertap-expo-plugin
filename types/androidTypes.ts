@@ -6,8 +6,6 @@ export interface Android{
     defaultNotificationChannelId?: string;
     inAppExcludeActivities?: string;  // Comma-separated activity names
     sslPinning?: string;  // "0" or "1"
-    useCustomId?: string;  //"0" or "1"
-    intentServiceName?: string;
     registerActivityLifecycleCallbacks?: boolean;
 }
 export interface Features {
