@@ -225,7 +225,7 @@ export const withCleverTapXcodeProjectNSE: ConfigPlugin<CleverTapPluginProps> = 
                 CleverTapLog.log('Inside CTNotificationServiceExtension target');
 
                 const buildSettingsObj = configurations[key].buildSettings;
-                buildSettingsObj.CT_PUSH_APP_GROUP = clevertapProps.ios?.notifications?.iosPushAppGroup;
+                buildSettingsObj.CTEXPO_PUSH_APP_GROUP = clevertapProps.ios?.notifications?.iosPushAppGroup;
                 buildSettingsObj.SWIFT_VERSION = swiftVersion;
                 if (codeSignStyle) { buildSettingsObj.CODE_SIGN_STYLE = codeSignStyle; }
                 if (codeSignIdentity) { buildSettingsObj.CODE_SIGN_IDENTITY = codeSignIdentity; }
@@ -233,6 +233,24 @@ export const withCleverTapXcodeProjectNSE: ConfigPlugin<CleverTapPluginProps> = 
                 if (developmentTeam) { buildSettingsObj.DEVELOPMENT_TEAM = developmentTeam; }
                 if (provisioningProfile) { buildSettingsObj.PROVISIONING_PROFILE_SPECIFIER = provisioningProfile; }
                 buildSettingsObj.CODE_SIGN_ENTITLEMENTS = `${NSE_TARGET_NAME}/${NSE_TARGET_NAME}.entitlements`;
+
+                if (clevertapProps.ios?.notifications?.enablePushImpression) {
+                    buildSettingsObj.CTEXPO_ACCOUNT_ID = clevertapProps.accountId;
+                    buildSettingsObj.CTEXPO_ACCOUNT_TOKEN = clevertapProps.accountToken;
+                }
+                if(clevertapProps.ios?.notifications?.enablePushImpression && clevertapProps.accountRegion != null) {
+                    buildSettingsObj.CTEXPO_ACCOUNT_REGION = clevertapProps.accountRegion;
+                }
+                if(clevertapProps.ios?.notifications?.enablePushImpression && clevertapProps.proxyDomain != null) {
+                    buildSettingsObj.CTEXPO_PROXY_DOMAIN = clevertapProps.proxyDomain;
+                }
+                if(clevertapProps.ios?.notifications?.enablePushImpression && clevertapProps.spikyProxyDomain != null) {
+                    buildSettingsObj.CTEXPO_SPIKY_PROXY = clevertapProps.spikyProxyDomain;
+                }
+                if(clevertapProps.ios?.notifications?.enablePushImpression && clevertapProps.useCustomId && clevertapProps.cleverTapIdentifiers != null) {
+                    buildSettingsObj.CTEXPO_CT_CUSTOM_ID = clevertapProps.useCustomId;
+                    buildSettingsObj.CTEXPO_CT_IDENTIFIERS = clevertapProps.cleverTapIdentifiers;
+                }
             }
         }
 

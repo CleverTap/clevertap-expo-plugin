@@ -151,7 +151,7 @@ export const withCleverTapXcodeProjectNCE: ConfigPlugin<CleverTapPluginProps> = 
                 configurations[key].buildSettings.PRODUCT_NAME == `"${NCE_TARGET_NAME}"`
             ) {
                 const buildSettingsObj = configurations[key].buildSettings;
-                buildSettingsObj.CT_PUSH_APP_GROUP = clevertapProps.ios?.notifications?.iosPushAppGroup;
+                buildSettingsObj.CTEXPO_PUSH_APP_GROUP = clevertapProps.ios?.notifications?.iosPushAppGroup;
                 buildSettingsObj.SWIFT_VERSION = swiftVersion;
                 if (codeSignStyle) { buildSettingsObj.CODE_SIGN_STYLE = codeSignStyle; }
                 if (codeSignIdentity) { buildSettingsObj.CODE_SIGN_IDENTITY = codeSignIdentity; }

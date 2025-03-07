@@ -28,6 +28,25 @@ import {
 } from "./iOS_config/withCleverTapCustomTemplates";
 
 /**
+* Add 'aps-environment' record with current environment to '<project-name>.entitlements' file
+*/
+const withAppEnvironment: ConfigPlugin<CleverTapPluginProps> = (
+  config,
+  clevertapProps
+) => {
+  return withEntitlementsPlist(config, (newConfig) => {
+    if (clevertapProps?.ios?.mode == null) {
+      throw new Error(`
+        Missing required "mode" key in your app.json or app.config.js file for "clevertap-expo-plugin".
+        "mode" can be either "development" or "production".`
+      )
+    }
+    newConfig.modResults["aps-environment"] = clevertapProps.ios?.mode;
+    return newConfig;
+  });
+};
+
+/**
 * Add "Background Modes -> Remote notifications"
 */
 const withRemoteNotificationsPermissions: ConfigPlugin<CleverTapPluginProps> = (config) => {
@@ -62,6 +81,7 @@ const withCleverTapEntitlements: ConfigPlugin<CleverTapPluginProps> = (config, c
 };
 
 export const withCleverTapIos: ConfigPlugin<CleverTapPluginProps> = (config, clevertapProps) => {
+  config = withAppEnvironment(config, clevertapProps);
   config = withRemoteNotificationsPermissions(config, clevertapProps);
   config = withCleverTapEntitlements(config, clevertapProps);
   config = addCustomTemplateFilesToBundle(config, clevertapProps);

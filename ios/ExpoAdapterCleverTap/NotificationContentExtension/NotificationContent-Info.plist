@@ -5,7 +5,7 @@
 <key>CTExpo</key>
 	<dict>
 		<key>AppGroup</key>
-		<string>$(CT_PUSH_APP_GROUP)</string>
+		<string>$(CTEXPO_PUSH_APP_GROUP)</string>
 	</dict>
 	<key>Allow Arbitrary Loads</key>
 	<true/>
@@ -29,10 +29,6 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
-	<key>CleverTapAccountID</key>
-	<string></string>
-	<key>CleverTapToken</key>
-	<string></string>
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionAttributes</key>

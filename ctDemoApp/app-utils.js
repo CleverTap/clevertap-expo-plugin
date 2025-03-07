@@ -3,6 +3,7 @@ import {
     Platform,
     Linking
 } from 'react-native';
+import userDefaults from 'react-native-user-defaults'
 
 const CleverTap = require('clevertap-react-native');
 
@@ -46,6 +47,16 @@ export const set_userProfile = () => {
         custom1: 123,
         birthdate: new Date('2020-03-03T06:35:31'),
     });
+    userDefaults.set("CTProfileName", 'testUserA1', "group.com.clevertap.expoDemo", (err, data) => {
+        if(!err) console.log('Saved CTProfileName: testUserA1')
+
+    userDefaults.set("CTProfileEmail", 'aahana@mail.com', "group.com.clevertap.expoDemo", (err, data) => {
+        if(!err) console.log('Saved CTProfileEmail: aahana@mail.com')
+    })
+    userDefaults.set("CTProfileIdentity", 'sonalk', "group.com.clevertap.expoDemo", (err, data) => {
+        if(!err) console.log('Saved CTProfileIdentity: sonalk')
+    })
+
 };
 
 // Identity_Management

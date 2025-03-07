@@ -48,6 +48,7 @@
           "logLevel": 3,
 
           "ios": {
+            "mode": "development",
             "notifications": {
               "iosPushAppGroup": "group.com.clevertap.expoDemo",
               "enableRichMedia": true,

@@ -8,7 +8,6 @@ import NotificationCenter
 public class CleverTapAppDelegate: ExpoAppDelegateSubscriber, CleverTapURLDelegate, CleverTapSyncDelegate, UNUserNotificationCenterDelegate {
     public func shouldHandleCleverTap(_ url: URL?, for channel: CleverTapChannel) -> Bool {
         let plistDict = Bundle.main.infoDictionary
-        
         if let channels = plistDict?["CTExpoURLDelegateChannels"] as? [Int32] {
             let shouldHandle = channels.contains(channel.rawValue)
             return shouldHandle
@@ -45,29 +44,15 @@ public class CleverTapAppDelegate: ExpoAppDelegateSubscriber, CleverTapURLDelega
         if let enablePushInForeground = notificationProps?["EnablePushInForeground"] as? Bool, enablePushInForeground {
             UNUserNotificationCenter.current().delegate = self
         }
-        
         UNUserNotificationCenter.current().setNotificationCategories(unCategories)
+        
         if let logLevel = Bundle.main.object(forInfoDictionaryKey: "CTExpoLogLevel") as? Int32 {
             CleverTap.setDebugLevel(logLevel)
         }
         
         CleverTap.autoIntegrate()
-        CleverTap.sharedInstance()?.setUrlDelegate(self)
-                
-        //Set UserDefaults if enable Push impression CTExpoPushAppGroup
-        if let appGroup = Bundle.main.object(forInfoDictionaryKey: "CTExpoPushAppGroup") as? String {
-          //logs
-            let defaults = UserDefaults(suiteName: appGroup)
-            if let accountID = Bundle.main.object(forInfoDictionaryKey: "CleverTapAccountID") as? String,
-               let token = Bundle.main.object(forInfoDictionaryKey: "CleverTapToken") as? String {
-                defaults?.set(accountID, forKey: "accountID")
-                defaults?.set(token, forKey: "token")
-            }
-            if let region = Bundle.main.object(forInfoDictionaryKey: "CleverTapRegion") as? String {
-                defaults?.set(region, forKey: "region")
-            }
-            //other keys spiky and handshake
-            defaults?.synchronize()
+        if let channels = plistDict?["CTExpoURLDelegateChannels"] as? [Int32], !channels.isEmpty {
+            CleverTap.sharedInstance()?.setUrlDelegate(self)
         }
                 
         CleverTapReactManager.sharedInstance()?.applicationDidLaunch(options: launchOptions)
