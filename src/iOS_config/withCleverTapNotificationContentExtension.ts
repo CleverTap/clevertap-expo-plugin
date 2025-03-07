@@ -26,7 +26,7 @@ import {
 export const withCleverTapNCE: ConfigPlugin<CleverTapPluginProps> = (config, clevertapProps) => {
     // support for monorepos where node_modules can be above the project directory.
     const pluginDir = require.resolve("clevertap-expo-plugin/package.json")
-    const sourceDir = path.join(pluginDir, "../build/support/contentExtensionFiles/")
+    const sourceDir = path.join(pluginDir, "../ios/ExpoAdapterCleverTap/NotificationContentExtension/")
 
     return withDangerousMod(config, [
         'ios',
@@ -175,23 +175,15 @@ export const withAppGroupPermissionsNCE: ConfigPlugin<CleverTapPluginProps> = (
 ) => {
     const APP_GROUP_KEY = "com.apple.security.application-groups";
     return withEntitlementsPlist(config, config => {
-        const APP_GROUP_KEY = "com.apple.security.application-groups";
-
-      const existingAppGroups = config.modResults[APP_GROUP_KEY];
-      CleverTapLog.log(`enetered withEntitlementsPlist withAppGroupPermissionsNCE entered ${existingAppGroups}`);
-
-      if (clevertapProps.ios?.notifications?.iosPushAppGroup != null) {
-        CleverTapLog.log(`enetered withAppGroupPermissionsNCE entered ${clevertapProps.ios?.notifications?.iosPushAppGroup}`);
-
-        if (Array.isArray(existingAppGroups) && !existingAppGroups.includes(clevertapProps.ios?.notifications?.iosPushAppGroup)) {
-            CleverTapLog.log(`enetered withAppGroupPermissionsNCE ${clevertapProps.ios?.notifications?.iosPushAppGroup}`);
-            config.modResults[APP_GROUP_KEY] = existingAppGroups.concat([clevertapProps.ios?.notifications?.iosPushAppGroup]);
-          } else {
-            CleverTapLog.log(`enetered withAppGroupPermissionsNCE ${clevertapProps.ios?.notifications?.iosPushAppGroup}`);
-            config.modResults[APP_GROUP_KEY] = [clevertapProps.ios?.notifications?.iosPushAppGroup];
-          }
-
-      }
+        if (config.modRequest.projectName === "${NCE_TARGET_NAME}" && clevertapProps.ios?.notifications?.iosPushAppGroup != null) {
+            const APP_GROUP_KEY = "com.apple.security.application-groups";
+            const existingAppGroups = config.modResults[APP_GROUP_KEY];
+            if (Array.isArray(existingAppGroups) && !existingAppGroups.includes(clevertapProps.ios?.notifications?.iosPushAppGroup)) {
+                config.modResults[APP_GROUP_KEY] = existingAppGroups.concat([clevertapProps.ios?.notifications?.iosPushAppGroup]);
+              } else {
+                config.modResults[APP_GROUP_KEY] = [clevertapProps.ios?.notifications?.iosPushAppGroup];
+              }
+        }
         return config;
     });
 };

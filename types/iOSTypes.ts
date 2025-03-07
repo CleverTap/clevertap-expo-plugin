@@ -31,10 +31,6 @@ export type iOSFeatures = {
     * (optional) This value should be set when client wants to configure remote Push Notifications.
     */
     notifications?: NotificationFeature;
-    /**
-     * (optional) This value should be set to push client profile properties to record `Push Impression`.
-  .  */
-    profileProps?: Profile;
 }
 
 export type CustomTemplate = {
@@ -77,12 +73,6 @@ export type NotificationFeature = {
     */
     iosNCEFilePath?: string;
     iosPushAppGroup?: string;
-}
-
-export type Profile = {
-    name: string;
-    identity: number;
-    email: string;
 }
 
 export type NotificationCategory = {

@@ -28,24 +28,6 @@ import {
 } from "./iOS_config/withCleverTapCustomTemplates";
 
 /**
-* Add 'aps-environment' record with current environment to '<project-name>.entitlements' file
-*/
-const withAppEnvironment: ConfigPlugin<CleverTapPluginProps> = (
-  config,
-  clevertapProps
-) => {
-  return withEntitlementsPlist(config, (newConfig) => {
-    if (clevertapProps?.ios?.mode == null) {
-      throw new Error(`
-        Missing required "mode" key in your app.json or app.config.js file for "clevertap-expo-plugin".
-        "mode" can be either "development" or "production".`
-      )
-    }
-    newConfig.modResults["aps-environment"] = clevertapProps.ios?.mode;
-    return newConfig;
-  });
-};
-/**
 * Add "Background Modes -> Remote notifications"
 */
 const withRemoteNotificationsPermissions: ConfigPlugin<CleverTapPluginProps> = (config) => {
@@ -66,7 +48,7 @@ const withRemoteNotificationsPermissions: ConfigPlugin<CleverTapPluginProps> = (
 const withCleverTapEntitlements: ConfigPlugin<CleverTapPluginProps> = (config, clevertapProps) => {
   return withEntitlementsPlist(config, (config) => {
     // Add the app group to the main application target's entitlements.
-    if (clevertapProps.ios?.notifications?.enablePushImpression === true && clevertapProps.ios?.notifications?.iosPushAppGroup != null) {
+    if (clevertapProps.ios?.notifications?.iosPushAppGroup != null) {
       const appGroupsKey = 'com.apple.security.application-groups';
       const existingAppGroups = config.modResults[appGroupsKey];
       if (Array.isArray(existingAppGroups) && !existingAppGroups.includes(clevertapProps.ios?.notifications?.iosPushAppGroup)) {
@@ -80,7 +62,6 @@ const withCleverTapEntitlements: ConfigPlugin<CleverTapPluginProps> = (config, c
 };
 
 export const withCleverTapIos: ConfigPlugin<CleverTapPluginProps> = (config, clevertapProps) => {
-  config = withAppEnvironment(config, clevertapProps);
   config = withRemoteNotificationsPermissions(config, clevertapProps);
   config = withCleverTapEntitlements(config, clevertapProps);
   config = addCustomTemplateFilesToBundle(config, clevertapProps);

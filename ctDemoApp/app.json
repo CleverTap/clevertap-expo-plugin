@@ -48,13 +48,8 @@
           "logLevel": 3,
 
           "ios": {
-            "mode": "development",
-            "profileProps": {
-              "name": "test3",
-              "identity": 123455,
-              "email": "test3@gmail.com"
-            },
             "notifications": {
+              "iosPushAppGroup": "group.com.clevertap.expoDemo",
               "enableRichMedia": true,
               "enablePushImpression": true,
               "enablePushTemplate": true,

@@ -26,12 +26,16 @@ import {
 export const withCleverTapNSE: ConfigPlugin<CleverTapPluginProps> = (config, clevertapProps) => {
     // support for monorepos where node_modules can be above the project directory.
     const pluginDir = require.resolve("clevertap-expo-plugin/package.json")
-    const sourceDir = path.join(pluginDir, "../build/support/serviceExtensionFiles/")
-
     return withDangerousMod(config, [
         'ios',
         async config => {
+            const sourceDir = path.join(pluginDir, "../ios/ExpoAdapterCleverTap/NotificationServiceExtension/")
+            const projectRoot = config.modRequest.projectRoot;
             const iosPath = path.join(config.modRequest.projectRoot, "ios")
+
+            // Copy NSE source file either from configuration-provided location, falling back to the default one.
+            const sourcePath = clevertapProps.ios?.notifications?.iosNSEFilePath ?? `${sourceDir}${NSE_SOURCE_FILE}`
+            const targetFile = `${iosPath}/${NSE_TARGET_NAME}/${NSE_SOURCE_FILE}`;
 
             /* COPY OVER EXTENSION FILES */
             fs.mkdirSync(`${iosPath}/${NSE_TARGET_NAME}`, { recursive: true });
@@ -41,10 +45,6 @@ export const withCleverTapNSE: ConfigPlugin<CleverTapPluginProps> = (config, cle
                 const targetFile = `${iosPath}/${NSE_TARGET_NAME}/${extFile}`;
                 await FileManager.copyFile(`${sourceDir}${extFile}`, targetFile);
             }
-
-            // Copy NSE source file either from configuration-provided location, falling back to the default one.
-            const sourcePath = clevertapProps.ios?.notifications?.iosNSEFilePath ?? `${sourceDir}${NSE_SOURCE_FILE}`
-            const targetFile = `${iosPath}/${NSE_TARGET_NAME}/${NSE_SOURCE_FILE}`;
 
             await FileManager.copyFile(`${sourcePath}`, targetFile);
 
@@ -117,12 +117,6 @@ function updatePushImpressionNSE(
     }
 
     let notificationServiceContent = fs.readFileSync(filePath, 'utf-8');
-    const profile = clevertapProps.ios?.profileProps;
-
-    // Validate profile properties
-    if (!(profile?.name && profile.identity && profile.email)) {
-        throw new Error(`Some or all properties are missing from profile: ${JSON.stringify(profile)}`);
-    }
 
     // Add CleverTap integration if not already present
     if (!notificationServiceContent.includes('getUserDefaults(request)')) {
@@ -257,22 +251,14 @@ export const withAppGroupPermissionsNSE: ConfigPlugin<CleverTapPluginProps> = (
     config, clevertapProps
 ) => {
     return withEntitlementsPlist(config, config => {
-      const APP_GROUP_KEY = "com.apple.security.application-groups";
-
-      const existingAppGroups = config.modResults[APP_GROUP_KEY];
-      CleverTapLog.log(`enetered withEntitlementsPlist withAppGroupPermissionsNSE entered ${existingAppGroups}`);
-
       if (clevertapProps.ios?.notifications?.iosPushAppGroup != null) {
-        CleverTapLog.log(`enetered withAppGroupPermissionsNSE entered ${clevertapProps.ios?.notifications?.iosPushAppGroup}`);
-
+        const APP_GROUP_KEY = "com.apple.security.application-groups";
+        const existingAppGroups = config.modResults[APP_GROUP_KEY];
         if (Array.isArray(existingAppGroups) && !existingAppGroups.includes(clevertapProps.ios?.notifications?.iosPushAppGroup)) {
-            CleverTapLog.log(`enetered withAppGroupPermissionsNSE ${clevertapProps.ios?.notifications?.iosPushAppGroup}`);
             config.modResults[APP_GROUP_KEY] = existingAppGroups.concat([clevertapProps.ios?.notifications?.iosPushAppGroup]);
           } else {
-            CleverTapLog.log(`enetered withAppGroupPermissionsNSE ${clevertapProps.ios?.notifications?.iosPushAppGroup}`);
             config.modResults[APP_GROUP_KEY] = [clevertapProps.ios?.notifications?.iosPushAppGroup];
           }
-
       }
         return config;
     });
