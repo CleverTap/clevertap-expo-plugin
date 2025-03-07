@@ -5,11 +5,12 @@ import {
 } from "@expo/config-plugins";
 import { CleverTapPluginProps } from "../types/types";
 import {
+  withAppGroupPermissionsNCE,
   withCleverTapNCE,
   withCleverTapXcodeProjectNCE
 } from "./iOS_config/withCleverTapNotificationContentExtension";
 import {
-  withAppGroupPermissions,
+  withAppGroupPermissionsNSE,
   withCleverTapNSE,
   withCleverTapXcodeProjectNSE
 } from "./iOS_config/withCleverTapNotificationServiceExtension";
@@ -62,19 +63,37 @@ const withRemoteNotificationsPermissions: ConfigPlugin<CleverTapPluginProps> = (
   });
 };
 
+const withCleverTapEntitlements: ConfigPlugin<CleverTapPluginProps> = (config, clevertapProps) => {
+  return withEntitlementsPlist(config, (config) => {
+    // Add the app group to the main application target's entitlements.
+    if (clevertapProps.ios?.notifications?.enablePushImpression === true && clevertapProps.ios?.notifications?.iosPushAppGroup != null) {
+      const appGroupsKey = 'com.apple.security.application-groups';
+      const existingAppGroups = config.modResults[appGroupsKey];
+      if (Array.isArray(existingAppGroups) && !existingAppGroups.includes(clevertapProps.ios?.notifications?.iosPushAppGroup)) {
+        config.modResults[appGroupsKey] = existingAppGroups.concat([clevertapProps.ios?.notifications?.iosPushAppGroup]);
+      } else {
+        config.modResults[appGroupsKey] = [clevertapProps.ios?.notifications?.iosPushAppGroup];
+      }
+    }
+    return config;
+  });
+};
+
 export const withCleverTapIos: ConfigPlugin<CleverTapPluginProps> = (config, clevertapProps) => {
   config = withAppEnvironment(config, clevertapProps);
   config = withRemoteNotificationsPermissions(config, clevertapProps);
-  config = withAppGroupPermissions(config, clevertapProps);
+  config = withCleverTapEntitlements(config, clevertapProps);
   config = addCustomTemplateFilesToBundle(config, clevertapProps);
 
   if (clevertapProps.ios?.notifications?.enablePushTemplate) {
     config = withCleverTapNCE(config, clevertapProps);
     config = withCleverTapXcodeProjectNCE(config, clevertapProps);
+    config = withAppGroupPermissionsNCE(config, clevertapProps);
   }
   if (clevertapProps.ios?.notifications?.enableRichMedia || clevertapProps.ios?.notifications?.enablePushImpression) {
     config = withCleverTapNSE(config, clevertapProps);
     config = withCleverTapXcodeProjectNSE(config, clevertapProps);
+    config = withAppGroupPermissionsNSE(config, clevertapProps);
   }
   config = withCleverTapPod(config, clevertapProps);
   config = withCleverTapInfoPlist(config, clevertapProps);

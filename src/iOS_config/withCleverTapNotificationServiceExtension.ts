@@ -125,7 +125,7 @@ function updatePushImpressionNSE(
     }
 
     // Add CleverTap integration if not already present
-    if (!notificationServiceContent.includes('recordNotificationViewedEvent')) {
+    if (!notificationServiceContent.includes('getUserDefaults(request)')) {
         console.log('Adding CleverTap integration to NotificationServiceExtension.');
 
         // Update import
@@ -138,14 +138,8 @@ function updatePushImpressionNSE(
         // Add CleverTap event tracking code
         notificationServiceContent = notificationServiceContent.replace(
             `super.didReceive(request, withContentHandler: contentHandler)`,
-            `let profile: Dictionary<String, AnyObject> = [
-           "Name": "${profile.name}" as AnyObject,
-           "Identity": ${profile.identity} as AnyObject,
-           "Email": "${profile.email}" as AnyObject]
-          
-           CleverTap.sharedInstance()?.profilePush(profile)
-           CleverTap.sharedInstance()?.recordNotificationViewedEvent(withData: request.content.userInfo)
-           super.didReceive(request, withContentHandler: contentHandler)`
+            `getUserDefaults(request)
+            super.didReceive(request, withContentHandler: contentHandler)`
         );
 
         // Write the updated content back to the file
@@ -173,7 +167,9 @@ export const withCleverTapXcodeProjectNSE: ConfigPlugin<CleverTapPluginProps> = 
 
         // Add the new PBXGroup to the top level group. This makes the
         // files / folder appear in the file explorer in Xcode.
-        const groups = xcodeProject.hash.project.objects["PBXGroup"];
+        const projObjects = xcodeProject.hash.project.objects
+        const groups = projObjects["PBXGroup"];
+        const xcconfigs = projObjects['XCBuildConfiguration'];
         Object.keys(groups).forEach(function (key) {
             if (typeof groups[key] === "object" && groups[key].name === undefined && groups[key].path === undefined) {
                 xcodeProject.addToPbxGroup(extGroup.uuid, key);
@@ -182,10 +178,28 @@ export const withCleverTapXcodeProjectNSE: ConfigPlugin<CleverTapPluginProps> = 
 
         // WORK AROUND for codeProject.addTarget
         // Xcode projects don't contain these if there is only one target
-        const projObjects = xcodeProject.hash.project.objects;
         projObjects['PBXTargetDependency'] = projObjects['PBXTargetDependency'] || {};
         projObjects['PBXContainerItemProxy'] = projObjects['PBXTargetDependency'] || {};
 
+    // Retrieve Swift version and code signing settings from main target to apply to dependency targets.
+      let swiftVersion;
+      let codeSignStyle;
+      let codeSignIdentity;
+      let otherCodeSigningFlags;
+      let developmentTeam;
+      let provisioningProfile;
+      for (const configUUID of Object.keys(xcconfigs)) {
+        const buildSettings = xcconfigs[configUUID].buildSettings;
+        if (!swiftVersion && buildSettings && buildSettings.SWIFT_VERSION) {
+          swiftVersion = buildSettings.SWIFT_VERSION;
+          codeSignStyle = buildSettings.CODE_SIGN_STYLE;
+          codeSignIdentity = buildSettings.CODE_SIGN_IDENTITY;
+          otherCodeSigningFlags = buildSettings.OTHER_CODE_SIGN_FLAGS;
+          developmentTeam = buildSettings.DEVELOPMENT_TEAM;
+          provisioningProfile = buildSettings.PROVISIONING_PROFILE_SPECIFIER;
+          break;
+        }
+      }
         // Add the NSE target
         // This adds PBXTargetDependency and PBXContainerItemProxy for you
         const nseTarget = xcodeProject.addTarget(NSE_TARGET_NAME, "app_extension", NSE_TARGET_NAME, `${config.ios?.bundleIdentifier}.${NSE_TARGET_NAME}`);
@@ -200,7 +214,7 @@ export const withCleverTapXcodeProjectNSE: ConfigPlugin<CleverTapPluginProps> = 
         xcodeProject.addBuildPhase([], "PBXResourcesBuildPhase", "Resources", nseTarget.uuid);
 
         xcodeProject.addBuildPhase(
-            [],
+            ['UserNotifications.framework'],
             "PBXFrameworksBuildPhase",
             "Frameworks",
             nseTarget.uuid
@@ -214,10 +228,16 @@ export const withCleverTapXcodeProjectNSE: ConfigPlugin<CleverTapPluginProps> = 
                 typeof configurations[key].buildSettings !== "undefined" &&
                 configurations[key].buildSettings.PRODUCT_NAME == `"${NSE_TARGET_NAME}"`
             ) {
+                CleverTapLog.log('Inside CTNotificationServiceExtension target');
+
                 const buildSettingsObj = configurations[key].buildSettings;
-                buildSettingsObj.DEVELOPMENT_TEAM = config?.ios?.appleTeamId;
-                buildSettingsObj.IPHONEOS_DEPLOYMENT_TARGET = clevertapProps?.ios?.deploymentTarget ?? DEPLOYMENT_TARGET;
-                buildSettingsObj.TARGETED_DEVICE_FAMILY = clevertapProps?.ios?.deviceFamily ?? TARGETED_DEVICE_FAMILY;
+                buildSettingsObj.CT_PUSH_APP_GROUP = clevertapProps.ios?.notifications?.iosPushAppGroup;
+                buildSettingsObj.SWIFT_VERSION = swiftVersion;
+                if (codeSignStyle) { buildSettingsObj.CODE_SIGN_STYLE = codeSignStyle; }
+                if (codeSignIdentity) { buildSettingsObj.CODE_SIGN_IDENTITY = codeSignIdentity; }
+                if (otherCodeSigningFlags) { buildSettingsObj.OTHER_CODE_SIGN_FLAGS = otherCodeSigningFlags; }
+                if (developmentTeam) { buildSettingsObj.DEVELOPMENT_TEAM = developmentTeam; }
+                if (provisioningProfile) { buildSettingsObj.PROVISIONING_PROFILE_SPECIFIER = provisioningProfile; }
                 buildSettingsObj.CODE_SIGN_ENTITLEMENTS = `${NSE_TARGET_NAME}/${NSE_TARGET_NAME}.entitlements`;
             }
         }
@@ -233,20 +253,27 @@ export const withCleverTapXcodeProjectNSE: ConfigPlugin<CleverTapPluginProps> = 
 /**
  * Update NSE's entitlement file with App group
  */
-export const withAppGroupPermissions: ConfigPlugin<CleverTapPluginProps> = (
-    config
+export const withAppGroupPermissionsNSE: ConfigPlugin<CleverTapPluginProps> = (
+    config, clevertapProps
 ) => {
-    const APP_GROUP_KEY = "com.apple.security.application-groups";
     return withEntitlementsPlist(config, config => {
-        if (!Array.isArray(config.modResults[APP_GROUP_KEY])) {
-            config.modResults[APP_GROUP_KEY] = [];
-        }
-        const appGroups = config.modResults[APP_GROUP_KEY];
-        const entitlement = `group.${config?.ios?.bundleIdentifier || ""}`;
-        if (!appGroups.includes(entitlement)) {
-            appGroups.push(entitlement);
-        }
-        config.modResults[APP_GROUP_KEY] = appGroups;
+      const APP_GROUP_KEY = "com.apple.security.application-groups";
+
+      const existingAppGroups = config.modResults[APP_GROUP_KEY];
+      CleverTapLog.log(`enetered withEntitlementsPlist withAppGroupPermissionsNSE entered ${existingAppGroups}`);
+
+      if (clevertapProps.ios?.notifications?.iosPushAppGroup != null) {
+        CleverTapLog.log(`enetered withAppGroupPermissionsNSE entered ${clevertapProps.ios?.notifications?.iosPushAppGroup}`);
+
+        if (Array.isArray(existingAppGroups) && !existingAppGroups.includes(clevertapProps.ios?.notifications?.iosPushAppGroup)) {
+            CleverTapLog.log(`enetered withAppGroupPermissionsNSE ${clevertapProps.ios?.notifications?.iosPushAppGroup}`);
+            config.modResults[APP_GROUP_KEY] = existingAppGroups.concat([clevertapProps.ios?.notifications?.iosPushAppGroup]);
+          } else {
+            CleverTapLog.log(`enetered withAppGroupPermissionsNSE ${clevertapProps.ios?.notifications?.iosPushAppGroup}`);
+            config.modResults[APP_GROUP_KEY] = [clevertapProps.ios?.notifications?.iosPushAppGroup];
+          }
+
+      }
         return config;
     });
 };

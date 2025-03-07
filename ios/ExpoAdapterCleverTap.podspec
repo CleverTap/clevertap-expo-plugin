@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.platforms      = {
     :ios => '11'
   }
-  s.swift_version  = '5.4'
+  s.swift_version  = '5'
   s.source         = { git: 'https://github.com/expo/config-plugins.git' }
   s.static_framework = true
 

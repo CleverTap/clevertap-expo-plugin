@@ -35,6 +35,7 @@ end`;
 export const NCE_SOURCE_FILE = "NotificationViewController.swift"
 export const NCE_EXT_FILES = [
   `MainInterface.storyboard`,
+  `${NCE_TARGET_NAME}.entitlements`,
   `${NCE_TARGET_NAME}-Info.plist`
 ];
 export const NCE_PODFILE_REGEX = /target 'NotificationContent'/;

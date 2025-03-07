@@ -1,10 +1,11 @@
 import ExpoModulesCore
 import CleverTapSDK
 import class CleverTapReact.CleverTapReactManager
+import CleverTapReact.CleverTapReactCustomTemplates
 import SystemConfiguration
 import NotificationCenter
 
-public class CleverTapAppDelegate: ExpoAppDelegateSubscriber, CleverTapURLDelegate, UNUserNotificationCenterDelegate {
+public class CleverTapAppDelegate: ExpoAppDelegateSubscriber, CleverTapURLDelegate, CleverTapSyncDelegate, UNUserNotificationCenterDelegate {
     public func shouldHandleCleverTap(_ url: URL?, for channel: CleverTapChannel) -> Bool {
         let plistDict = Bundle.main.infoDictionary
         
@@ -15,55 +16,60 @@ public class CleverTapAppDelegate: ExpoAppDelegateSubscriber, CleverTapURLDelega
         return false
     }
     
-    struct NotificationCategory {
-        let identifier: String
-        let actions: [NotificationAction]?
-    }
-    
-    struct NotificationAction {
-        let identifier: String
-        let title: String
-    }
-    
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         let plistDict = Bundle.main.infoDictionary
         let notificationProps = plistDict?["NotificationProps"] as? [String: Any]
         var unCategories: Set<UNNotificationCategory> = []
         
-        // Register categories with UNUserNotificationCenter
-        UNUserNotificationCenter.current().setNotificationCategories(unCategories)
-        
         if let notificationProps = notificationProps,
-           let notificationCategories = notificationProps["NotificationCategories"] as? [NotificationCategory] {
+           let notificationCategories = notificationProps["NotificationCategories"] as? [[String: Any]] {
             
             notificationCategories.forEach { category in
-                let unActions = category.actions?.map { action in
-                    UNNotificationAction(identifier: action.identifier, title: action.title, options: [])
-                } ?? []
-                
-                let unCategory = UNNotificationCategory(identifier: category.identifier, actions: unActions, intentIdentifiers: [], options: [])
-                unCategories.insert(unCategory)
+                if let actions = category["actions"] as? [[String: Any]],
+                   let identifier = category["identifier"] as? String {
+                    
+                    let unActions = actions.compactMap { action in
+                        if let identifier = action["identifier"] as? String,
+                           let titleValue = action["title"] as? String {
+                            return UNNotificationAction(identifier: identifier, title: titleValue)
+                        }
+                        return nil
+                    }
+                    let unCategory = UNNotificationCategory(identifier: identifier, actions: unActions, intentIdentifiers: [], options: [])
+                    unCategories.insert(unCategory)
+                }
             }
         }
-        print(unCategories)
         
         // Register categories with UNUserNotificationCenter
+        if let enablePushInForeground = notificationProps?["EnablePushInForeground"] as? Bool, enablePushInForeground {
+            UNUserNotificationCenter.current().delegate = self
+        }
+        
         UNUserNotificationCenter.current().setNotificationCategories(unCategories)
+        if let logLevel = Bundle.main.object(forInfoDictionaryKey: "CTExpoLogLevel") as? Int32 {
+            CleverTap.setDebugLevel(logLevel)
+        }
         
-        // register category with actions
-        //                let action1 = UNNotificationAction(identifier: "action_1", title: "Back", options: [])
-        //                let action2 = UNNotificationAction(identifier: "action_2", title: "Next", options: [])
-        //                let action3 = UNNotificationAction(identifier: "action_3", title: "View In App", options: [])
-        //                let category = UNNotificationCategory(identifier: "CTNotification", actions: [action1, action2, action3], intentIdentifiers: [], options: [])
-        //                UNUserNotificationCenter.current().setNotificationCategories([category])
-        
-//        if let channels = plistDict?["CTExpoURLDelegateChannels"] as? [Int32], channels.count > 0 {
-            // Set the URL Delegate
         CleverTap.autoIntegrate()
-
-            CleverTap.sharedInstance()?.setUrlDelegate(self)
-//        }
-//        CleverTapReactCustomTemplates registerCustomTemplates("")
+        CleverTap.sharedInstance()?.setUrlDelegate(self)
+                
+        //Set UserDefaults if enable Push impression CTExpoPushAppGroup
+        if let appGroup = Bundle.main.object(forInfoDictionaryKey: "CTExpoPushAppGroup") as? String {
+          //logs
+            let defaults = UserDefaults(suiteName: appGroup)
+            if let accountID = Bundle.main.object(forInfoDictionaryKey: "CleverTapAccountID") as? String,
+               let token = Bundle.main.object(forInfoDictionaryKey: "CleverTapToken") as? String {
+                defaults?.set(accountID, forKey: "accountID")
+                defaults?.set(token, forKey: "token")
+            }
+            if let region = Bundle.main.object(forInfoDictionaryKey: "CleverTapRegion") as? String {
+                defaults?.set(region, forKey: "region")
+            }
+            //other keys spiky and handshake
+            defaults?.synchronize()
+        }
+                
         CleverTapReactManager.sharedInstance()?.applicationDidLaunch(options: launchOptions)
         return true
     }
@@ -84,3 +90,4 @@ public class CleverTapAppDelegate: ExpoAppDelegateSubscriber, CleverTapURLDelega
         }
     }
 }
+

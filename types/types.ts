@@ -33,6 +33,11 @@ export type CleverTapPluginProps = {
    */
   disableAppLaunchedEvent?: boolean;
   /**
+   * (optional) Use to enable setting custom Id event.
+   */
+  useCustomId?: boolean;
+  cleverTapIdentifiers?: [string];
+  /**
    * (optional) Use to setup custom handshake domain.
    */
   handshakeDomain?: string;

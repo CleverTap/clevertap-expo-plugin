@@ -45,10 +45,10 @@
           "disableAppLaunchedEvent": false,
           "enableFileProtection": true,
           "encryptionLevel": 1,
-          "logLevel": 2,
+          "logLevel": 3,
+
           "ios": {
             "mode": "development",
-            "deploymentTarget": "11",
             "profileProps": {
               "name": "test3",
               "identity": 123455,
@@ -65,11 +65,11 @@
                   "actions": [
                     {
                       "identifier": "action1",
-                      "title": "title1"
+                      "title": "Back"
                     },
                     {
                       "identifier": "action2",
-                      "title": "title2"
+                      "title": "Next"
                     }
                   ]
                 }

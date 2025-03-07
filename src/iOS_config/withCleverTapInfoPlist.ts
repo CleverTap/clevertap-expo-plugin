@@ -33,6 +33,14 @@ export const withCleverTapInfoPlist: ConfigPlugin<CleverTapPluginProps> = (
       config.modResults.CleverTapSpikyProxyDomain = clevertapProps.spikyProxyDomain;
       CleverTapLog.log(`Setting spikyProxyDomain: ${clevertapProps.spikyProxyDomain}`);
     }
+    if (clevertapProps.useCustomId) {
+      config.modResults.CleverTapUseCustomId = clevertapProps.useCustomId;
+      CleverTapLog.log(`Enabling custom Id usage`);
+    }
+    if (clevertapProps.cleverTapIdentifiers) {
+      config.modResults.CleverTapIdentifiers = clevertapProps.cleverTapIdentifiers;
+      CleverTapLog.log(`Enabling custom Id usage`);
+    }
     if (clevertapProps.disableAppLaunchedEvent) {
       config.modResults.CleverTapDisableAppLaunched = clevertapProps.disableAppLaunchedEvent;
       CleverTapLog.log(`Disabling the "App Launched" event reporting`);
@@ -55,8 +63,19 @@ export const withCleverTapInfoPlist: ConfigPlugin<CleverTapPluginProps> = (
     }
 
     //CTExpo internal props
+    if (clevertapProps.logLevel) {
+      config.modResults.CTExpoLogLevel = clevertapProps.logLevel;
+      CleverTapLog.log(`Enabling CleverTap logging value: ${clevertapProps.logLevel}`);
+    }
+
     if (!config.modResults.NotificationProps) {
       config.modResults.NotificationProps = {};
+    }
+
+    if (clevertapProps.ios?.notifications?.iosPushAppGroup != null) {
+      const iosPushAppGroup = clevertapProps.ios?.notifications?.iosPushAppGroup;
+      config.modResults.CTExpoPushAppGroup = iosPushAppGroup;
+      CleverTapLog.log(`Setting app group for push`);
     }
 
     if (clevertapProps.ios?.notifications?.enablePushInForeground) {

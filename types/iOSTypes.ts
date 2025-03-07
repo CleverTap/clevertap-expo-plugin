@@ -76,6 +76,7 @@ export type NotificationFeature = {
     * logic required.
     */
     iosNCEFilePath?: string;
+    iosPushAppGroup?: string;
 }
 
 export type Profile = {
