@@ -49,6 +49,7 @@ export const set_userProfile = () => {
     });
     userDefaults.set("CTProfileName", 'testUserA1', "group.com.clevertap.expoDemo", (err, data) => {
         if(!err) console.log('Saved CTProfileName: testUserA1')
+    })
 
     userDefaults.set("CTProfileEmail", 'aahana@mail.com', "group.com.clevertap.expoDemo", (err, data) => {
         if(!err) console.log('Saved CTProfileEmail: aahana@mail.com')
