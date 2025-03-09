@@ -16,11 +16,17 @@ For more information check out our [website](https://clevertap.com/ "CleverTap")
 
 To get started, sign up [here](https://clevertap.com/live-product-demo/).
 
-## Overview
+## 📋 Overview
 Expo is a framework and platform built around React Native that helps you develop, build, and deploy React Native applications quickly. The CleverTap Expo plugin provides a streamlined way to integrate the CleverTap React Native SDK into your Expo application without writing native code.
 It enables customization during the prebuild phase of managed workflow builds, eliminating the need to eject to a bare workflow. Specifically tailored for CleverTap integration, this plugin simplifies the setup by automatically generating and configuring the required native code files to ensure the CleverTap React Native SDK functions seamlessly. Consider this plugin as an automated way to implement the required native configurations, saving you from manually writing platform-specific code for CleverTap integration.
 
----
+## 🧩 Compatibility Matrix
+To ensure smooth integration of the CleverTap Expo plugin, please reference the following compatibility matrix. This table outlines the supported versions of CleverTap Expo Plugin, Expo SDK, React Native, and the CleverTap React Native SDK that work together effectively.
+
+| CleverTap Expo Plugin version | Expo SDK version | React Native version | CleverTap React Native SDK version |
+|-------------------------------|------------------|----------------------|------------------------------------|
+| 0.1.0                     | 52.0.0           | 0.76                 | 3.2.0                              |
+
 
 ## 🚀 Install and Integration
 
@@ -198,7 +204,7 @@ To verify your CleverTap integration is working properly:
 - Check the CleverTap dashboard to ensure the user profile and events are being tracked
 - Test push notifications by sending a test campaign from the CleverTap dashboard
 
-## Important Notes and Recommendations for Android
+## 📣 Important Notes and Recommendations for Android
 
 ### File Locations
 - **HMS Configuration File**: The `agconnect-services.json` file must be placed at the root level of your project's assets folder for HMS push integration to function correctly.
@@ -251,6 +257,9 @@ Enable `android.features.enableMediaForInAppsInbox` for video content in in-app 
 ## 🆕 Changelog
 
 Refer to the [CleverTap Expo plugin Change Log](/CHANGELOG.md).
+
+## 🎬 Sample App
+To see a React Native Expo app running with the CleverTap SDK, check out our [sample app on GitHub](./ctDemoApp/).
 
 ## ⁉️ Help and Questions?
 
