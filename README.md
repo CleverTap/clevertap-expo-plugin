@@ -55,6 +55,7 @@ In your `app.json` file, add the CleverTap Expo Plugin configuration. Below is a
           "proxyDomain": "analytics.example.com", // Optional, default: null
           "spikyProxyDomain": "spiky.example.com", // Optional, default: null
           "handshakeDomain": "handshake.example.com", // Optional, default: null
+          "customIdentifiers": "Email,Phone", // Optional, default: null
           "android": {
             "features": {
               "enablePush": true, // Optional, default: false
@@ -67,7 +68,6 @@ In your `app.json` file, add the CleverTap Expo Plugin configuration. Below is a
               "enableGoogleAdId": false // Optional, default: false
             },
            "customNotificationSound": ["notification_sound.mp3", "alert_tone.mp3","reminder. mp3"], // Optional, default: null
-           "customIdentifiers": "Email,Phone", // Optional, default: null
            "backgroundSync": "1", // Optional, default: "0"
            "defaultNotificationChannelId": "default_channel", // Optional, default: null
            "inAppExcludeActivities": "SplashActivity", // Optional, default: null
@@ -97,6 +97,7 @@ The CleverTap Expo plugin supports a wide range of configuration options to cust
 | proxyDomain | string | Optional. Your custom proxy domain, e.g., "analytics.yourdomain.com". | Default is null (uses standard CleverTap endpoints). |
 | spikyProxyDomain | string | Optional. Your custom spiky proxy domain for push impression events. | Default is null (uses standard CleverTap endpoints). |
 | handshakeDomain | string | Optional. Your custom handshake domain. | Default is null (uses standard CleverTap handshake endpoint). |
+| android.customIdentifiers | string | Comma-separated list of custom identifiers to enable custom identity management. Specify which identifiers (e.g., "Email", "Phone", "Identity" or any combinations of them) CleverTap should use for user identification during `onUserLogin()` calls. | Default is Identity,Email. |
 
 #### Android-Specific Configuration
 
@@ -111,7 +112,6 @@ The CleverTap Expo plugin supports a wide range of configuration options to cust
 | android.features.enableHmsPush | boolean | Enable Huawei Push Service (HMS) integration. When enabled, CleverTap will send push notifications through both HMS and FCM, ensuring delivery to Huawei devices that don't support Google services. | Default is false (HMS push disabled). |
 | android.features.enableGoogleAdId | boolean | Enable Google Advertising ID collection. When enabled, CleverTap will use the Google Advertising ID to uniquely identify users instead of generating its own device identifiers. | Default is false (Google Ad ID collection disabled). |
 | android.customNotificationSound | string or string[] | Specify custom notification sound file(s) placed in the assets folder. These sound files can then be used when creating notification channels in your app with `CleverTapAPI.createNotificationChannel()`. | Default is null (uses default system sound). |
-| android.customIdentifiers | string | Comma-separated list of custom identifiers to enable custom identity management. Specify which identifiers (e.g., "Email", "Phone", "Identity" or any combinations of them) CleverTap should use for user identification during `onUserLogin()` calls. | Default is Identity,Email. |
 | android.backgroundSync | string | Enable CleverTap's Pull Notification via background ping service. When set to "1", this feature enables reaching users on devices that suppress or restrict regular push notifications through GCM/FCM, providing an alternative delivery mechanism. | Default is "0" (background sync disabled). |
 | android.defaultNotificationChannelId | string | Specify a default notification channel ID for push notifications. This channel will be used as a fallback when a push notification specifies a channel that doesn't exist in the app, ensuring notifications are always displayed. | Default is null (falls back to a CleverTap created "Miscellaneous" channel if no valid channel is found). |
 | android.inAppExcludeActivities | string | Comma-separated list of activities where in-app messages should not be shown. | Default is null (shows in-apps in all activities). |
