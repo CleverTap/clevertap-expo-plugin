@@ -33,7 +33,7 @@ if (useManagedAndroidSdkVersions) {
 
 dependencies {
   implementation(project(':clevertap-react-native'))
-  compileOnly("com.clevertap.android:push-templates:1.3.0")
+  compileOnly("com.clevertap.android:push-templates:1.2.4")
 }
 
 android {

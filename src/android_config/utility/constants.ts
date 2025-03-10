@@ -32,14 +32,14 @@ export const CLEVERTAP_GRADLE_PROPERTIES_KEYS = {
 
 export const CLEVERTAP_DEPENDENCIES_DEFAULT_VERSIONS: Dependencies = {
     clevertapCore: {
-        clevertapSdkVersion: '7.1.2',
+        clevertapCoreSdkVersion: '7.1.2',
         androidxCoreVersion: '1.9.0'
     },
     pushNotifications: {
         firebaseMessagingVersion: '23.0.6'
     },
     pushTemplates: {
-        pushTemplatesVersion: '1.2.4'
+        clevertapPushTemplatesSdkVersion: '1.2.4'
     },
     inApp: {
         appCompatVersion: '1.6.0-rc01',
@@ -55,16 +55,16 @@ export const CLEVERTAP_DEPENDENCIES_DEFAULT_VERSIONS: Dependencies = {
 
     },
     media3: {
-        version: '1.1.1'
+        media3Version: '1.1.1'
     },
     installReferrer: {
-        version: '2.2'
+        installReferrerVersion: '2.2'
     },
     hmsPush: {
         clevertapHmsSdkVersion: '1.3.4',
         hmsPushVersion: '6.11.0.300'
     },
     googleAdId: {
-        version: '23.6.0'
+        playServicesAdsVersion: '18.2.0'
     }
 };

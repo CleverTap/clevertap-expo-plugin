@@ -21,14 +21,14 @@ export interface Features {
 }
 export interface Dependencies {
     clevertapCore: {
-        clevertapSdkVersion: string;
+        clevertapCoreSdkVersion: string;
         androidxCoreVersion: string;
     };
     pushNotifications: {
         firebaseMessagingVersion: string;
     };
     pushTemplates: {
-        pushTemplatesVersion: string;
+        clevertapPushTemplatesSdkVersion: string;
     };
     inApp: {
         appCompatVersion: string;
@@ -43,16 +43,16 @@ export interface Dependencies {
         fragmentVersion: string;
     };
     media3: {
-        version: string;
+        media3Version: string;
     };
     installReferrer: {
-        version: string;
+        installReferrerVersion: string;
     };
     hmsPush: {
         clevertapHmsSdkVersion: string;
         hmsPushVersion: string;
     };
     googleAdId: {
-        version: string;
+        playServicesAdsVersion: string;
     };
 }
