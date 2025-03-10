@@ -12,12 +12,12 @@
 	<string>$(CTEXPO_PROXY_DOMAIN)</string>
    <key>CTExpo</key>
 	<dict>
+		<key>CleverTapIdentifiers</key>
+		<string>$(CTEXPO_CT_IDENTIFIERS)</string>
+		<key>CleverTapUseCustomId</key>
+		<string>$(CTEXPO_CT_CUSTOM_ID)</string>
 		<key>AppGroup</key>
 		<string>$(CTEXPO_PUSH_APP_GROUP)</string>
-		<key>CleverTapUseCustomId</key>
-		<false/>
-		<key>CleverTapIdentifiers</key>
-		<array/>
 	</dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>

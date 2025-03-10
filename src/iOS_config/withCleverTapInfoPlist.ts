@@ -23,23 +23,23 @@ export const withCleverTapInfoPlist: ConfigPlugin<CleverTapPluginProps> = (
 
     if (clevertapProps.accountRegion) {
       config.modResults.CleverTapRegion = clevertapProps.accountRegion;
-      CleverTapLog.log(`Setting region code: ${clevertapProps.accountRegion}`);
+      CleverTapLog.log(`Configuring app with region code: ${clevertapProps.accountRegion}`);
     }
     if (clevertapProps.proxyDomain) {
       config.modResults.CleverTapProxyDomain = clevertapProps.proxyDomain;
-      CleverTapLog.log(`Setting proxyDomain: ${clevertapProps.proxyDomain}`);
+      CleverTapLog.log(`Configuring app with proxyDomain: ${clevertapProps.proxyDomain}`);
     }
     if (clevertapProps.spikyProxyDomain) {
       config.modResults.CleverTapSpikyProxyDomain = clevertapProps.spikyProxyDomain;
-      CleverTapLog.log(`Setting spikyProxyDomain: ${clevertapProps.spikyProxyDomain}`);
+      CleverTapLog.log(`Configuring app with spikyProxyDomain: ${clevertapProps.spikyProxyDomain}`);
     }
-    if (clevertapProps.useCustomId) {
-      config.modResults.CleverTapUseCustomId = clevertapProps.useCustomId;
-      CleverTapLog.log(`Enabling custom Id usage`);
+    if (clevertapProps.ios?.useCustomId) {
+      config.modResults.CleverTapUseCustomId = clevertapProps.ios?.useCustomId;
+      CleverTapLog.log(`Enabling custom identifier usage: ${clevertapProps.ios?.useCustomId}`);
     }
-    if (clevertapProps.cleverTapIdentifiers) {
-      config.modResults.CleverTapIdentifiers = clevertapProps.cleverTapIdentifiers;
-      CleverTapLog.log(`Enabling custom Id usage`);
+    if (clevertapProps.ios?.cleverTapIdentifiers) {
+      config.modResults.CleverTapIdentifiers = clevertapProps.ios?.cleverTapIdentifiers;
+      CleverTapLog.log(`Configuring app with custom identifiers: ${clevertapProps.ios?.cleverTapIdentifiers}`);
     }
     if (clevertapProps.disableAppLaunchedEvent) {
       config.modResults.CleverTapDisableAppLaunched = clevertapProps.disableAppLaunchedEvent;
@@ -47,7 +47,7 @@ export const withCleverTapInfoPlist: ConfigPlugin<CleverTapPluginProps> = (
     }
     if (clevertapProps.encryptionLevel) {
       config.modResults.CleverTapEncryptionLevel = clevertapProps.encryptionLevel;
-      CleverTapLog.log(`Setting encryption level: ${clevertapProps.encryptionLevel}`);
+      CleverTapLog.log(`Configuring app with encryption level: ${clevertapProps.encryptionLevel}`);
     }
     if (clevertapProps.ios?.disableIDFV) {
       config.modResults.CleverTapDisableIDFV = clevertapProps.ios?.disableIDFV;
@@ -55,58 +55,58 @@ export const withCleverTapInfoPlist: ConfigPlugin<CleverTapPluginProps> = (
     }
     if (clevertapProps.handshakeDomain) {
       config.modResults.CleverTapHandshakeDomain = clevertapProps.handshakeDomain;
-      CleverTapLog.log(`Setting handshake domain value: ${clevertapProps.handshakeDomain}`);
+      CleverTapLog.log(`Configuring app with handshake domain value: ${clevertapProps.handshakeDomain}`);
     }
     if (clevertapProps.ios?.enableFileProtection) {
       config.modResults.CleverTapEnableFileProtection = clevertapProps.ios?.enableFileProtection;
-      CleverTapLog.log(`Setting file protection value: ${clevertapProps.ios?.enableFileProtection}`);
+      CleverTapLog.log(`Configuring app with file protection value: ${clevertapProps.ios?.enableFileProtection}`);
     }
 
     //CTExpo internal props
     if (clevertapProps.logLevel) {
       config.modResults.CTExpoLogLevel = clevertapProps.logLevel;
-      CleverTapLog.log(`Enabling CleverTap logging value: ${clevertapProps.logLevel}`);
+      CleverTapLog.log(`Configuring CleverTap SDK logging value: ${clevertapProps.logLevel}`);
     }
 
-    if (!config.modResults.NotificationProps) {
-      config.modResults.NotificationProps = {};
+    if (!config.modResults.CTExpoNotificationProps) {
+      config.modResults.CTExpoNotificationProps = {};
     }
 
     if (clevertapProps.ios?.notifications?.iosPushAppGroup != null) {
       const iosPushAppGroup = clevertapProps.ios?.notifications?.iosPushAppGroup;
       config.modResults.CTExpoPushAppGroup = iosPushAppGroup;
-      CleverTapLog.log(`Setting app group for push`);
+      CleverTapLog.log(`Configuring App group value:  ${iosPushAppGroup}`);
     }
 
     if (clevertapProps.ios?.notifications?.enablePushInForeground) {
       const enablePushInForeground = clevertapProps.ios?.notifications?.enablePushInForeground;
 
       // Add or update the NotificationProps key with your value
-      (config.modResults.NotificationProps as NotificationProps)[
+      (config.modResults.CTExpoNotificationProps as NotificationProps)[
         "EnablePushInForeground"
       ] = enablePushInForeground;
-      CleverTapLog.log(`Enabling push in foreground`);
+      CleverTapLog.log(`Configuring app to hanlde push in foreground: ${JSON.stringify(enablePushInForeground)}`);
     }
 
     if (clevertapProps.ios?.notifications?.notificationCategories != null) {
       const notificationCategories = clevertapProps.ios?.notifications?.notificationCategories as [NotificationCategory];
 
-      (config.modResults.NotificationProps as NotificationProps)[
+      (config.modResults.CTExpoNotificationProps as NotificationProps)[
         "NotificationCategories"
       ] = notificationCategories;
-      CleverTapLog.log(`Setting notification categories`);
+      CleverTapLog.log(`Configuring app to hanlde notification categories: ${JSON.stringify(notificationCategories)}`);
     }
 
     if (clevertapProps.ios?.templateIdentifiers?.templates != null) {
       const customTemplate = clevertapProps.ios?.templateIdentifiers;
       config.modResults.CTExpoCustomTemplate = customTemplate;
-      CleverTapLog.log(`Setting custom template`);
+      CleverTapLog.log(`Configuring app to hanlde custom template : ${JSON.stringify(customTemplate)}`);
     }
 
     if (clevertapProps.ios?.enableURLDelegateChannels != null) {
       const enableURLDelegateChannels = clevertapProps.ios?.enableURLDelegateChannels;
       config.modResults.CTExpoURLDelegateChannels = enableURLDelegateChannels as [number];
-      CleverTapLog.log(`Handling url delegate for these channels: ${enableURLDelegateChannels}`);
+      CleverTapLog.log(`Configuring app to hanlde url delegate for these channels: ${JSON.stringify(enableURLDelegateChannels)}`);
     }
 
     return config;

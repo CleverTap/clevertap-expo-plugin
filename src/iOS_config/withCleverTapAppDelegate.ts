@@ -3,15 +3,7 @@ import {
   withAppDelegate
 } from "@expo/config-plugins";
 import { CleverTapPluginProps } from "../../types/types";
-import {
-  addCleverTapImportsForAutoIntegrate,
-  addCleverTapAutoIntegrate,
-  addCleverTapImportsTemplates,
-  addCleverTapTemplates,
-  addCleverTapNotificationCategory,
-  addCleverTapURLDelegate,
-  addEnablePushInForeground
-} from "../../support/UpdateAppDelegate";
+import { CustomTemplate } from "../../types/iOSTypes";
 
 /**
 * Update AppDelegate with required CleverTap's setup 
@@ -20,36 +12,36 @@ export const withCleverTapAppDelegate: ConfigPlugin<CleverTapPluginProps> = (con
   clevertapProps) => {
   return withAppDelegate(config, (config) => {
     let appDelegate = config.modResults.contents;
-    // Adds imports at the top
-    // if (!appDelegate.includes('[CleverTap autoIntegrate]')) {
-    //   config.modResults.contents = addCleverTapImportsForAutoIntegrate(appDelegate)
-    //   appDelegate = config.modResults.contents;
-    //   config.modResults.contents = addCleverTapAutoIntegrate(appDelegate, clevertapProps.logLevel ?? 0)
-    // }
-
     // Adds Custom template
-    // if (!appDelegate.includes('registerCustomTemplates') && clevertapProps.ios?.templateIdentifiers?.templates) {
-    //   config.modResults.contents = addCleverTapImportsTemplates(appDelegate)
-    //   appDelegate = config.modResults.contents;
-    //   config.modResults.contents = addCleverTapTemplates(appDelegate, clevertapProps.ios?.templateIdentifiers)
-    // }
-    // Adds UNNotificationCategory code
-    // if (!appDelegate.includes('UNNotificationCategory') && (clevertapProps.ios?.notifications?.notificationCategories?.length ?? 0 > 0)) {
-    //   appDelegate = config.modResults.contents;
-    //   config.modResults.contents = addCleverTapNotificationCategory(appDelegate, clevertapProps.ios?.notifications?.notificationCategories)
-    // }
 
-    // Adds CleverTapURLDelegate code
-    // if (!appDelegate.includes('CleverTapURLDelegate.h') && clevertapProps.ios?.enableURLDelegateChannels) {
-    //   appDelegate = config.modResults.contents;
-    //   config.modResults.contents = addCleverTapURLDelegate(appDelegate, clevertapProps.ios?.enableURLDelegateChannels)
-    // }
-
-    // Adds willPresentNotification function
-    // if (!appDelegate.includes('willPresentNotification') && clevertapProps.ios?.notifications?.enablePushInForeground) {
-    //   appDelegate = config.modResults.contents;
-    //   config.modResults.contents = addEnablePushInForeground(appDelegate)
-    // }
+    if (!appDelegate.includes('registerCustomTemplates') && clevertapProps.ios?.templateIdentifiers?.templates) {
+      config.modResults.contents = addCleverTapImportsTemplates(appDelegate)
+      appDelegate = config.modResults.contents;
+      config.modResults.contents = addCleverTapTemplates(appDelegate, clevertapProps.ios?.templateIdentifiers)
+    }
     return config;
   });
 };
+
+/**
+ * Adds CleverTap's custom template code 
+ */
+const addCleverTapImportsTemplates = (appDelegate: string): string => {
+  appDelegate = appDelegate.replace(
+      `#import "AppDelegate.h"`,
+      `#import "AppDelegate.h""
+#import "CleverTapReactCustomTemplates.h"`
+);
+return appDelegate;
+}
+
+const addCleverTapTemplates = (appDelegate: string, templateIdentifiers: CustomTemplate): string => {
+// Generate the custom templates string
+const templatesString = templateIdentifiers.templates.map(id => `@"${id}"`).join(", ") + ", nil";
+  appDelegate = appDelegate.replace(
+      `return [super application:application didFinishLaunchingWithOptions:launchOptions];`,
+      ` [CleverTapReactCustomTemplates registerCustomTemplates:${templatesString}];
+ return [super application:application didFinishLaunchingWithOptions:launchOptions];`
+      );
+return appDelegate;
+}

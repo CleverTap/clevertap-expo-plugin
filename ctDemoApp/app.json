@@ -45,8 +45,7 @@
           "disableAppLaunchedEvent": false,
           "enableFileProtection": true,
           "encryptionLevel": 1,
-          "logLevel": 3,
-
+          "logLevel": 1,
           "ios": {
             "mode": "development",
             "notifications": {

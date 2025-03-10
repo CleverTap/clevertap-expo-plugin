@@ -1,5 +1,5 @@
 import { Android } from "./androidTypes";
-import { iOSFeatures } from "./iOSTypes";
+import { iOS } from "./iOSTypes";
 /**
  * CleverTapPluginProps refer to the properties set by the user in their app config file (e.g: app.json)
  */
@@ -25,7 +25,7 @@ export type CleverTapPluginProps = {
    */
   spikyProxyDomain?: string;
   /**
-   * (optional) Use to configure CleverTap logs.
+   * (optional) Use to configure CleverTap logs. 
    */
   logLevel?: number;
   /**
@@ -33,20 +33,15 @@ export type CleverTapPluginProps = {
    */
   disableAppLaunchedEvent?: boolean;
   /**
-   * (optional) Use to enable setting custom Id event.
-   */
-  useCustomId?: boolean;
-  cleverTapIdentifiers?: [string];
-  /**
    * (optional) Use to setup custom handshake domain.
    */
   handshakeDomain?: string;
   /**
-   * (optional) Use to set encryption level for PII data.
+   * (optional) Use to set encryption level for PII data. eg: 1/ 0 where 1 means Medium and 0 means None.
    */
   encryptionLevel?: CleverTapEncryptionLevel;
   
-  ios?: iOSFeatures;
+  ios?: iOS;
   android: Android;
 };
 

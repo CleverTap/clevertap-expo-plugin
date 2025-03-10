@@ -1,10 +1,9 @@
 #if canImport(CTNotificationService)
-import CTNotificationService
 import CleverTapSDK
+import CTNotificationService
 
-class NotificationService: CTNotificationServiceExtension {
+class NotificationService: UNNotificationServiceExtension {
   override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
-    getUserDefaults(request)
     super.didReceive(request, withContentHandler: contentHandler)
   }
 }
@@ -21,22 +20,22 @@ func getUserDefaults(_ request: UNNotificationRequest) {
   let profilename = defaults?.string(forKey: "CTProfileName")
   let profileEmail = defaults?.string(forKey: "CTProfileEmail")
   let profileIdentity = defaults?.string(forKey: "CTProfileIdentity")
-  let profilePhone = defaults?.string(forKey: "CTProfilePhone") //should this be string ??
+  let profilePhone = defaults?.string(forKey: "CTProfilePhone")
   
-  var profileDict: [String: String]
-  if let useCustomId = ctExpo["CleverTapUseCustomId"] as? Bool,
-     useCustomId,
-     let customIds = ctExpo["CleverTapIdentifiers"] as? [String] {
+  var profileDict = ["Name": profilename, "Email": profileEmail, "Identity": profileIdentity, "Phone": profilePhone].compactMapValues { $0 }
+  
+  if let useCustomId = ctExpo["CleverTapUseCustomId"] as? String,
+     useCustomId == "true",
+     let customId = ctExpo["CleverTapIdentifiers"] as? String {
+     
+    let customIds = customId.components(separatedBy: " ")
     
-    //test custom identity
-    profileDict = Dictionary(uniqueKeysWithValues: customIds.compactMap { key in
+    let customProfileDict = Dictionary(uniqueKeysWithValues: customIds.compactMap { key in
         defaults?.string(forKey: key).map { (key, $0) }
     })
-    print(profileDict)
-  } else {
-    profileDict = ["Name": profilename, "Email": profileEmail, "Identity": profileIdentity, "Phone": profilePhone].compactMapValues { $0 }
+    profileDict = profileDict.merging(customProfileDict) { (current, new) in new }
   }
-  
+
   if !profileDict.isEmpty {
     CleverTap.sharedInstance()?.profilePush(profileDict)
     CleverTap.sharedInstance()?.recordNotificationViewedEvent(withData: request.content.userInfo)

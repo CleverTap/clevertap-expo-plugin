@@ -6,19 +6,17 @@ import {
 } from "@expo/config-plugins";
 import * as path from 'path';
 import * as fs from "fs-extra";
-import { FileManager } from "../../support/FileManager";
+import { FileManager } from "./FileManager";
 import { CleverTapPluginProps } from "../../types/types";
-import NSUpdaterManager from "../../support/NSUpdaterManager";
+import NSUpdaterManager from "./NSUpdaterManager";
 import { CleverTapLog } from "../../support/CleverTapLog";
 import {
     NCE_TARGET_NAME,
     NCE_EXT_FILES,
     NCE_SOURCE_FILE,
     DEFAULT_BUNDLE_VERSION,
-    DEFAULT_BUNDLE_SHORT_VERSION,
-    DEPLOYMENT_TARGET,
-    TARGETED_DEVICE_FAMILY
-} from "../../support/IOSConstants";
+    DEFAULT_BUNDLE_SHORT_VERSION
+} from "./IOSConstants";
 
 /**
 * Copy NotificationContentExtension with CleverTap code files into target folder
@@ -162,7 +160,7 @@ export const withCleverTapXcodeProjectNCE: ConfigPlugin<CleverTapPluginProps> = 
             }
         }
         
-        CleverTapLog.log('Added CTNotificationContentExtension target');
+        CleverTapLog.log('Successfully added NotificationContentExtension target');
         return newConfig;
     })
 };

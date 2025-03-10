@@ -17,10 +17,11 @@ export const addCustomTemplateFilesToBundle: ConfigPlugin<CleverTapPluginProps> 
       // Get the root directory of the Expo project
       const projectRoot = config.modRequest.projectRoot;
       const projectName = config.modRequest.projectName;
+      const templateIdentifiers = clevertapProps.ios?.templateIdentifiers;
 
-      const sourcePath = path.resolve(projectRoot, clevertapProps.ios?.templateIdentifiers?.source ?? "assets"); // e.g., "./assets"
+      const sourcePath = path.resolve(projectRoot, templateIdentifiers?.source ?? "assets"); // e.g., "./assets"
       const iosPath = path.join(projectRoot, "ios");
-      const destPath = path.join(iosPath, projectName ?? "", clevertapProps.ios?.templateIdentifiers?.destination ?? ""); // iOS main bundle
+      const destPath = path.join(iosPath, projectName ?? "", templateIdentifiers?.destination ?? ""); // iOS main bundle
 
       // Ensure the destination directory exists and copy files
       fs.ensureDirSync(destPath);
@@ -28,21 +29,20 @@ export const addCustomTemplateFilesToBundle: ConfigPlugin<CleverTapPluginProps> 
       // Read all JSON files from the directory
       const jsonFiles = fs.readdirSync(sourcePath).filter(file => file.endsWith(".json"));
 
-      // Filter only the JSON files that match specificFiles1
+      // Filter only the JSON files that match specificFiles
       const filteredFiles = jsonFiles.filter(file =>
-        clevertapProps.ios?.templateIdentifiers?.templates.includes(path.basename(file, ".json")) // Remove .json and check against the list
+        templateIdentifiers?.templates.includes(path.basename(file, ".json")) // Remove .json and check against the list
       );
       if (filteredFiles.length == 0) {
-        CleverTapLog.error("To enable using custom templates, add json files");
+        CleverTapLog.error(`To enable using custom templates, add json files in the path provided: ${templateIdentifiers?.destination}`);
         return config;
       }
-      CleverTapLog.log(`Adding template files from: ${sourcePath} to iOS bundle: ${destPath}`);
       filteredFiles.forEach(file => {
-        CleverTapLog.log(file);
         const srcFile = path.join(sourcePath, file);
         const destFile = path.join(destPath, file);
         fs.copySync(srcFile, destFile, { overwrite: true });
       });
+      CleverTapLog.log(`Successfully added template files: ${JSON.stringify(templateIdentifiers?.templates)} from: ${sourcePath} to iOS bundle: ${destPath}`);
       return config;
     },
   ]);

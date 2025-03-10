@@ -47,7 +47,7 @@ const withAppEnvironment: ConfigPlugin<CleverTapPluginProps> = (
 };
 
 /**
-* Add "Background Modes -> Remote notifications"
+* Add `Background Modes -> Remote notifications` capbility
 */
 const withRemoteNotificationsPermissions: ConfigPlugin<CleverTapPluginProps> = (config) => {
   const BACKGROUND_MODE_KEYS = ["remote-notification"];
@@ -64,6 +64,9 @@ const withRemoteNotificationsPermissions: ConfigPlugin<CleverTapPluginProps> = (
   });
 };
 
+/**
+* Add 'App groups' capability
+*/
 const withCleverTapEntitlements: ConfigPlugin<CleverTapPluginProps> = (config, clevertapProps) => {
   return withEntitlementsPlist(config, (config) => {
     // Add the app group to the main application target's entitlements.
@@ -84,14 +87,17 @@ export const withCleverTapIos: ConfigPlugin<CleverTapPluginProps> = (config, cle
   config = withAppEnvironment(config, clevertapProps);
   config = withRemoteNotificationsPermissions(config, clevertapProps);
   config = withCleverTapEntitlements(config, clevertapProps);
-  config = addCustomTemplateFilesToBundle(config, clevertapProps);
+  if (clevertapProps.ios?.templateIdentifiers != null) {
+    config = addCustomTemplateFilesToBundle(config, clevertapProps);
+  }
+  const notifications = clevertapProps.ios?.notifications
 
-  if (clevertapProps.ios?.notifications?.enablePushTemplate) {
+  if (notifications?.enablePushTemplate) {
     config = withCleverTapNCE(config, clevertapProps);
     config = withCleverTapXcodeProjectNCE(config, clevertapProps);
     config = withAppGroupPermissionsNCE(config, clevertapProps);
   }
-  if (clevertapProps.ios?.notifications?.enableRichMedia || clevertapProps.ios?.notifications?.enablePushImpression) {
+  if (notifications?.enableRichMedia || notifications?.enablePushImpression) {
     config = withCleverTapNSE(config, clevertapProps);
     config = withCleverTapXcodeProjectNSE(config, clevertapProps);
     config = withAppGroupPermissionsNSE(config, clevertapProps);

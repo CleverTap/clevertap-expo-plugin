@@ -12,7 +12,7 @@ import {
     NCE_PODFILE_SNIPPET,
     NCE_PODFILE_REGEX,
     NSE_PODFILE_REGEX
-} from "../../support/IOSConstants";
+} from "./IOSConstants";
 /**
 * Add pod for CleverTap, CTNotificationServiceExtension and CTNotificationContentExtension
 */

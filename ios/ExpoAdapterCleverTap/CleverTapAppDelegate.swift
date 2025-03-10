@@ -1,7 +1,6 @@
 import ExpoModulesCore
 import CleverTapSDK
-import class CleverTapReact.CleverTapReactManager
-import CleverTapReact.CleverTapReactCustomTemplates
+import CleverTapReact
 import SystemConfiguration
 import NotificationCenter
 
@@ -17,9 +16,10 @@ public class CleverTapAppDelegate: ExpoAppDelegateSubscriber, CleverTapURLDelega
     
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         let plistDict = Bundle.main.infoDictionary
-        let notificationProps = plistDict?["NotificationProps"] as? [String: Any]
+        let notificationProps = plistDict?["CTExpoNotificationProps"] as? [String: Any]
         var unCategories: Set<UNNotificationCategory> = []
         
+        // Register categories with UNUserNotificationCenter
         if let notificationProps = notificationProps,
            let notificationCategories = notificationProps["NotificationCategories"] as? [[String: Any]] {
             
@@ -40,7 +40,6 @@ public class CleverTapAppDelegate: ExpoAppDelegateSubscriber, CleverTapURLDelega
             }
         }
         
-        // Register categories with UNUserNotificationCenter
         if let enablePushInForeground = notificationProps?["EnablePushInForeground"] as? Bool, enablePushInForeground {
             UNUserNotificationCenter.current().delegate = self
         }
@@ -61,7 +60,7 @@ public class CleverTapAppDelegate: ExpoAppDelegateSubscriber, CleverTapURLDelega
     
     public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let plistDict = Bundle.main.infoDictionary
-        let notificationProps = plistDict?["NotificationProps"] as? [String: Any]
+        let notificationProps = plistDict?["CTExpoNotificationProps"] as? [String: Any]
         
         if let enablePushInForeground = notificationProps?["EnablePushInForeground"] as? Bool, enablePushInForeground {
             print("clevertap-expo-plugin: CleverTap will handle push in foreground")

@@ -6,19 +6,17 @@ import {
 } from "@expo/config-plugins";
 import * as path from 'path';
 import * as fs from "fs-extra";
-import { FileManager } from "../../support/FileManager";
+import { FileManager } from "./FileManager";
 import { CleverTapPluginProps } from "../../types/types";
-import NSUpdaterManager from "../../support/NSUpdaterManager";
+import NSUpdaterManager from "./NSUpdaterManager";
 import { CleverTapLog } from "../../support/CleverTapLog";
 import {
     NSE_TARGET_NAME,
     NSE_EXT_FILES,
     NSE_SOURCE_FILE,
     DEFAULT_BUNDLE_VERSION,
-    DEFAULT_BUNDLE_SHORT_VERSION,
-    DEPLOYMENT_TARGET,
-    TARGETED_DEVICE_FAMILY
-} from "../../support/IOSConstants";
+    DEFAULT_BUNDLE_SHORT_VERSION
+} from "./IOSConstants";
 
 /**
 * Copy NotificationServiceExtension with CleverTap code files into target folder
@@ -84,7 +82,7 @@ function updateRichMediaNSE(
     let notificationServiceContent = fs.readFileSync(filePath, 'utf-8');
 
     // Add CleverTap integration if not already present
-    if (!notificationServiceContent.includes('CTNotificationService')) {
+    if (!notificationServiceContent.includes('CTNotificationServiceExtension')) {
         //Update import
         notificationServiceContent = notificationServiceContent.replace(
             `import UserNotifications`,
@@ -97,9 +95,9 @@ function updateRichMediaNSE(
             `CTNotificationServiceExtension`);
 
         fs.writeFileSync(filePath, notificationServiceContent);
-        console.log('Updated NotificationServiceExtension for rich media support successfully.');
+        console.log('Successfully updated rich media support in NotificationServiceExtension.');
     } else {
-        console.log("CTNotificationService already exists, not updating the code");
+        console.log('Rich media support already exists, not updating the code.');
     }
 }
 
@@ -120,8 +118,6 @@ function updatePushImpressionNSE(
 
     // Add CleverTap integration if not already present
     if (!notificationServiceContent.includes('getUserDefaults(request)')) {
-        console.log('Adding CleverTap integration to NotificationServiceExtension.');
-
         // Update import
         notificationServiceContent = notificationServiceContent.replace(
             `import UserNotifications`,
@@ -138,9 +134,9 @@ function updatePushImpressionNSE(
 
         // Write the updated content back to the file
         fs.writeFileSync(filePath, notificationServiceContent, 'utf-8');
-        console.log('Updated NotificationServiceExtension for push impression support successfully.');
+        console.log('Succeddfully updated push impression support in NotificationServiceExtension.');
     } else {
-        console.log('recordNotificationViewedEvent already exists, not updating the code.');
+        console.log('Push impression support already exists, not updating the code.');
     }
 }
 
@@ -222,8 +218,6 @@ export const withCleverTapXcodeProjectNSE: ConfigPlugin<CleverTapPluginProps> = 
                 typeof configurations[key].buildSettings !== "undefined" &&
                 configurations[key].buildSettings.PRODUCT_NAME == `"${NSE_TARGET_NAME}"`
             ) {
-                CleverTapLog.log('Inside CTNotificationServiceExtension target');
-
                 const buildSettingsObj = configurations[key].buildSettings;
                 buildSettingsObj.CTEXPO_PUSH_APP_GROUP = clevertapProps.ios?.notifications?.iosPushAppGroup;
                 buildSettingsObj.SWIFT_VERSION = swiftVersion;
@@ -247,9 +241,9 @@ export const withCleverTapXcodeProjectNSE: ConfigPlugin<CleverTapPluginProps> = 
                 if(clevertapProps.ios?.notifications?.enablePushImpression && clevertapProps.spikyProxyDomain != null) {
                     buildSettingsObj.CTEXPO_SPIKY_PROXY = clevertapProps.spikyProxyDomain;
                 }
-                if(clevertapProps.ios?.notifications?.enablePushImpression && clevertapProps.useCustomId && clevertapProps.cleverTapIdentifiers != null) {
-                    buildSettingsObj.CTEXPO_CT_CUSTOM_ID = clevertapProps.useCustomId;
-                    buildSettingsObj.CTEXPO_CT_IDENTIFIERS = clevertapProps.cleverTapIdentifiers;
+                if(clevertapProps.ios?.notifications?.enablePushImpression && clevertapProps.ios?.useCustomId && clevertapProps.ios?.cleverTapIdentifiers != null) {
+                    buildSettingsObj.CTEXPO_CT_CUSTOM_ID = clevertapProps.ios?.useCustomId;
+                    buildSettingsObj.CTEXPO_CT_IDENTIFIERS = clevertapProps.ios?.cleverTapIdentifiers;
                 }
             }
         }
@@ -257,7 +251,7 @@ export const withCleverTapXcodeProjectNSE: ConfigPlugin<CleverTapPluginProps> = 
         // Add development teams to both your target and the original project      
         // xcodeProject.addTargetAttribute("DevelopmentTeam", clevertapProps?.devTeam, nseTarget);
         // xcodeProject.addTargetAttribute("DevelopmentTeam", clevertapProps?.devTeam);
-        CleverTapLog.log('Added CTNotificationServiceExtension target');
+        CleverTapLog.log('Successfully added CTNotificationServiceExtension target');
         return newConfig;
     })
 };

@@ -1,12 +1,8 @@
-export type iOSFeatures = {
+export type iOS = {
     /**
     * (required) Used to configure APNs environment entitlement. "development" or "production"
     */
     mode: string;
-    /**
-    * (optional) Target DEPLOYMENT_TARGET value to be used when adding the iOS NSE and NCE. This value should match the value in your Podfile e.g: "12.0".
-    */
-    deploymentTarget?: string;
     /**
     * (optional) TARGETED_DEVICE_FAMILY value to be used when adding the iOS NSE and NCE eg: "1,2" for iPhone/ iPad.
     */
@@ -31,6 +27,14 @@ export type iOSFeatures = {
     * (optional) This value should be set when client wants to configure remote Push Notifications.
     */
     notifications?: NotificationFeature;
+    /**
+    * (optional) Use to enable support for setting custom cleverTapID.
+    */
+    useCustomId?: boolean;
+    /**
+    * (optional) Use to provide identifiers for setting custom cleverTapID. e.g. "Email,Phone"
+    */
+    cleverTapIdentifiers?: [string];
 }
 
 export type CustomTemplate = {
@@ -50,15 +54,15 @@ export type NotificationFeature = {
     enablePushInForeground?: boolean;
     /**
     * (optional) This value should be set to true if user wants to integrate CTNotificationService Extension. Client will be able to use Rich Push from dashboard.
-  . */
+    */
     enableRichMedia?: boolean;
     /**
     * (optional) This value should be set to true if user wants to enable Push Impressions. Enable `enableRichMedia` to add CTNotificationService Extension.
-   .*/
+    */
     enablePushImpression?: boolean;
     /**
     * (optional) This value should be set to true if user wants to add Notification Content Extension target.
-   .*/
+    */
     enablePushTemplate?: boolean;
     /**
     * (optional) The local path to a custom Notification Service Extension (NSE), written in Swift. The NSE will typically start as a copy
@@ -72,6 +76,9 @@ export type NotificationFeature = {
     * logic required.
     */
     iosNCEFilePath?: string;
+    /**
+    * (optional) This value should be set to if user wants to log Push Impressions to dashboard.
+    */
     iosPushAppGroup?: string;
 }
 
