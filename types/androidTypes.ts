@@ -1,18 +1,11 @@
 export interface Android{
     features : Features;
-    customNotificationSound?: string;
-    customIdentifiers?: string;  // e.g., "Email,Phone"
+    customNotificationSound?: string | string[];
     backgroundSync?: string;
     defaultNotificationChannelId?: string;
     inAppExcludeActivities?: string;  // Comma-separated activity names
-    proxyDomain?: string;   // e.g., "analytics.sdktesting.xyz"
-    spikyProxyDomain?: string;  // e.g., "spiky-analytics.sdktesting.xyz"
-    encryptionLevel?: string;  // "0" or "1"
     sslPinning?: string;  // "0" or "1"
-    useCustomId?: string;  //"0" or "1"
-    handshakeDomain?: string;
-    disableAppLaunched?: string;  // "0" or "1"
-    intentServiceName?: string;
+    registerActivityLifecycleCallbacks?: boolean;
 }
 export interface Features {
     
@@ -27,14 +20,14 @@ export interface Features {
 }
 export interface Dependencies {
     clevertapCore: {
-        clevertapSdkVersion: string;
+        clevertapCoreSdkVersion: string;
         androidxCoreVersion: string;
     };
     pushNotifications: {
         firebaseMessagingVersion: string;
     };
     pushTemplates: {
-        pushTemplatesVersion: string;
+        clevertapPushTemplatesSdkVersion: string;
     };
     inApp: {
         appCompatVersion: string;
@@ -49,16 +42,16 @@ export interface Dependencies {
         fragmentVersion: string;
     };
     media3: {
-        version: string;
+        media3Version: string;
     };
     installReferrer: {
-        version: string;
+        installReferrerVersion: string;
     };
     hmsPush: {
         clevertapHmsSdkVersion: string;
         hmsPushVersion: string;
     };
     googleAdId: {
-        version: string;
+        playServicesAdsVersion: string;
     };
 }

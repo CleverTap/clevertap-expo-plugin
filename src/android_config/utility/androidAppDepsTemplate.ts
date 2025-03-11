@@ -11,7 +11,7 @@ const getVersionProperty = (propertyKey: string): string => {
     // Map property keys to their default values
     switch (propertyKey) {
         case KEYS.CLEVERTAP_SDK_VERSION:
-            defaultValue = VERSIONS.clevertapCore?.clevertapSdkVersion || '';
+            defaultValue = VERSIONS.clevertapCore?.clevertapCoreSdkVersion || '';
             break;
         case KEYS.ANDROIDX_CORE_VERSION:
             defaultValue = VERSIONS.clevertapCore?.androidxCoreVersion || '';
@@ -20,7 +20,7 @@ const getVersionProperty = (propertyKey: string): string => {
             defaultValue = VERSIONS.pushNotifications?.firebaseMessagingVersion || '';
             break;
         case KEYS.PUSH_TEMPLATES_VERSION:
-            defaultValue = VERSIONS.pushTemplates?.pushTemplatesVersion || '';
+            defaultValue = VERSIONS.pushTemplates?.clevertapPushTemplatesSdkVersion || '';
             break;
         case KEYS.APP_COMPAT_VERSION:
             defaultValue = VERSIONS.inApp?.appCompatVersion || VERSIONS.inbox?.appCompatVersion || '';
@@ -41,10 +41,10 @@ const getVersionProperty = (propertyKey: string): string => {
             defaultValue = VERSIONS.inApp?.fragmentVersion || VERSIONS.inbox?.fragmentVersion || '';
             break;
         case KEYS.MEDIA3_VERSION:
-            defaultValue = VERSIONS.media3?.version || '';
+            defaultValue = VERSIONS.media3?.media3Version || '';
             break;
         case KEYS.INSTALL_REFERRER_VERSION:
-            defaultValue = VERSIONS.installReferrer?.version || '';
+            defaultValue = VERSIONS.installReferrer?.installReferrerVersion || '';
             break;
         case KEYS.CLEVERTAP_HMS_SDK_VERSION:
             defaultValue = VERSIONS.hmsPush?.clevertapHmsSdkVersion || '';
@@ -53,7 +53,7 @@ const getVersionProperty = (propertyKey: string): string => {
             defaultValue = VERSIONS.hmsPush?.hmsPushVersion || '';
             break;
         case KEYS.PLAY_SERVICES_ADS_VERSION:
-            defaultValue = VERSIONS.googleAdId?.version || '';
+            defaultValue = VERSIONS.googleAdId?.playServicesAdsVersion || '';
             break;
     }
 
@@ -85,7 +85,7 @@ const generateInAppDependencies = () => `
     }`;
 
 const generateInboxDependencies = () => `
-    // InApp/Inbox features
+    // Inbox features
     if (${getPropertyCheck(KEYS.INBOX_ENABLED)}) {
         implementation("androidx.appcompat:appcompat:${getVersionProperty(KEYS.APP_COMPAT_VERSION)}")
         implementation("androidx.recyclerview:recyclerview:${getVersionProperty(KEYS.RECYCLERVIEW_VERSION)}")
@@ -93,13 +93,14 @@ const generateInboxDependencies = () => `
         implementation("com.google.android.material:material:${getVersionProperty(KEYS.MATERIAL_VERSION)}")
         implementation("com.github.bumptech.glide:glide:${getVersionProperty(KEYS.GLIDE_VERSION)}")
         implementation("androidx.fragment:fragment:${getVersionProperty(KEYS.FRAGMENT_VERSION)}")
+    }`;
 
-        // Optional ExoPlayer Libraries
-        if (${getPropertyCheck(KEYS.MEDIA_ENABLED)}) {
-            implementation("androidx.media3:media3-exoplayer:${getVersionProperty(KEYS.MEDIA3_VERSION)}")
-            implementation("androidx.media3:media3-exoplayer-hls:${getVersionProperty(KEYS.MEDIA3_VERSION)}")
-            implementation("androidx.media3:media3-ui:${getVersionProperty(KEYS.MEDIA3_VERSION)}")
-        }
+const generateMediaDependencies = () => `
+    // Media for InApps/Inbox
+    if (${getPropertyCheck(KEYS.MEDIA_ENABLED)}) {
+        implementation("androidx.media3:media3-exoplayer:${getVersionProperty(KEYS.MEDIA3_VERSION)}")
+        implementation("androidx.media3:media3-exoplayer-hls:${getVersionProperty(KEYS.MEDIA3_VERSION)}")
+        implementation("androidx.media3:media3-ui:${getVersionProperty(KEYS.MEDIA3_VERSION)}")
     }`;
 
 const generateInstallReferrerDependencies = () => `
@@ -118,7 +119,7 @@ const generateHmsPushDependencies = () => `
 const generateGoogleAdIdDependencies = () => `
     // Google Ad ID
     if (${getPropertyCheck(KEYS.GOOGLE_AD_ID_ENABLED)}) {
-        implementation("com.google.android.gms:play-services-ads:${getVersionProperty(KEYS.PLAY_SERVICES_ADS_VERSION)}")
+        implementation("com.google.android.gms:play-services-ads-identifier:${getVersionProperty(KEYS.PLAY_SERVICES_ADS_VERSION)}")
     }`;
 
 export const generateDependenciesTemplate = (): string => {
@@ -128,6 +129,7 @@ export const generateDependenciesTemplate = (): string => {
         generatePushTemplatesDependencies(),
         generateInAppDependencies(),
         generateInboxDependencies(),
+        generateMediaDependencies(),
         generateInstallReferrerDependencies(),
         generateHmsPushDependencies(),
         generateGoogleAdIdDependencies()
