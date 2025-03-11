@@ -76,7 +76,7 @@ const METADATA_CONFIGS: MetadataConfig[] = [
     },
     {
         key: 'CLEVERTAP_IDENTIFIER',
-        getValue: (props) => props.android?.customIdentifiers
+        getValue: (props) => props.customIdentifiers
     },
     {
         key: 'CLEVERTAP_NOTIFICATION_ICON',
