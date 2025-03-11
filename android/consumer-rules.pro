@@ -1,0 +1,3 @@
+-dontwarn com.clevertap.android.pushtemplates.PushTemplateNotificationHandler
+-dontwarn com.clevertap.android.pushtemplates.TemplateRenderer$Companion
+-dontwarn com.clevertap.android.pushtemplates.TemplateRenderer

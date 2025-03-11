@@ -1,0 +1,5 @@
+<resources>
+  <string name="expo_clevertap_register_activity_lifecycle_callbacks">true</string>
+  <string name="expo_clevertap_enable_push_templates">false</string>
+  <string name="expo_clevertap_log_level">-1</string>
+</resources>

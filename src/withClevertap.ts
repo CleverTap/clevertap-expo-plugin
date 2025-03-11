@@ -10,6 +10,13 @@ const withClevertap: ConfigPlugin<CleverTapPluginProps> = (config, props) => {
         'You are trying to use the CleverTap plugin without any props.'
       );
     }
+
+  if (!props.accountId) {
+    throw new Error('CleverTap accountId is required but was not specified in the config');
+  }
+  if (!props.accountToken) {
+    throw new Error('CleverTap accountToken is required but was not specified in the config');
+  }
     config = withCleverTapAndroid(config, props);  
     config = withCleverTapIos(config, props);  
     return config;
