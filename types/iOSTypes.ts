@@ -20,10 +20,6 @@ export type iOS = {
     */
     enableURLDelegateChannels?: [number];
     /**
-    * (optional) This value should be set when client wants to use Custom Templates.
-    */
-    templateIdentifiers?: CustomTemplate;
-    /**
     * (optional) This value should be set when client wants to configure remote Push Notifications.
     */
     notifications?: NotificationFeature;
@@ -35,12 +31,6 @@ export type iOS = {
     * (optional) Use to provide identifiers for setting custom cleverTapID. e.g. "Email,Phone"
     */
     cleverTapIdentifiers?: [string];
-}
-
-export type CustomTemplate = {
-    source: string;
-    destination: string;
-    templates: [string];
 }
 
 export type NotificationFeature = {

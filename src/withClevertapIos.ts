@@ -20,12 +20,6 @@ import {
 import {
   withCleverTapPod
 } from "./iOS_config/withCleverTapPodfile";
-import {
-  withCleverTapAppDelegate
-} from "./iOS_config/withCleverTapAppDelegate";
-import {
-  addCustomTemplateFilesToBundle
-} from "./iOS_config/withCleverTapCustomTemplates";
 
 /**
 * Add 'aps-environment' record with current environment to '<project-name>.entitlements' file
@@ -87,9 +81,7 @@ export const withCleverTapIos: ConfigPlugin<CleverTapPluginProps> = (config, cle
   config = withAppEnvironment(config, clevertapProps);
   config = withRemoteNotificationsPermissions(config, clevertapProps);
   config = withCleverTapEntitlements(config, clevertapProps);
-  if (clevertapProps.ios?.templateIdentifiers != null) {
-    config = addCustomTemplateFilesToBundle(config, clevertapProps);
-  }
+
   const notifications = clevertapProps.ios?.notifications
 
   if (notifications?.enablePushTemplate) {
@@ -104,7 +96,6 @@ export const withCleverTapIos: ConfigPlugin<CleverTapPluginProps> = (config, cle
   }
   config = withCleverTapPod(config, clevertapProps);
   config = withCleverTapInfoPlist(config, clevertapProps);
-  config = withCleverTapAppDelegate(config, clevertapProps);
 
   return config;
 };

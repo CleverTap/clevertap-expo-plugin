@@ -63,10 +63,8 @@ export const withCleverTapInfoPlist: ConfigPlugin<CleverTapPluginProps> = (
     }
 
     //CTExpo internal props
-    if (clevertapProps.logLevel) {
-      config.modResults.CTExpoLogLevel = clevertapProps.logLevel;
-      CleverTapLog.log(`Configuring CleverTap SDK logging value: ${clevertapProps.logLevel}`);
-    }
+    config.modResults.CTExpoLogLevel = clevertapProps.logLevel ?? -1;
+    CleverTapLog.log(`Configuring CleverTap SDK logging value: ${clevertapProps.logLevel}`);
 
     if (!config.modResults.CTExpoNotificationProps) {
       config.modResults.CTExpoNotificationProps = {};
