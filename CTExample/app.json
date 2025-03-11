@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ctDemoApp",
-    "slug": "ctdemoapp",
+    "name": "CTExample",
+    "slug": "CTExample",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -16,7 +16,6 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.clevertap.expoDemo",
-      "appleTeamId": "A5J34NR598",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -43,38 +42,21 @@
           "accountToken": "6b4-2c0",
           "accountRegion": "eu1",
           "disableAppLaunchedEvent": false,
-          "enableFileProtection": true,
           "encryptionLevel": 1,
           "logLevel": 1,
           "ios": {
             "mode": "development",
             "notifications": {
-              "iosPushAppGroup": "group.com.clevertap.expoDemo",
               "enableRichMedia": true,
               "enablePushImpression": true,
-              "enablePushTemplate": true,
-              "enablePushInForeground": true,
+              "iosPushAppGroup": "group.com.clevertap.expoDemo",
               "notificationCategories": [
                 {
                   "identifier": "CTNotification",
-                  "actions": [
-                    {
-                      "identifier": "action1",
-                      "title": "Back"
-                    },
-                    {
-                      "identifier": "action2",
-                      "title": "Next"
-                    }
-                  ]
+                  "actions": [ ]
                 }
               ]
-            },
-            "enableURLDelegateChannels": [
-              0,
-              1,
-              2
-            ]
+            }
           },
           "android": {
             "customNotificationSound": "expo_sound.mp3",

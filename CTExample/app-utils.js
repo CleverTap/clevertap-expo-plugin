@@ -72,8 +72,6 @@ export const onUser_Login = () => {
         custom1: 123,
         birthdate: new Date('1992-12-22T06:35:31'),
     });
-
-    CleverTap.onUserLogin('{"Phone":"+212665925279"}');
 };
 
 export const getCleverTap_id = () => {
