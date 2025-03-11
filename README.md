@@ -47,7 +47,7 @@ In your `app.json` file, add the CleverTap Expo Plugin configuration. Below is a
 **app.json**
 ```json
 {
-  "expo": {
+  "expo" : {
     "plugins": [
       [
         "clevertap-expo-plugin",
@@ -61,7 +61,6 @@ In your `app.json` file, add the CleverTap Expo Plugin configuration. Below is a
           "proxyDomain": "analytics.example.com", // Optional, default: null
           "spikyProxyDomain": "spiky.example.com", // Optional, default: null
           "handshakeDomain": "handshake.example.com", // Optional, default: null
-          "customIdentifiers": "Email,Phone", // Optional, default: null
           "android": {
             "features": {
               "enablePush": true, // Optional, default: false
@@ -73,18 +72,40 @@ In your `app.json` file, add the CleverTap Expo Plugin configuration. Below is a
               "enableHmsPush": false, // Optional, default: false
               "enableGoogleAdId": false // Optional, default: false
             },
+           "customIdentifiers": "Email,Phone", // Optional, default: null
            "customNotificationSound": ["notification_sound.mp3", "alert_tone.mp3","reminder. mp3"], // Optional, default: null
            "backgroundSync": "1", // Optional, default: "0"
            "defaultNotificationChannelId": "default_channel", // Optional, default: null
            "inAppExcludeActivities": "SplashActivity", // Optional, default: null
            "sslPinning": "1", // Optional, default: "0"
            "registerActivityLifecycleCallbacks": true // Optional, default: true
+          },
+           "ios": {
+            "mode": "development", //Mandatory
+            "disableIDFV": true, //Optional, default: false
+            "enableFileProtection": true, //Optional, default: false
+            "useCustomId": true, //Optional, default: false
+            "cleverTapIdentifiers": ["Email", "Phone"], //Optional, default: null
+            "enableURLDelegateChannels": [ 0, 1, 2 ], //Optional, default: null
+            "notifications": {
+              "enableRichMedia": true, // Optional, default: false
+              "enablePushImpression": true, // Optional, default: false
+              "enablePushTemplate": true, // Optional, default: false
+              "enablePushInForeground": true, // Optional, default: false
+              "iosPushAppGroup": "group.com.clevertap.expoDemo", // Optional, default: null
+              "notificationCategories": [
+                {
+                  "identifier": "CTNotification",
+                  "actions": [ { "identifier": "action1",  "title": "title1" } ]
+                }
+              ] // Optional, default: null
+            }
           }
         }
       ]
     ]
   }
-}
+  }
 ```
 
 ### Step 4: Configure your app.json
@@ -103,7 +124,6 @@ The CleverTap Expo plugin supports a wide range of configuration options to cust
 | proxyDomain | string | Optional. Your custom proxy domain, e.g., "analytics.yourdomain.com". | Default is null (uses standard CleverTap endpoints). |
 | spikyProxyDomain | string | Optional. Your custom spiky proxy domain for push impression events. | Default is null (uses standard CleverTap endpoints). |
 | handshakeDomain | string | Optional. Your custom handshake domain. | Default is null (uses standard CleverTap handshake endpoint). |
-| android.customIdentifiers | string | Comma-separated list of custom identifiers to enable custom identity management. Specify which identifiers (e.g., "Email", "Phone", "Identity" or any combinations of them) CleverTap should use for user identification during `onUserLogin()` calls. | Default is Identity,Email. |
 
 #### Android-Specific Configuration
 
@@ -123,6 +143,24 @@ The CleverTap Expo plugin supports a wide range of configuration options to cust
 | android.inAppExcludeActivities | string | Comma-separated list of activities where in-app messages should not be shown. | Default is null (shows in-apps in all activities). |
 | android.sslPinning | string | Set to "1" to enable SSL pinning for added security. | Default is "0" (SSL pinning disabled). |
 | android.registerActivityLifecycleCallbacks | boolean |  Register activity lifecycle callbacks automatically. When enabled, CleverTap will automatically register for Android activity lifecycle events. This is strongly recommended as many CleverTap features depend on these callbacks to function properly, including session tracking, in-app notifications, and user engagement metrics. | Default is true (lifecycle callbacks enabled). |
+| android.customIdentifiers | string | Comma-separated list of custom identifiers to enable custom identity management. Specify which identifiers (e.g., "Email", "Phone", "Identity" or any combinations of them) CleverTap should use for user identification during `onUserLogin()` calls. | Default is Identity,Email. |
+
+#### iOS-Specific Configuration
+
+| Property | Type | Description | Default Behavior |
+|----------|------|-------------|-----------------|
+| iOS.mode | string | Set the APNs environment in entitlement to "development" or "production" for push notifications. This determines whether the app uses the sandbox or production APNs servers. | Default value is automatically set based on the provisioning profile. |
+| iOS.disableIDFV | Boolean | Disable the collection of Identifier for Vendor (IDFV) on iOS devices. | Default value is true to use IDFV as unique identifier. |
+| iOS.enableFileProtection | boolean | Enable file protection by setting the "NSDataWritingFileProtectionComplete" option when writing data to disk, ensuring maximum security by restricting access until the device is unlocked. | Default is NSFileProtectionCompleteUntilFirstUserAuthentication, meaning the file is inaccessible only until the user unlocks the device for the first time after boot. |
+| iOS.useCustomId | string | Use to enable support for setting custom cleverTapID. | Default is false. |
+| iOS.cleverTapIdentifiers | [string] | Array of custom identifiers to enable custom identity management. Specify which identifiers (e.g., "Email", "Phone", "Identity" or any combinations of them) CleverTap should use for user identification during `onUserLogin()` calls. | Default is Identity, Email. |
+| iOS.notifications.notificationCategories | [NotificationCategory] | Enable when the client wants to define and handle custom notification categories, enabling interactive notification actions such as buttons or custom UI elements. | Default is null. |
+| iOS.notifications.enablePushInForeground | Boolean | This value should be set when client wants to receive push notifications in the foreground. | Default is false. |
+| iOS.notifications.enableRichMedia | Boolean | Enable if user wants to integrate CTNotificationService Extension. Client will be able to use Rich Push from dashboard. | Default is false (fallback to only receive standard push notifications without rich media content). |
+| iOS.notifications.enablePushTemplate | Boolean | This value should be set to true if user wants to add Notification Content Extension target. | Default is false (fallback to only receive standard push notifications without rich media content). |
+| iOS.notifications.enablePushImpression | Boolean | Enable if user wants to integrate CTNotificationService Extension. This value should be set to true if user wants to enable logging Push Impressions event on Dashboard. | Default is false. |
+| iOS.notifications.iosPushAppGroup | string | This value should be set to to enable logging Push Impressions to dashboard. The user profile details should be saved in specified "app group". When push notification is received, the saved profile details will be used to log Push Impression to correct profile. | Default is null. (Should be set to log Push Impressions) |
+
 
 ### Step 5: Additional Android Configurations
 Configure additional Android-specific settings in your app.json file.
