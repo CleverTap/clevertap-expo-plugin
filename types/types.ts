@@ -1,3 +1,4 @@
+import { Android } from "./androidTypes";
 /**
  * CleverTapPluginProps refer to the properties set by the user in their app config file (e.g: app.json)
  */
@@ -38,10 +39,9 @@ export type CleverTapPluginProps = {
    * (optional) Use to set encryption level for PII data.
    */
   encryptionLevel?: CleverTapEncryptionLevel;
-  /**
-   * (optional) Use to set encryption level for PII data.
-   */
+  customIdentifiers?: string;  // e.g., "Email,Phone"
   ios?: iOSFeatures;
+  android:Android;
 };
 
 export type iOSFeatures = {

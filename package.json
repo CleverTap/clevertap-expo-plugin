@@ -1,14 +1,21 @@
 {
   "name": "clevertap-expo-plugin",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "The CleverTap expo plugin enables integration of the CleverTap SDK into your Expo projects, to leverage CleverTap's features in your React Native applications.",
   "main": "./app.plugin.js",
   "scripts": {
-    "build": "yarn run lint && rm -rf build && tsc && cp -a support/serviceExtensionFiles build/support/ && cp -a support/contentExtensionFiles build/support/",
-    "lint": "eslint . --ext .ts",
+    "build": "rm -rf build && tsc && cp -a support/serviceExtensionFiles build/support/ && cp -a support/contentExtensionFiles build/support/ && expo-module build",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "start": "expo start --dev-client"
+    "start": "expo start --dev-client",
+    "clean": "expo-module clean",
+    "lint": "expo-module lint",
+    "test": "expo-module test",
+    "prepare": "expo-module prepare",
+    "prepublishOnly": "expo-module prepublishOnly",
+    "expo-module": "expo-module",
+    "open:ios": "xed example/ios",
+    "open:android": "open -a \"Android Studio\" example/android"
   },
   "keywords": [
     "expo",
@@ -16,7 +23,7 @@
     "push",
     "notifications"
   ],
-  "author": "Clevertap",
+  "author": "CleverTap",
   "license": "MIT",
   "homepage": "https://github.com/CleverTap/clevertap-expo-plugin#readme",
   "devDependencies": {
@@ -33,11 +40,5 @@
     "expo": "*",
     "react": "*",
     "react-native": "*"
-  },
-  "private": true,
-  "expo": {
-    "autolinking": {
-      "nativeModulesDir": ".."
-    }
   }
 }

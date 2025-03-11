@@ -20,13 +20,12 @@
     "@react-navigation/stack": "^6.4.1",
     "@types/react": "~18.3.12",
     "@types/react-native": "^0.72.8",
-    "clevertap-expo-plugin": "file:../../clevertap-expo-plugin-0.1.0.tgz",
     "clevertap-react-native": "^3.1.1",
     "expo": "~52.0.18",
     "expo-asset": "~11.0.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-native": "0.76.5",
+    "react-native": "^0.77.0",
     "typescript": "^5.3.3"
   },
   "private": true,
@@ -34,8 +33,14 @@
     "expo": "~52.0.33",
     "expo-router": "^4.0.17",
     "react": "18.3.1",
-    "react-native": "0.76.7",
+    "react-native": "^0.77.0",
     "react-native-svg-transformer": "^1.5.0",
-    "react-native-toast-message": "^2.2.1"
+    "react-native-toast-message": "^2.2.1",
+    "expo-linking": "~7.0.3"
+  },
+  "expo": {
+  "autolinking": {
+    "nativeModulesDir": ".."
   }
+}
 }
