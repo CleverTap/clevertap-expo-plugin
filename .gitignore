@@ -1,9 +1,17 @@
-build/
+.expo/
 node_modules/
 .DS_Store
-.expo
+src/dist/
+build/
 
 #plugin
 package-lock.json
 
-Examples/ctDemoApp/.expo
+
+ctDemoApp/android/
+ctDemoApp/ios/
+ctDemoApp/package-lock.json
+
+.idea
+local.properties
+.gradle

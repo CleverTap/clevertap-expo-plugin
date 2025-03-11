@@ -1,0 +1,116 @@
+{
+  "expo": {
+    "name": "ctDemoApp",
+    "slug": "ctdemoapp",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.clevertap.expoDemo",
+      "appleTeamId": "A5J34NR598",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.clevertap.expo.demo",
+      "googleServicesFile":"./assets/google-services.json",
+      "permissions": ["android.permission.ACCESS_NETWORK_STATE","android.permission.INTERNET","android.permission.POST_NOTIFICATIONS"]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      [
+        "clevertap-expo-plugin",
+        {
+          "accountId": "W9R-486-4W5Z",
+          "accountToken": "6b4-2c0",
+          "accountRegion": "eu1",
+          "disableAppLaunchedEvent": false,
+          "enableFileProtection": true,
+          "encryptionLevel": 1,
+          "logLevel": 1,
+          "ios": {
+            "mode": "development",
+            "notifications": {
+              "iosPushAppGroup": "group.com.clevertap.expoDemo",
+              "enableRichMedia": true,
+              "enablePushImpression": true,
+              "enablePushTemplate": true,
+              "enablePushInForeground": true,
+              "notificationCategories": [
+                {
+                  "identifier": "CTNotification",
+                  "actions": [
+                    {
+                      "identifier": "action1",
+                      "title": "Back"
+                    },
+                    {
+                      "identifier": "action2",
+                      "title": "Next"
+                    }
+                  ]
+                }
+              ]
+            },
+            "enableURLDelegateChannels": [
+              0,
+              1,
+              2
+            ]
+          },
+          "android": {
+            "customNotificationSound": "expo_sound.mp3",
+            "registerActivityLifecycleCallbacks": true,
+            "features": {
+              "enablePush": true
+            }
+          }
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          },
+          "android": {
+            "enableProguardInReleaseBuilds": true
+          }
+        }
+      ],
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "dbe8cccc-ad80-427c-83c3-78aec505b08f"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/dbe8cccc-ad80-427c-83c3-78aec505b08f"
+    }
+  }
+}
