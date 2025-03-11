@@ -4,12 +4,13 @@ node_modules/
 src/dist/
 build/
 
-
 #plugin
 package-lock.json
 
-ios/
-Examples/ctDemoApp/android/
+
+ctDemoApp/android/
+ctDemoApp/ios/
+ctDemoApp/package-lock.json
 .idea
 local.properties
 .gradle
