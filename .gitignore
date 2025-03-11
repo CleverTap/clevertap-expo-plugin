@@ -11,6 +11,7 @@ package-lock.json
 ctDemoApp/android/
 ctDemoApp/ios/
 ctDemoApp/package-lock.json
+
 .idea
 local.properties
 .gradle

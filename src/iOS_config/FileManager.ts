@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { CleverTapLog } from './CleverTapLog';
+import { CleverTapLog } from '../../support/CleverTapLog';
 
 /**
  * FileManager contains static *awaitable* file-system functions

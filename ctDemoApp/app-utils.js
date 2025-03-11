@@ -3,6 +3,7 @@ import {
     Platform,
     Linking
 } from 'react-native';
+import userDefaults from 'react-native-user-defaults'
 
 const CleverTap = require('clevertap-react-native');
 
@@ -46,6 +47,17 @@ export const set_userProfile = () => {
         custom1: 123,
         birthdate: new Date('2020-03-03T06:35:31'),
     });
+    userDefaults.set("CTProfileName", 'testUserA1', "group.com.clevertap.expoDemo", (err, data) => {
+        if(!err) console.log('Saved CTProfileName: testUserA1')
+    })
+
+    userDefaults.set("CTProfileEmail", 'test@test.com', "group.com.clevertap.expoDemo", (err, data) => {
+        if(!err) console.log('Saved CTProfileEmail: aahana@mail.com')
+    })
+    userDefaults.set("CTProfileIdentity", '123456', "group.com.clevertap.expoDemo", (err, data) => {
+        if(!err) console.log('Saved CTProfileIdentity: sonalk')
+    })
+
 };
 
 // Identity_Management
@@ -643,12 +655,12 @@ export const _handleCleverTapEvent = (eventName, event) => {
     showToast(`${eventName} called!`);
 
     // Uncomment to access payload for each events.
-    // if (eventName == 'CleverTapProfileDidInitialize') {
-    //   console.log('Profile did initialized with cleverTapID: '+ event['CleverTapID']);
-    // }
-    // if (eventName == 'CleverTapProfileSync') {
-    //   console.log('Profile data updated with updates: ', event['updates']);
-    // }
+    if (eventName == 'CleverTapProfileDidInitialize') {
+      console.log('Profile did initialized with cleverTapID: '+ event['CleverTapID']);
+    }
+    if (eventName == 'CleverTapProfileSync') {
+      console.log('Profile data updated with updates: ', event['updates']);
+    }
 };
 
 export const _handleCleverTapInboxEvent = (eventName, event) => {
@@ -656,70 +668,70 @@ export const _handleCleverTapInboxEvent = (eventName, event) => {
     showToast(`${eventName} called!`);
 
     // Uncomment to access payload for each events.
-    // if (eventName == CleverTap.CleverTapInboxMessageTapped) {
-    //   let contentPageIndex = event.contentPageIndex;
-    //   let buttonIndex = event.buttonIndex;
-    //   var data = event.data;
-    //   let inboxMessageClicked = data.msg;
-    //   console.log(
-    //     'App Inbox ->',
-    //     'InboxItemClicked at page-index ' +
-    //       contentPageIndex +
-    //       ' with button-index ' +
-    //       buttonIndex,
-    //   );
+    if (eventName == CleverTap.CleverTapInboxMessageTapped) {
+      let contentPageIndex = event.contentPageIndex;
+      let buttonIndex = event.buttonIndex;
+      var data = event.data;
+      let inboxMessageClicked = data.msg;
+      console.log(
+        'App Inbox ->',
+        'InboxItemClicked at page-index ' +
+          contentPageIndex +
+          ' with button-index ' +
+          buttonIndex,
+      );
 
     //   //The contentPageIndex corresponds to the page index of the content, which ranges from 0 to the total number of pages for carousel templates. For non-carousel templates, the value is always 0, as they only have one page of content.
-    //   let messageContentObject = inboxMessageClicked.content[contentPageIndex];
+      let messageContentObject = inboxMessageClicked.content[contentPageIndex];
 
-    //   //The buttonIndex corresponds to the CTA button clicked (0, 1, or 2). A value of -1 indicates the app inbox body/message clicked.
-    //   if (buttonIndex != -1) {
-    //     //button is clicked
-    //     let buttonObject = messageContentObject.action.links[buttonIndex];
-    //     let buttonType = buttonObject.type;
-    //     switch (buttonType) {
-    //       case 'copy':
-    //         //this type copies the associated text to the clipboard
-    //         let copiedText = buttonObject.copyText.text;
-    //         console.log(
-    //           'App Inbox ->',
-    //           'copied text to Clipboard: ' + copiedText,
-    //         );
-    //         //_dismissAppInbox()
-    //         break;
+      //The buttonIndex corresponds to the CTA button clicked (0, 1, or 2). A value of -1 indicates the app inbox body/message clicked.
+      if (buttonIndex != -1) {
+        //button is clicked
+        let buttonObject = messageContentObject.action.links[buttonIndex];
+        let buttonType = buttonObject.type;
+        switch (buttonType) {
+          case 'copy':
+            //this type copies the associated text to the clipboard
+            let copiedText = buttonObject.copyText.text;
+            console.log(
+              'App Inbox ->',
+              'copied text to Clipboard: ' + copiedText,
+            );
+            //_dismissAppInbox()
+            break;
 
-    //       case 'url':
-    //         //this type fires the DeepLink
-    //         let firedDeepLinkUrl = buttonObject.url.android.text;
-    //         console.log(
-    //           'App Inbox ->',
-    //           'fired DeepLink url: ' + firedDeepLinkUrl,
-    //         );
-    //         //_dismissAppInbox();
-    //         break;
-    //       case 'kv':
-    //         //this type contains the custom key-value pairs
-    //         let kvPair = buttonObject.kv;
-    //         console.log('App Inbox ->', 'custom key-value pair: ', kvPair);
-    //         //_dismissAppInbox();
-    //         break;
-    //     }
-    //   } else {
-    //     //Item's body is clicked
-    //     console.log(
-    //       'App Inbox ->',
-    //       'type/template of App Inbox item: ' + inboxMessageClicked.type,
-    //     );
-    //     //_dismissAppInbox();
-    //   }
-    // }
+          case 'url':
+            //this type fires the DeepLink
+            let firedDeepLinkUrl = buttonObject.url.android.text;
+            console.log(
+              'App Inbox ->',
+              'fired DeepLink url: ' + firedDeepLinkUrl,
+            );
+            //_dismissAppInbox();
+            break;
+          case 'kv':
+            //this type contains the custom key-value pairs
+            let kvPair = buttonObject.kv;
+            console.log('App Inbox ->', 'custom key-value pair: ', kvPair);
+            //_dismissAppInbox();
+            break;
+        }
+      } else {
+        //Item's body is clicked
+        console.log(
+          'App Inbox ->',
+          'type/template of App Inbox item: ' + inboxMessageClicked.type,
+        );
+        //_dismissAppInbox();
+      }
+    }
 
-    // if (eventName == 'CleverTapInboxMessageButtonTapped') {
-    //   console.log('Inbox message button tapped with customExtras:');
-    //   for (const key of Object.keys(event)) {
-    //     console.log('Value for key: ' + key + ' is:' + event[key]);
-    //   }
-    // }
+    if (eventName == 'CleverTapInboxMessageButtonTapped') {
+      console.log('Inbox message button tapped with customExtras:');
+      for (const key of Object.keys(event)) {
+        console.log('Value for key: ' + key + ' is:' + event[key]);
+      }
+    }
 };
 
 export const _dismissAppInbox = () => {
@@ -731,28 +743,28 @@ export const _handleCleverTapInAppEvent = (eventName, event) => {
     showToast(`${eventName} called!`);
 
     // Uncomment to access payload for each events.
-    // if (eventName == 'CleverTapInAppNotificationButtonTapped') {
-    //   console.log('InApp button tapped with key-value pair:');
-    //   for (const key of Object.keys(event)) {
-    //     console.log('Value for key: '+ key + ' is:' + event[key]);
-    //   }
-    // }
-    // if (eventName == 'CleverTapInAppNotificationDismissed') {
-    //   let extras = event['extras'];
-    //   let actionExtras = event['actionExtras'];
-    //   console.log('InApp dismissed with extras: ', extras ,' and actionExtras: ', actionExtras);
-    //   for (const key of Object.keys(extras)) {
-    //     console.log('Value for extras key: '+ key + ' is:' + extras[key]);
-    //   }
-    //   for (const key of Object.keys(actionExtras)) {
-    //     console.log('Value for actionExtras key: '+ key + ' is:' + actionExtras[key]);
-    //   }
-    // }
+    if (eventName == 'CleverTapInAppNotificationButtonTapped') {
+      console.log('InApp button tapped with key-value pair:');
+      for (const key of Object.keys(event)) {
+        console.log('Value for key: '+ key + ' is:' + event[key]);
+      }
+    }
+    if (eventName == 'CleverTapInAppNotificationDismissed') {
+      let extras = event['extras'];
+      let actionExtras = event['actionExtras'];
+      console.log('InApp dismissed with extras: ', extras ,' and actionExtras: ', actionExtras);
+      for (const key of Object.keys(extras)) {
+        console.log('Value for extras key: '+ key + ' is:' + extras[key]);
+      }
+      for (const key of Object.keys(actionExtras)) {
+        console.log('Value for actionExtras key: '+ key + ' is:' + actionExtras[key]);
+      }
+    }
     // Following event is only applicable for the android platform
-    // if (eventName == 'CleverTapInAppNotificationShowed') {
-    //    let type = event.data.type;
-    //    console.log('Value for inApp type:', type);
-    // }
+    if (eventName == 'CleverTapInAppNotificationShowed') {
+       let type = event.data.type;
+       console.log('Value for inApp type:', type);
+    }
 };
 
 export const _handleCleverTapPushEvent = (eventName, event) => {
@@ -760,16 +772,16 @@ export const _handleCleverTapPushEvent = (eventName, event) => {
     showToast(`${JSON.stringify(eventName)} called!`);
 
     // Uncomment to access payload for each events.
-    // if (eventName == 'CleverTapPushNotificationClicked') {
-    //   if (event['wzrk_dl'] != null) {
-    //     let deepLink = event['wzrk_dl'];
-    //     console.log('Push Notification clicked with deeplink: ' + deepLink);
-    //   }
-    // }
-    // if (eventName == 'CleverTapPushPermissionResponseReceived') {
-    //   let accepted = event['accepted'];
-    //   console.log('Push Permission accepted:', accepted);
-    // }
+    if (eventName == 'CleverTapPushNotificationClicked') {
+      if (event['wzrk_dl'] != null) {
+        let deepLink = event['wzrk_dl'];
+        console.log('Push Notification clicked with deeplink: ' + deepLink);
+      }
+    }
+    if (eventName == 'CleverTapPushPermissionResponseReceived') {
+      let accepted = event['accepted'];
+      console.log('Push Permission accepted:', accepted);
+    }
 };
 
 export const _handleCleverTapDisplayUnitsLoaded = (eventName, event) => {
