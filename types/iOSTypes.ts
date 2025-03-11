@@ -23,14 +23,6 @@ export type iOS = {
     * (optional) This value should be set when client wants to configure remote Push Notifications.
     */
     notifications?: NotificationFeature;
-    /**
-    * (optional) Use to enable support for setting custom cleverTapID.
-    */
-    useCustomId?: boolean;
-    /**
-    * (optional) Use to provide identifiers for setting custom cleverTapID. e.g. "Email,Phone"
-    */
-    cleverTapIdentifiers?: [string];
 }
 
 export type NotificationFeature = {

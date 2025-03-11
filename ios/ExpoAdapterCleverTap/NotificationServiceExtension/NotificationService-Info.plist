@@ -10,15 +10,8 @@
 	<string>$(CTEXPO_ACCOUNT_ID)</string>
 	<key>CleverTapProxyDomain</key>
 	<string>$(CTEXPO_PROXY_DOMAIN)</string>
-   <key>CTExpo</key>
-	<dict>
-		<key>CleverTapIdentifiers</key>
-		<string>$(CTEXPO_CT_IDENTIFIERS)</string>
-		<key>CleverTapUseCustomId</key>
-		<string>$(CTEXPO_CT_CUSTOM_ID)</string>
-		<key>AppGroup</key>
-		<string>$(CTEXPO_PUSH_APP_GROUP)</string>
-	</dict>
+   <key>CTExpoAppGroup</key>
+	<string>$(CTEXPO_PUSH_APP_GROUP)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

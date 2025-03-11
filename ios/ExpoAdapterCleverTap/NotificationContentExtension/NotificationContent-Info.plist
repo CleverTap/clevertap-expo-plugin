@@ -2,11 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-<key>CTExpo</key>
-	<dict>
-		<key>AppGroup</key>
-		<string>$(CTEXPO_PUSH_APP_GROUP)</string>
-	</dict>
 	<key>Allow Arbitrary Loads</key>
 	<true/>
 	<key>Application Application App Transport Security Settings</key>

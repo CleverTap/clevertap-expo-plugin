@@ -5,7 +5,6 @@ import {
 } from "@expo/config-plugins";
 import { CleverTapPluginProps } from "../types/types";
 import {
-  withAppGroupPermissionsNCE,
   withCleverTapNCE,
   withCleverTapXcodeProjectNCE
 } from "./iOS_config/withCleverTapNotificationContentExtension";
@@ -87,7 +86,6 @@ export const withCleverTapIos: ConfigPlugin<CleverTapPluginProps> = (config, cle
   if (notifications?.enablePushTemplate) {
     config = withCleverTapNCE(config, clevertapProps);
     config = withCleverTapXcodeProjectNCE(config, clevertapProps);
-    config = withAppGroupPermissionsNCE(config, clevertapProps);
   }
   if (notifications?.enableRichMedia || notifications?.enablePushImpression) {
     config = withCleverTapNSE(config, clevertapProps);

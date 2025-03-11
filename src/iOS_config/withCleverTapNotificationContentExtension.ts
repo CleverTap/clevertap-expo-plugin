@@ -149,7 +149,6 @@ export const withCleverTapXcodeProjectNCE: ConfigPlugin<CleverTapPluginProps> = 
                 configurations[key].buildSettings.PRODUCT_NAME == `"${NCE_TARGET_NAME}"`
             ) {
                 const buildSettingsObj = configurations[key].buildSettings;
-                buildSettingsObj.CTEXPO_PUSH_APP_GROUP = clevertapProps.ios?.notifications?.iosPushAppGroup;
                 buildSettingsObj.SWIFT_VERSION = swiftVersion;
                 if (codeSignStyle) { buildSettingsObj.CODE_SIGN_STYLE = codeSignStyle; }
                 if (codeSignIdentity) { buildSettingsObj.CODE_SIGN_IDENTITY = codeSignIdentity; }
@@ -163,25 +162,4 @@ export const withCleverTapXcodeProjectNCE: ConfigPlugin<CleverTapPluginProps> = 
         CleverTapLog.log('Successfully added NotificationContentExtension target');
         return newConfig;
     })
-};
-
-/**
- * Update NSE's entitlement file with App group
- */
-export const withAppGroupPermissionsNCE: ConfigPlugin<CleverTapPluginProps> = (
-    config, clevertapProps
-) => {
-    const APP_GROUP_KEY = "com.apple.security.application-groups";
-    return withEntitlementsPlist(config, config => {
-        if (config.modRequest.projectName === "${NCE_TARGET_NAME}" && clevertapProps.ios?.notifications?.iosPushAppGroup != null) {
-            const APP_GROUP_KEY = "com.apple.security.application-groups";
-            const existingAppGroups = config.modResults[APP_GROUP_KEY];
-            if (Array.isArray(existingAppGroups) && !existingAppGroups.includes(clevertapProps.ios?.notifications?.iosPushAppGroup)) {
-                config.modResults[APP_GROUP_KEY] = existingAppGroups.concat([clevertapProps.ios?.notifications?.iosPushAppGroup]);
-              } else {
-                config.modResults[APP_GROUP_KEY] = [clevertapProps.ios?.notifications?.iosPushAppGroup];
-              }
-        }
-        return config;
-    });
 };

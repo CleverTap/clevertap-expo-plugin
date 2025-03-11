@@ -134,7 +134,7 @@ function updatePushImpressionNSE(
 
         // Write the updated content back to the file
         fs.writeFileSync(filePath, notificationServiceContent, 'utf-8');
-        console.log('Succeddfully updated push impression support in NotificationServiceExtension.');
+        console.log('Successfully updated push impression support in NotificationServiceExtension.');
     } else {
         console.log('Push impression support already exists, not updating the code.');
     }
@@ -240,10 +240,6 @@ export const withCleverTapXcodeProjectNSE: ConfigPlugin<CleverTapPluginProps> = 
                 }
                 if(clevertapProps.ios?.notifications?.enablePushImpression && clevertapProps.spikyProxyDomain != null) {
                     buildSettingsObj.CTEXPO_SPIKY_PROXY = clevertapProps.spikyProxyDomain;
-                }
-                if(clevertapProps.ios?.notifications?.enablePushImpression && clevertapProps.ios?.useCustomId && clevertapProps.ios?.cleverTapIdentifiers != null) {
-                    buildSettingsObj.CTEXPO_CT_CUSTOM_ID = clevertapProps.ios?.useCustomId;
-                    buildSettingsObj.CTEXPO_CT_IDENTIFIERS = clevertapProps.ios?.cleverTapIdentifiers;
                 }
             }
         }

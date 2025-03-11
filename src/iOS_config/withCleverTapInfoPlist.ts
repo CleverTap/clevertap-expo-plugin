@@ -33,13 +33,10 @@ export const withCleverTapInfoPlist: ConfigPlugin<CleverTapPluginProps> = (
       config.modResults.CleverTapSpikyProxyDomain = clevertapProps.spikyProxyDomain;
       CleverTapLog.log(`Configuring app with spikyProxyDomain: ${clevertapProps.spikyProxyDomain}`);
     }
-    if (clevertapProps.ios?.useCustomId) {
-      config.modResults.CleverTapUseCustomId = clevertapProps.ios?.useCustomId;
-      CleverTapLog.log(`Enabling custom identifier usage: ${clevertapProps.ios?.useCustomId}`);
-    }
-    if (clevertapProps.ios?.cleverTapIdentifiers) {
-      config.modResults.CleverTapIdentifiers = clevertapProps.ios?.cleverTapIdentifiers;
-      CleverTapLog.log(`Configuring app with custom identifiers: ${clevertapProps.ios?.cleverTapIdentifiers}`);
+    if (clevertapProps.customIdentifiers) {
+      const customIdentifiers = clevertapProps.customIdentifiers.split(" ");
+      config.modResults.CleverTapIdentifiers = customIdentifiers;
+      CleverTapLog.log(`Configuring app with custom identifiers: ${clevertapProps.customIdentifiers}`);
     }
     if (clevertapProps.disableAppLaunchedEvent) {
       config.modResults.CleverTapDisableAppLaunched = clevertapProps.disableAppLaunchedEvent;
@@ -93,12 +90,6 @@ export const withCleverTapInfoPlist: ConfigPlugin<CleverTapPluginProps> = (
         "NotificationCategories"
       ] = notificationCategories;
       CleverTapLog.log(`Configuring app to hanlde notification categories: ${JSON.stringify(notificationCategories)}`);
-    }
-
-    if (clevertapProps.ios?.templateIdentifiers?.templates != null) {
-      const customTemplate = clevertapProps.ios?.templateIdentifiers;
-      config.modResults.CTExpoCustomTemplate = customTemplate;
-      CleverTapLog.log(`Configuring app to hanlde custom template : ${JSON.stringify(customTemplate)}`);
     }
 
     if (clevertapProps.ios?.enableURLDelegateChannels != null) {
