@@ -99,8 +99,8 @@ const withCleverTapRootGradle: ConfigPlugin<CleverTapPluginProps> = (
                     contents = updateClasspathVersion(contents, hmsInfo.lineToReplace!, newLine);
                 }
             }
-            const agpInfo = getClasspathInfo(contents, AGP_CLASSPATH);
-            if (agpInfo.exists && agpInfo.currentVersion) {
+            const agpInfo = getClasspathInfo(contents, AGP_CLASSPATH, true);
+            if (agpInfo.exists) {
                 if (agpInfo.currentVersion !== AGP_CLASSPATH.split(':')[2]) {
                     const newLine = `classpath '${AGP_CLASSPATH}'`;
                     contents = updateClasspathVersion(contents, agpInfo.lineToReplace!, newLine);
