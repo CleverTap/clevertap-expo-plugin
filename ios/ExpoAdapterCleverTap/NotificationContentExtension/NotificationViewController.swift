@@ -1,3 +1,4 @@
+#if canImport(CTNotificationContent)
 import CTNotificationContent
 import CleverTapSDK
 
@@ -15,9 +16,6 @@ class NotificationViewController: CTNotificationViewController {
     // optional: implement to get notification response
     override func userDidReceive(_ response: UNNotificationResponse?) {
         print("Push Notification Payload \(String(describing: response?.notification.request.content.userInfo))")
-        let notificationPayload = response?.notification.request.content.userInfo
-        if (response?.actionIdentifier == "action_2") {
-            CleverTap.sharedInstance()?.recordNotificationClickedEvent(withData: notificationPayload ?? "")
-        }
     }
 }
+#endif

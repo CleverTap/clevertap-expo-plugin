@@ -37,20 +37,19 @@
     },
     "plugins": [
       [
-        "../app.plugin.js",
+        "clevertap-expo-plugin",
         {
-          "accountId": "TEST-46W-WWR-R85Z",
-          "accountToken": "TEST-200-064",
+          "accountId": "W9R-486-4W5Z",
+          "accountToken": "6b4-2c0",
           "accountRegion": "eu1",
           "disableAppLaunchedEvent": false,
           "enableFileProtection": true,
           "encryptionLevel": 1,
-          "logLevel": 2,
+          "logLevel": 1,
           "ios": {
             "mode": "development",
-            "deploymentTarget": "11",
-            "deviceFamily": "1,2",
             "notifications": {
+              "iosPushAppGroup": "group.com.clevertap.expoDemo",
               "enableRichMedia": true,
               "enablePushImpression": true,
               "enablePushTemplate": true,
@@ -61,11 +60,11 @@
                   "actions": [
                     {
                       "identifier": "action1",
-                      "title": "title1"
+                      "title": "Back"
                     },
                     {
                       "identifier": "action2",
-                      "title": "title2"
+                      "title": "Next"
                     }
                   ]
                 }
@@ -75,26 +74,14 @@
               0,
               1,
               2
-            ],
-            "templateIdentifiers": {
-              "source": "assets",
-              "destination": "Resources",
-              "templates": [
-                "templates"
-              ]
-            }
+            ]
           },
-          "android":{
-            "customNotificationSound":"expo_sound.mp3",
-            "registerActivityLifecycleCallbacks":true,
-            "features":{
-              "enablePush":true
+          "android": {
+            "customNotificationSound": "expo_sound.mp3",
+            "registerActivityLifecycleCallbacks": true,
+            "features": {
+              "enablePush": true
             }
-          },
-          "profileProps": {
-            "name": "test3",
-            "identity": 123455,
-            "email": "test3@gmail.com"
           }
         }
       ],

@@ -4,7 +4,7 @@
   "description": "The CleverTap expo plugin enables integration of the CleverTap SDK into your Expo projects, to leverage CleverTap's features in your React Native applications.",
   "main": "./app.plugin.js",
   "scripts": {
-    "build": "rm -rf build && tsc && cp -a support/serviceExtensionFiles build/support/ && cp -a support/contentExtensionFiles build/support/ && expo-module build",
+    "build": "rm -rf build && expo-module build",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "start": "expo start --dev-client",
@@ -28,13 +28,9 @@
   "homepage": "https://github.com/CleverTap/clevertap-expo-plugin#readme",
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
-    "@types/react": "~18.3.12",
-    "expo": "~52.0.0",
-    "expo-build-properties": "^0.13.2",
-    "expo-module-scripts": "^4.0.3",
-    "expo-modules-core": "^2.2.1",
-    "fs-extra": "^11.3.0",
-    "react-native": "0.76.0"
+    "expo": "^48.0.0",
+    "expo-module-scripts": "^3.0.4",
+    "typescript": "^5.8.2"
   },
   "peerDependencies": {
     "expo": "*",
