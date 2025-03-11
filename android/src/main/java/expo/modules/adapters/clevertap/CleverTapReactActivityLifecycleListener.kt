@@ -4,9 +4,12 @@ import android.app.Activity
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.getIntent
 import android.os.Build
 import android.os.Bundle
 import com.clevertap.android.sdk.CleverTapAPI
+import com.clevertap.android.sdk.Logger
+import com.clevertap.react.CleverTapRnAPI
 import expo.modules.core.interfaces.ReactActivityLifecycleListener
 
 class CleverTapReactActivityLifecycleListener(private val activityContext: Context) : ReactActivityLifecycleListener {
@@ -14,6 +17,9 @@ class CleverTapReactActivityLifecycleListener(private val activityContext: Conte
 
     override fun onCreate(activity: Activity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
+        activity.intent?.data?.also {
+            CleverTapRnAPI.setInitialUri(it)
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             NotificationUtils.dismissNotification(activity.intent, activity.applicationContext)
         }
@@ -34,6 +40,10 @@ class CleverTapReactActivityLifecycleListener(private val activityContext: Conte
 
     override fun onNewIntent(intent: Intent): Boolean {
         val result = super.onNewIntent(intent)
+        intent.data?.also {
+            CleverTapRnAPI.setInitialUri(it)
+        }
+
         val cleverTapDefaultInstance = CleverTapAPI.getDefaultInstance(activityContext.applicationContext)
 
         val payload = intent.extras

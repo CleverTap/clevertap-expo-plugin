@@ -2,37 +2,54 @@ import { ConfigPlugin, withStringsXml } from '@expo/config-plugins';
 import { CleverTapLog } from '../../../support/CleverTapLog';
 import { CleverTapPluginProps } from '../../../types/types';
 
+const DEFAULT_VALUES = {
+    registerActivityLifecycleCallbacks: 'true',
+    enablePushTemplates: 'false',
+    logLevel: '-1'
+} as const;
+
+const STRING_KEYS = {
+    registerActivityLifecycleCallbacks: 'expo_clevertap_register_activity_lifecycle_callbacks',
+    enablePushTemplates: 'expo_clevertap_enable_push_templates',
+    logLevel: 'expo_clevertap_log_level'
+} as const;
+
 export const withCleverTapAndroidResources: ConfigPlugin<CleverTapPluginProps> = (config, props) => {
     return withStringsXml(config, async (config) => {
         const strings = config.modResults.resources.string || [];
 
         // Activity Lifecycle Callbacks
-        if (props.android?.registerActivityLifecycleCallbacks !== undefined) {
-            addOrUpdateString(
-                strings,
-                'expo_clevertap_register_activity_lifecycle_callbacks',
-                String(props.android.registerActivityLifecycleCallbacks)
-            );
-        }
+        const lifecycleCallbacks = props?.android?.registerActivityLifecycleCallbacks !== undefined 
+            ? String(props.android.registerActivityLifecycleCallbacks)
+            : DEFAULT_VALUES.registerActivityLifecycleCallbacks;
+        
+        addOrUpdateString(
+            strings,
+            STRING_KEYS.registerActivityLifecycleCallbacks,
+            lifecycleCallbacks
+        );
 
         // Push Templates
-        if (props.android?.features?.enablePushTemplates !== undefined) {
-            addOrUpdateString(
-                strings,
-                'expo_clevertap_enable_push_templates',
-                String(props.android.features.enablePushTemplates)
-            );
-        }
+        const pushTemplates = props?.android?.features?.enablePushTemplates !== undefined
+            ? String(props.android.features.enablePushTemplates)
+            : DEFAULT_VALUES.enablePushTemplates;
+        
+        addOrUpdateString(
+            strings,
+            STRING_KEYS.enablePushTemplates,
+            pushTemplates
+        );
 
         // Log Level
-        if (props.logLevel !== undefined) {
-            addOrUpdateString(
-                strings,
-                'expo_clevertap_log_level',
-                String(props.logLevel)
-            );
-        }
-
+        const logLevel = props?.logLevel !== undefined
+            ? String(props.logLevel)
+            : DEFAULT_VALUES.logLevel;
+        
+        addOrUpdateString(
+            strings,
+            STRING_KEYS.logLevel,
+            logLevel
+        );
         config.modResults.resources.string = strings;
         
         // Log what resources were added for debugging
