@@ -46,6 +46,7 @@ Example/android/app/.cxx
 *.iml
 .project
 .settings
+android
 
 # Node
 node_modules

@@ -11,3 +11,5 @@ package-lock.json
 ios/
 Examples/ctDemoApp/android/
 .idea
+local.properties
+.gradle
