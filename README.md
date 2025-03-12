@@ -39,7 +39,7 @@ npm install clevertap-react-native
 
 ### Step 2: Install the CleverTap Expo Plugin
 ```sh
-npx expo install clevertap-expo-plugin
+npx expo install @clevertap/clevertap-expo-plugin
 ```
 
 ### Step 3: Add the plugin to your app.json

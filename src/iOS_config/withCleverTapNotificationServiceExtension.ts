@@ -23,7 +23,7 @@ import {
 */
 export const withCleverTapNSE: ConfigPlugin<CleverTapPluginProps> = (config, clevertapProps) => {
     // support for monorepos where node_modules can be above the project directory.
-    const pluginDir = require.resolve("clevertap-expo-plugin/package.json")
+    const pluginDir = require.resolve("@clevertap/clevertap-expo-plugin/package.json")
     return withDangerousMod(config, [
         'ios',
         async config => {

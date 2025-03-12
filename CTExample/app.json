@@ -36,7 +36,7 @@
     },
     "plugins": [
       [
-        "clevertap-expo-plugin",
+        "@clevertap/clevertap-expo-plugin",
         {
           "accountId": "YOUR ACCT ID",
           "accountToken": "YOUR ACCT TOKEN",
