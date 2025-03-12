@@ -8,9 +8,9 @@ build/
 package-lock.json
 
 
-ctDemoApp/android/
-ctDemoApp/ios/
-ctDemoApp/package-lock.json
+CTExample/android/
+CTExample/ios/
+CTExample/package-lock.json
 
 .idea
 local.properties
