@@ -52,7 +52,7 @@ In your `app.json` file, add the CleverTap Expo Plugin configuration. Below is a
   "expo" : {
     "plugins": [
       [
-        "clevertap-expo-plugin",
+        "@clevertap/clevertap-expo-plugin",
         {
           "accountId": "WWW-AAA-BBBB",
           "accountToken": "AAA-BBB-CCCC",
