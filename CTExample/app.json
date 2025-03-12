@@ -36,11 +36,11 @@
     },
     "plugins": [
       [
-        "clevertap-expo-plugin",
+        "@clevertap/clevertap-expo-plugin",
         {
-          "accountId": "W9R-486-4W5Z",
-          "accountToken": "6b4-2c0",
-          "accountRegion": "eu1",
+          "accountId": "YOUR ACCT ID",
+          "accountToken": "YOUR ACCT TOKEN",
+          "accountRegion": "YOUR ACCT REGION",
           "disableAppLaunchedEvent": false,
           "encryptionLevel": 1,
           "logLevel": 1,

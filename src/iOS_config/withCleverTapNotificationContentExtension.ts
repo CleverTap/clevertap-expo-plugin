@@ -23,7 +23,7 @@ import {
 */
 export const withCleverTapNCE: ConfigPlugin<CleverTapPluginProps> = (config, clevertapProps) => {
     // support for monorepos where node_modules can be above the project directory.
-    const pluginDir = require.resolve("clevertap-expo-plugin/package.json")
+    const pluginDir = require.resolve("@clevertap/clevertap-expo-plugin/package.json")
     const sourceDir = path.join(pluginDir, "../ios/ExpoAdapterCleverTap/NotificationContentExtension/")
 
     return withDangerousMod(config, [
@@ -70,7 +70,6 @@ export const withCleverTapXcodeProjectNCE: ConfigPlugin<CleverTapPluginProps> = 
             return newConfig;
         }
 
-        const pluginDir = require.resolve("clevertap-expo-plugin/package.json")
         // Create new PBXGroup for the extension
         const extGroup = xcodeProject.addPbxGroup([...NCE_EXT_FILES, NCE_SOURCE_FILE], NCE_TARGET_NAME, NCE_TARGET_NAME);
 
@@ -118,8 +117,6 @@ export const withCleverTapXcodeProjectNCE: ConfigPlugin<CleverTapPluginProps> = 
         if (!groupKey) {
             console.warn(`Group for ${NCE_TARGET_NAME} was not found, creating a new one.`);
         }
-        const sourceDir = path.join(pluginDir, "../build/support/contentExtensionFiles/")
-        const storyboardPath = path.join(sourceDir, 'MainInterface.storyboard');
 
         // Add build phases to the new target
         xcodeProject.addBuildPhase(
