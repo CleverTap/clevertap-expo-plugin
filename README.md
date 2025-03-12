@@ -9,6 +9,8 @@
 </a>
 [![npm downloads](https://img.shields.io/npm/dm/clevertap-expo-plugin.svg)](https://www.npmjs.com/package/clevertap-expo-plugin)
 
+> **Beta Status Notice**: This plugin is currently in beta. While it is fully functional and has undergone testing, you may encounter occasional issues. We welcome your feedback to improve the plugin before its stable release.
+
 ## 👋 Introduction
 Learn how to integrate the CleverTap SDK into your Expo React Native application. This guide explains how to set up and configure CleverTap's features using the Expo plugin.
 
@@ -318,7 +320,17 @@ Enable `android.features.enableMediaForInAppsInbox` for video content in in-app 
 Refer to the [CleverTap Expo plugin Change Log](/CHANGELOG.md).
 
 ## 🎬 Sample App
-To see a React Native Expo app running with the CleverTap SDK, check out our [sample app on GitHub](./CTExample/).
+To see a React Native Expo app running with the CleverTap SDK, check out our [sample app on GitHub](./ctDemoApp/).
+
+## 📝 Beta Feedback
+Since this plugin is in beta, we highly value your feedback to improve its stability and functionality. If you encounter any issues, have suggestions, or want to share your experience with the plugin, please:
+
+1. Submit detailed bug reports through GitHub Issues
+2. Include specific steps to reproduce any problems
+3. Share your environment details (Expo version, React Native version, device information)
+4. Suggest enhancements or features you'd like to see in future releases
+
+Your input is crucial for the success of this plugin and will help us prepare for the stable release.
 
 ## ⁉️ Help and Questions?
 
