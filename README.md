@@ -52,33 +52,32 @@ In your `app.json` file, add the CleverTap Expo Plugin configuration. Below is a
       [
         "clevertap-expo-plugin",
         {
-          "accountId": "WWW-AAA-BBBB", // Mandatory
-          "accountToken": "AAA-BBB-CCCC", // Mandatory
-          "accountRegion": "eu1", // Optional, default: null
-          "disableAppLaunchedEvent": false, // Optional, default: false
-          "logLevel": 0, // Optional, default: -1 (off)
-          "encryptionLevel": 1, // Optional, default: 0 (no encryption)
-          "proxyDomain": "analytics.example.com", // Optional, default: null
-          "spikyProxyDomain": "spiky.example.com", // Optional, default: null
-          "handshakeDomain": "handshake.example.com", // Optional, default: null
-          "customIdentifiers": "Email,Phone", // Optional, default: null
+          "accountId": "WWW-AAA-BBBB",
+          "accountToken": "AAA-BBB-CCCC",
+          "accountRegion": "eu1",
+          "disableAppLaunchedEvent": false,
+          "logLevel": 0, 
+          "encryptionLevel": 1, 
+          "proxyDomain": "analytics.example.com", 
+          "spikyProxyDomain": "spiky.example.com",
+          "customIdentifiers": "Email,Phone", 
           "android": {
             "features": {
-              "enablePush": true, // Optional, default: false
-              "enablePushTemplates": true, // Optional, default: false
-              "enableInApp": true, // Optional, default: false
-              "enableInbox": true, // Optional, default: false
-              "enableMediaForInAppsInbox": true, // Optional, default: false
-              "enableInstallReferrer": true, // Optional, default: false
-              "enableHmsPush": false, // Optional, default: false
-              "enableGoogleAdId": false // Optional, default: false
+              "enablePush": true, 
+              "enablePushTemplates": true, 
+              "enableInApp": true, 
+              "enableInbox": true, 
+              "enableMediaForInAppsInbox": true, 
+              "enableInstallReferrer": true, 
+              "enableHmsPush": false, 
+              "enableGoogleAdId": false 
             },
-           "customNotificationSound": ["notification_sound.mp3", "alert_tone.mp3","reminder. mp3"], // Optional, default: null
-           "backgroundSync": "1", // Optional, default: "0"
-           "defaultNotificationChannelId": "default_channel", // Optional, default: null
-           "inAppExcludeActivities": "SplashActivity", // Optional, default: null
-           "sslPinning": "1", // Optional, default: "0"
-           "registerActivityLifecycleCallbacks": true // Optional, default: true
+           "customNotificationSound": ["notification_sound.mp3", "alert_tone.mp3","reminder. mp3"], 
+           "backgroundSync": "1", 
+           "defaultNotificationChannelId": "default_channel", 
+           "inAppExcludeActivities": "SplashActivity", 
+           "sslPinning": "1", 
+           "registerActivityLifecycleCallbacks": true 
           },
            "ios": {
             "mode": "development", //Mandatory
@@ -86,17 +85,17 @@ In your `app.json` file, add the CleverTap Expo Plugin configuration. Below is a
             "enableFileProtection": true, //Optional, default: false
             "enableURLDelegateChannels": [ 0, 1, 2 ], //Optional, default: null
             "notifications": {
-              "enableRichMedia": true, // Optional, default: false
-              "enablePushImpression": true, // Optional, default: false
-              "enablePushTemplate": true, // Optional, default: false
-              "enablePushInForeground": true, // Optional, default: false
-              "iosPushAppGroup": "group.com.clevertap.expoDemo", // Optional, default: null
+              "enableRichMedia": true, 
+              "enablePushImpression": true, 
+              "enablePushTemplate": true, 
+              "enablePushInForeground": true, 
+              "iosPushAppGroup": "group.com.clevertap.expoDemo", 
               "notificationCategories": [
                 {
                   "identifier": "CTNotification",
                   "actions": [ { "identifier": "action1",  "title": "title1" } ]
                 }
-              ] // Optional, default: null
+              ] 
             }
           }
         }
@@ -121,7 +120,6 @@ The CleverTap Expo plugin supports a wide range of configuration options to cust
 | encryptionLevel | number | Optional. Set to 1 to enable encryption of PII data. | Default is 0 (no encryption). |
 | proxyDomain | string | Optional. Your custom proxy domain, e.g., "analytics.yourdomain.com". | Default is null (uses standard CleverTap endpoints). |
 | spikyProxyDomain | string | Optional. Your custom spiky proxy domain for push impression events. | Default is null (uses standard CleverTap endpoints). |
-| handshakeDomain | string | Optional. Your custom handshake domain. | Default is null (uses standard CleverTap handshake endpoint). |
 | customIdentifiers | string | Comma-separated list of custom identifiers to enable custom identity management. Specify which identifiers (e.g., "Email", "Phone", "Identity" or any combinations of them) CleverTap should use for user identification during `onUserLogin()` calls. | Default is Identity,Email. |
 
 #### Android-Specific Configuration
@@ -291,9 +289,9 @@ To verify your CleverTap integration is working properly:
    "channel_id",
    "Channel Name",
    "Channel Description",
-   5, // Importance - 5 is max
-   true, // Sound enabled
-   "sound_file.mp3" // Sound file name with extension
+   5, 
+   true, 
+   "sound_file.mp3" 
   );
   ```
 
