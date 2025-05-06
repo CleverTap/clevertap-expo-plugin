@@ -212,7 +212,53 @@ You can customize your notification icon using the standard Expo configuration. 
 ```
 The CleverTap Expo plugin will automatically use this icon for notifications. Ensure that your icon follows Android's guidelines for notification icons.
 
-### Step 7: Additional iOS Configuration for Push Impressions (Optional)
+### Step 7: Additional iOS Configuration for Notification Extensions
+
+#### Step 7.1: Additional iOS Configuration for Provisioning Profiles Setup When Extensions Are Enabled
+
+After configuring the basic settings in your app.json, if you want to use Notification Service Extension or Notification Content Extension, you must add the extra property inside app.json as shown below. Ensure that you have created the appropriate App IDs and provisioning profiles for each extension.
+
+```
+{
+  "expo": {
+   ….
+    "extra": {
+      "eas": {
+        "projectId": “xxxx”,
+        "build": {
+          "experimental": {
+            "ios": {
+              "appExtensions": [
+                {
+                  "targetName": "NotificationService",
+                  "bundleIdentifier": “xxxx”,
+                  "entitlements": {
+                    "com.apple.security.application-groups": [
+                      "group.xxxx”
+                    ]
+                  }
+                },
+                {
+                  "targetName": "NotificationContent",
+                  "bundleIdentifier": “xxxx”,
+                  "entitlements": {
+                    "com.apple.security.application-groups": [
+                      "group.xxxx”
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+…
+}
+
+```
+
+#### Step 7.2: Additional iOS Configuration for Push Impressions (Optional)
 
 After configuring the basic settings in your app.json, the next step is to create an App Group Identifier to enable data sharing between your main app and the Notification Service Extension. This app group will be assigned to both the main target and the Notification Service Extension target during the prebuild phase. 
 For detailed steps on App Group configuration, refer to this (documentation)[https://developer.apple.com/documentation/xcode/configuring-app-groups].
