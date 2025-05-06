@@ -63,11 +63,11 @@ public class CleverTapAppDelegate: ExpoAppDelegateSubscriber, CleverTapURLDelega
         let notificationProps = plistDict?["CTExpoNotificationProps"] as? [String: Any]
         
         if let enablePushInForeground = notificationProps?["EnablePushInForeground"] as? Bool, enablePushInForeground {
-            print("clevertap-expo-plugin: CleverTap will handle push in foreground")
+            NSLog("clevertap-expo-plugin: CleverTap will handle push in foreground")
             if #available(iOS 14.0, *) {
-                completionHandler([.badge, .sound, .banner])
+                completionHandler([.badge, .sound, .banner, .list])
             } else {
-                completionHandler([.badge, .sound, .alert])
+                completionHandler([.badge, .sound, .alert, .list])
             }
         } else {
             completionHandler([])
