@@ -2,3 +2,6 @@ node_modules/
 CTExample/
 .expo/
 .idea
+android/.gradle
+android/build
+clevertap-clevertap-expo-plugin-*.tgz
