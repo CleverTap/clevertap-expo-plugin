@@ -28,7 +28,7 @@ To ensure smooth integration of the CleverTap Expo plugin, please reference the 
 | CleverTap Expo Plugin version | Expo SDK version | React Native version | CleverTap React Native SDK version |
 |-------------------------------|------------------|----------------------|------------------------------------|
 | 0.0.1                     | 52.0.0           | 0.77                 | 3.2.0                              |
-
+| 0.0.2                     | 52.0.0           | 0.77                 | 3.2.0                              |
 
 ## 🚀 Install and Integration
 
