@@ -7,7 +7,55 @@ import { createFeatureProperties, createVersionProperties } from '../utility/uti
 import { CleverTapLog } from '../../../support/CleverTapLog';
 import { CLEVERTAP_DEPENDENCIES_DEFAULT_VERSIONS } from '../utility/constants';
 import { CleverTapPluginProps } from '../../../types/types';
+import { Dependencies, DependencyVersions } from '../../../types/androidTypes';
 
+/**
+ * Deep merge user dependency version overrides with default versions
+ */
+function mergeDependencyVersions(defaults: Dependencies, overrides?: DependencyVersions): Dependencies {
+    if (!overrides) {
+        return defaults;
+    }
+
+    return {
+        clevertapCore: {
+            ...defaults.clevertapCore,
+            ...overrides.clevertapCore
+        },
+        pushNotifications: {
+            ...defaults.pushNotifications,
+            ...overrides.pushNotifications
+        },
+        pushTemplates: {
+            ...defaults.pushTemplates,
+            ...overrides.pushTemplates
+        },
+        inApp: {
+            ...defaults.inApp,
+            ...overrides.inApp
+        },
+        inbox: {
+            ...defaults.inbox,
+            ...overrides.inbox
+        },
+        media3: {
+            ...defaults.media3,
+            ...overrides.media3
+        },
+        installReferrer: {
+            ...defaults.installReferrer,
+            ...overrides.installReferrer
+        },
+        hmsPush: {
+            ...defaults.hmsPush,
+            ...overrides.hmsPush
+        },
+        googleAdId: {
+            ...defaults.googleAdId,
+            ...overrides.googleAdId
+        }
+    };
+}
 
 export const withClevertapAndroidAppBuildGradle: ConfigPlugin<CleverTapPluginProps> = (
     config,
@@ -22,7 +70,8 @@ export const withClevertapAndroidAppBuildGradle: ConfigPlugin<CleverTapPluginPro
                 enableInstallReferrer = false,
                 enableHmsPush = false,
                 enableGoogleAdId = false
-            } = {} // Default empty object for features
+            } = {}, // Default empty object for features
+            dependencyVersions
         } = {} }) => {
     // Modify build.gradle
     config = withAppBuildGradle(config, (config) => {
@@ -68,7 +117,12 @@ export const withClevertapAndroidAppBuildGradle: ConfigPlugin<CleverTapPluginPro
             enableGoogleAdId
         });
 
-        const versionProperties = createVersionProperties(CLEVERTAP_DEPENDENCIES_DEFAULT_VERSIONS);
+        // Merge user dependency version overrides with defaults
+        const mergedVersions = mergeDependencyVersions(CLEVERTAP_DEPENDENCIES_DEFAULT_VERSIONS, dependencyVersions);
+        if (dependencyVersions) {
+            CleverTapLog.log(`Applied dependency version overrides: ${JSON.stringify(dependencyVersions)}`);
+        }
+        const versionProperties = createVersionProperties(mergedVersions);
 
         const newProperties = [...featureProperties, ...versionProperties];
 

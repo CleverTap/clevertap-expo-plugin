@@ -142,6 +142,7 @@ The CleverTap Expo plugin supports a wide range of configuration options to cust
 | android.inAppExcludeActivities | string | Comma-separated list of activities where in-app messages should not be shown. | Default is null (shows in-apps in all activities). |
 | android.sslPinning | string | Set to "1" to enable SSL pinning for added security. | Default is "0" (SSL pinning disabled). |
 | android.registerActivityLifecycleCallbacks | boolean |  Register activity lifecycle callbacks automatically. When enabled, CleverTap will automatically register for Android activity lifecycle events. This is strongly recommended as many CleverTap features depend on these callbacks to function properly, including session tracking, in-app notifications, and user engagement metrics. | Default is true (lifecycle callbacks enabled). |
+| android.dependencyVersions | DependencyVersions | Optional. Override any Android dependency version to resolve compatibility issues. See [Dependency Versions Guide](docs/DEPENDENCY_VERSIONS.md) for detailed configuration. | Default uses plugin-defined versions. |
 
 #### iOS-Specific Configuration
 
@@ -156,7 +157,65 @@ The CleverTap Expo plugin supports a wide range of configuration options to cust
 | iOS.notifications.enablePushTemplate | Boolean | This value should be set to true if user wants to add Notification Content Extension target. | Default is false (fallback to only receive standard push notifications without rich media content). |
 | iOS.notifications.enablePushImpression | Boolean | Enable if user wants to integrate CTNotificationService Extension. This value should be set to true if user wants to enable logging Push Impressions event on Dashboard. | Default is false. |
 | iOS.notifications.iosPushAppGroup | string | This value should be set to to enable logging Push Impressions to dashboard. The user profile details should be saved in specified "app group". When push notification is received, the saved profile details will be used to log Push Impression to correct profile. | Default is null. (Should be set to log Push Impressions) |
+| iOS.versions | IOSVersions | Optional. Override iOS constants like deployment target, device family, and bundle versions. See [Dependency Versions Guide](docs/DEPENDENCY_VERSIONS.md) for detailed configuration. | Default uses plugin-defined constants. |
 
+## 🔧 Configurable Dependency Versions
+
+The CleverTap Expo Plugin supports overriding Android dependency versions and iOS constants directly from your `app.json`, solving compatibility issues and providing version control flexibility.
+
+### Key Benefits
+- **Fix Version Conflicts**: Resolve compatibility issues with other packages
+- **Future-Proof**: Control dependency versions without waiting for plugin updates
+- **Type-Safe**: Full TypeScript support with IntelliSense
+- **Backwards Compatible**: Existing configurations continue to work unchanged
+
+### Android Example: Override Media3 Version
+```json
+{
+  "expo": {
+    "plugins": [
+      [
+        "@clevertap/clevertap-expo-plugin",
+        {
+          "android": {
+            "features": { "enableInbox": true },
+            "dependencyVersions": {
+              "media3": {
+                "media3Version": "1.5.0"
+              }
+            }
+          }
+        }
+      ]
+    ]
+  }
+}
+```
+
+### iOS Example: Update Deployment Target
+```json
+{
+  "expo": {
+    "plugins": [
+      [
+        "@clevertap/clevertap-expo-plugin",
+        {
+          "ios": {
+            "mode": "development",
+            "versions": {
+              "deploymentTarget": "12.0",
+              "defaultBundleVersion": "2"
+            }
+          }
+        }
+      ]
+    ]
+  }
+}
+```
+
+### Comprehensive Guide
+For complete configuration options, available dependency versions, troubleshooting, and advanced usage examples, see the [Dependency Versions Guide](docs/DEPENDENCY_VERSIONS.md).
 
 ### Step 5: Additional Android Configurations
 Configure additional Android-specific settings in your app.json file.
@@ -360,6 +419,27 @@ To verify your CleverTap integration is working properly:
 
 - **Media Support:**
 Enable `android.features.enableMediaForInAppsInbox` for video content in in-app messages and app inbox.
+
+## 🚧 Known Limitations
+
+### iOS Features Status
+
+#### iOS Bundle Version Overrides
+- **Status**: Not Working
+- **Issue**: Extension bundle versions not applying user overrides from `ios.versions.defaultBundleVersion` and `ios.versions.defaultBundleShortVersion`
+- **Current Behavior**: Extensions use default values instead of user-configured values
+- **Workaround**: Extensions are still created and functional, but use default bundle versions
+
+#### iOS Deployment Target Override  
+- **Status**: Managed by Expo
+- **Note**: The `deploymentTarget` setting is controlled by Expo's iOS configuration system, not by the CleverTap plugin
+- **Current Behavior**: Works correctly through Expo's standard iOS configuration
+
+### Fully Working Features
+- ✅ **Android Dependency Versions**: All Android dependency overrides working perfectly
+- ✅ **iOS Package Resolution**: Smart directory detection for local development
+- ✅ **iOS Extensions**: NotificationService and NotificationContent extensions created successfully
+- ✅ **Backwards Compatibility**: All existing configurations continue to work
 
 ## 🆕 Changelog
 

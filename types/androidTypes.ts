@@ -6,6 +6,7 @@ export interface Android{
     inAppExcludeActivities?: string;  // Comma-separated activity names
     sslPinning?: string;  // "0" or "1"
     registerActivityLifecycleCallbacks?: boolean;
+    dependencyVersions?: DependencyVersions;  // Allow users to override any dependency version
 }
 export interface Features {
     
@@ -53,5 +54,43 @@ export interface Dependencies {
     };
     googleAdId: {
         playServicesAdsVersion: string;
+    };
+}
+
+export interface DependencyVersions {
+    clevertapCore?: {
+        clevertapCoreSdkVersion?: string;
+        androidxCoreVersion?: string;
+    };
+    pushNotifications?: {
+        firebaseMessagingVersion?: string;
+    };
+    pushTemplates?: {
+        clevertapPushTemplatesSdkVersion?: string;
+    };
+    inApp?: {
+        appCompatVersion?: string;
+        fragmentVersion?: string;
+    };
+    inbox?: {
+        appCompatVersion?: string;
+        recyclerViewVersion?: string;
+        viewPagerVersion?: string;
+        materialVersion?: string;
+        glideVersion?: string;
+        fragmentVersion?: string;
+    };
+    media3?: {
+        media3Version?: string;
+    };
+    installReferrer?: {
+        installReferrerVersion?: string;
+    };
+    hmsPush?: {
+        clevertapHmsSdkVersion?: string;
+        hmsPushVersion?: string;
+    };
+    googleAdId?: {
+        playServicesAdsVersion?: string;
     };
 }
