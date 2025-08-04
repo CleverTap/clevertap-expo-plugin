@@ -14,16 +14,29 @@ import {
     NCE_TARGET_NAME,
     NCE_EXT_FILES,
     NCE_SOURCE_FILE,
-    DEFAULT_BUNDLE_VERSION,
-    DEFAULT_BUNDLE_SHORT_VERSION
+    getDefaultBundleVersion,
+    getDefaultBundleShortVersion
 } from "./IOSConstants";
+
+/**
+ * Smart plugin directory detection - works for both npm and local development
+ */
+function getPluginDirectory(): string {
+    try {
+        // First try npm package resolution (most efficient for production)
+        return require.resolve("@clevertap/clevertap-expo-plugin/package.json");
+    } catch (error) {
+        // Fallback for local development (file:../path scenarios)
+        return path.join(__dirname, '../../../package.json');
+    }
+}
 
 /**
 * Copy NotificationContentExtension with CleverTap code files into target folder
 */
 export const withCleverTapNCE: ConfigPlugin<CleverTapPluginProps> = (config, clevertapProps) => {
     // support for monorepos where node_modules can be above the project directory.
-    const pluginDir = require.resolve("@clevertap/clevertap-expo-plugin/package.json")
+    const pluginDir = getPluginDirectory();
     const sourceDir = path.join(pluginDir, "../ios/ExpoAdapterCleverTap/NotificationContentExtension/")
 
     return withDangerousMod(config, [
@@ -49,8 +62,8 @@ export const withCleverTapNCE: ConfigPlugin<CleverTapPluginProps> = (config, cle
             /* MODIFY COPIED EXTENSION FILES */
             const nseUpdater = new NSUpdaterManager(`${iosPath}/${NCE_TARGET_NAME}`, `${NCE_TARGET_NAME}-Info.plist`,);
             // await nseUpdater.updateNSEEntitlements(`group.${config.ios?.bundleIdentifier}.clevertap`)
-            await nseUpdater.updateNEBundleVersion(config.ios?.buildNumber ?? DEFAULT_BUNDLE_VERSION);
-            await nseUpdater.updateNEBundleShortVersion(config?.version ?? DEFAULT_BUNDLE_SHORT_VERSION);
+            await nseUpdater.updateNEBundleVersion(config.ios?.buildNumber ?? getDefaultBundleVersion(clevertapProps.ios?.versions?.defaultBundleVersion));
+            await nseUpdater.updateNEBundleShortVersion(config?.version ?? getDefaultBundleShortVersion(clevertapProps.ios?.versions?.defaultBundleShortVersion));
 
             CleverTapLog.log('Added NotificationContentExtension files into target folder');
             return config;

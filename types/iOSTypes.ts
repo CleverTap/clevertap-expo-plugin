@@ -23,6 +23,10 @@ export type iOS = {
     * (optional) This value should be set when client wants to configure remote Push Notifications.
     */
     notifications?: NotificationFeature;
+    /**
+    * (optional) Allow users to override iOS constants like deployment target, device family, bundle versions.
+    */
+    versions?: IOSVersions;
 }
 
 export type NotificationFeature = {
@@ -72,4 +76,23 @@ export type NotificationCategory = {
 export type NotificationAction = {
     identifier: string;
     title: string;
+}
+
+export interface IOSVersions {
+    /**
+     * (optional) iOS deployment target override. Default: "11.0"
+     */
+    deploymentTarget?: string;
+    /**
+     * (optional) Targeted device family override. Default: "1,2" (iPhone/iPad)
+     */
+    targetedDeviceFamily?: string;
+    /**
+     * (optional) Default bundle version override. Default: "1"
+     */
+    defaultBundleVersion?: string;
+    /**
+     * (optional) Default bundle short version override. Default: "1.0"
+     */
+    defaultBundleShortVersion?: string;
 }

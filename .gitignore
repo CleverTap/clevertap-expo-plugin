@@ -15,3 +15,9 @@ CTExample/package-lock.json
 .idea
 local.properties
 .gradle
+
+# IDE files
+*.project
+.classpath
+.settings/
+*.iml
