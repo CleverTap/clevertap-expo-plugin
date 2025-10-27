@@ -4,9 +4,9 @@ import { mergeContents } from "@expo/config-plugins/build/utils/generateCode";
 import { CleverTapLog } from '../../../support/CleverTapLog';
 import { CleverTapPluginProps } from '../../../types/types';
 
-const GOOGLE_SERVICES_CLASSPATH = "com.google.gms:google-services:4.4.0";
-const HMS_CLASSPATH = "com.huawei.agconnect:agcp:1.9.1.300";
-const AGP_CLASSPATH = "com.android.tools.build:gradle:8.2.2"
+const GOOGLE_SERVICES_CLASSPATH = "com.google.gms:google-services:4.4.2";
+const HMS_CLASSPATH = "com.huawei.agconnect:agcp:1.9.1.301";
+const AGP_CLASSPATH = "com.android.tools.build:gradle:8.6.0"
 
 interface ClasspathInfo {
     exists: boolean;

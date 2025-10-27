@@ -9,6 +9,7 @@ const { addMetaDataItemToMainApplication, getMainApplicationOrThrow, removeMetaD
 const { addPermission, removePermissions } = AndroidConfig.Permissions
 const FCM_SERVICE_NAME = 'com.clevertap.android.sdk.pushnotification.fcm.FcmMessageListenerService';
 const CT_INTENT_SERVICE_NAME = 'com.clevertap.android.sdk.pushnotification.CTNotificationIntentService';
+const HMS_MANIFEST_ENTRY = 'hps,hps_token,com.clevertap.android.hms.HmsPushProvider,com.huawei.hms.push.HmsMessageService';
 
 export const withCleverTapAndroidManifest: ConfigPlugin<CleverTapPluginProps> = (config, props) => {
     return withAndroidManifest(config, async config => {
@@ -119,6 +120,14 @@ const METADATA_CONFIGS: MetadataConfig[] = [
         getValue: (props) => typeof props.disableAppLaunchedEvent !== 'undefined' ? 
         (props.disableAppLaunchedEvent ? "1" : "0") : 
         undefined
+    },
+    {
+        key: 'CLEVERTAP_PROVIDER_1',
+        getValue: (props) => props.android?.features?.enableHmsPush ? HMS_MANIFEST_ENTRY : undefined
+    },
+    {
+        key: 'CLEVERTAP_ENCRYPTION_IN_TRANSIT',
+        getValue: (props) => props.encryptionInTransit ? "1" : undefined
     }
 ];
 

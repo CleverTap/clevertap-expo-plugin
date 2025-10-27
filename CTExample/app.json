@@ -43,7 +43,9 @@
           "accountRegion": "YOUR ACCT REGION",
           "disableAppLaunchedEvent": false,
           "encryptionLevel": 1,
-          "logLevel": 1,
+          "logLevel": 3,
+          "customIdentifiers":"Email,Phone",
+          "encryptionInTransit":"1",
           "ios": {
             "mode": "development",
             "notifications": {
