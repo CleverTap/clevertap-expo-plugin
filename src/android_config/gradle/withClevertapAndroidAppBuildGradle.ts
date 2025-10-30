@@ -21,7 +21,8 @@ export const withClevertapAndroidAppBuildGradle: ConfigPlugin<CleverTapPluginPro
                 enableMediaForInAppsInbox = false,
                 enableInstallReferrer = false,
                 enableHmsPush = false,
-                enableGoogleAdId = false
+                enableGoogleAdId = false,
+                enablePlayReview = false
             } = {} // Default empty object for features
         } = {} }) => {
     // Modify build.gradle
@@ -65,7 +66,8 @@ export const withClevertapAndroidAppBuildGradle: ConfigPlugin<CleverTapPluginPro
             enableMediaForInAppsInbox,
             enableInstallReferrer,
             enableHmsPush,
-            enableGoogleAdId
+            enableGoogleAdId,
+            enablePlayReview
         });
 
         const versionProperties = createVersionProperties(CLEVERTAP_DEPENDENCIES_DEFAULT_VERSIONS);

@@ -1,7 +1,17 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-### [Version 0.0.2](https://github.com/CleverTap/clevertap-expo-plugin/releases/tag/0.0.1) (May 26, 2025)
+### [Version 0.0.3](https://github.com/CleverTap/clevertap-expo-plugin/releases/tag/0.0.3) (Oct 30, 2025)
+
+> **Note**: This is a beta release. While fully functional, it may contain issues that will be addressed in future releases.
+
+#### Added
+- Adds support for Expo SDK [53.0.0](https://expo.dev/changelog/sdk-53) and React Native [0.79](https://reactnative.dev/blog/2025/04/08/react-native-0.79)
+- Adds support for CleverTap React Native SDK [3.7.0](https://github.com/CleverTap/clevertap-react-native/blob/master/CHANGELOG.md#version-370-october-3-2025)
+- Adds `encryptionInTransit` parameter to enable encryption for all event data sent over the network.
+- Adds `enablePlayReview` feature for Android to support Google Play In-App Review as a System In-App Function
+
+### [Version 0.0.2](https://github.com/CleverTap/clevertap-expo-plugin/releases/tag/0.0.2) (May 26, 2025)
 
 > **Note**: This is a beta release. While fully functional, it may contain issues that will be addressed in future releases.
 

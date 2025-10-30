@@ -55,6 +55,9 @@ const getVersionProperty = (propertyKey: string): string => {
         case KEYS.PLAY_SERVICES_ADS_VERSION:
             defaultValue = VERSIONS.googleAdId?.playServicesAdsVersion || '';
             break;
+        case KEYS.PLAY_REVIEW_VERSION:
+            defaultValue = VERSIONS.playReview?.playReviewVersion || '';
+            break;
     }
 
     return `$\{project.findProperty('${propertyKey}') ?: '${defaultValue}'\}`;
@@ -122,6 +125,12 @@ const generateGoogleAdIdDependencies = () => `
         implementation("com.google.android.gms:play-services-ads-identifier:${getVersionProperty(KEYS.PLAY_SERVICES_ADS_VERSION)}")
     }`;
 
+const generatePlayReviewDependencies = () => `
+    // Google Play In-App Review (System In-App Functions - SDK 7.4.0+)
+    if (${getPropertyCheck(KEYS.PLAY_REVIEW_ENABLED)}) {
+        implementation("com.google.android.play:review:${getVersionProperty(KEYS.PLAY_REVIEW_VERSION)}")
+    }`;
+
 export const generateDependenciesTemplate = (): string => {
     const sections = [
         generateCoreDependencies(),
@@ -132,7 +141,8 @@ export const generateDependenciesTemplate = (): string => {
         generateMediaDependencies(),
         generateInstallReferrerDependencies(),
         generateHmsPushDependencies(),
-        generateGoogleAdIdDependencies()
+        generateGoogleAdIdDependencies(),
+        generatePlayReviewDependencies()
     ];
 
     return sections.join('\n');

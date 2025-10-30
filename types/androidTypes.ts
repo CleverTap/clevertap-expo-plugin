@@ -17,6 +17,7 @@ export interface Features {
     enableInstallReferrer?: boolean;
     enableHmsPush?: boolean;
     enableGoogleAdId?: boolean;
+    enablePlayReview?: boolean;
 }
 export interface Dependencies {
     clevertapCore: {
@@ -53,5 +54,8 @@ export interface Dependencies {
     };
     googleAdId: {
         playServicesAdsVersion: string;
+    };
+    playReview: {
+        playReviewVersion: string;
     };
 }
