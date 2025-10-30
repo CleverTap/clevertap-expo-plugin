@@ -11,6 +11,7 @@ export const CLEVERTAP_GRADLE_PROPERTIES_KEYS = {
     INSTALL_REFERRER_ENABLED: 'clevertapInstallReferrerEnabled',
     HMS_PUSH_ENABLED: 'clevertapHmsPushEnabled',
     GOOGLE_AD_ID_ENABLED: 'clevertapGoogleAdIdEnabled',
+    PLAY_REVIEW_ENABLED: 'clevertapPlayReviewEnabled',
 
     // Dependency version keys for gradle.properties
     CLEVERTAP_SDK_VERSION: 'clevertapCoreSdkVersion',
@@ -28,6 +29,7 @@ export const CLEVERTAP_GRADLE_PROPERTIES_KEYS = {
     CLEVERTAP_HMS_SDK_VERSION: 'clevertapHmsSdkVersion',
     HMS_PUSH_VERSION: 'hmsPushVersion',
     PLAY_SERVICES_ADS_VERSION: 'playServicesAdsVersion',
+    PLAY_REVIEW_VERSION: 'playReviewVersion',
 } as const;
 
 export const CLEVERTAP_DEPENDENCIES_DEFAULT_VERSIONS: Dependencies = {
@@ -66,5 +68,8 @@ export const CLEVERTAP_DEPENDENCIES_DEFAULT_VERSIONS: Dependencies = {
     },
     googleAdId: {
         playServicesAdsVersion: '18.2.0'
+    },
+    playReview: {
+        playReviewVersion: '2.0.2'
     }
 };

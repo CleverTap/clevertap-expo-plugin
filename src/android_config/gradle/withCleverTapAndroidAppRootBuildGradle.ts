@@ -24,7 +24,8 @@ export const withCleverTapRootGradlePlugin: ConfigPlugin<CleverTapPluginProps> =
             enableMediaForInAppsInbox = false,
             enableInstallReferrer = false,
             enableHmsPush = false,
-            enableGoogleAdId = false
+            enableGoogleAdId = false,
+            enablePlayReview = false
         } = {} // Default empty object for features
     } = {},
     ...props
@@ -41,7 +42,8 @@ export const withCleverTapRootGradlePlugin: ConfigPlugin<CleverTapPluginProps> =
                 enableMediaForInAppsInbox,
                 enableInstallReferrer,
                 enableHmsPush,
-                enableGoogleAdId
+                enableGoogleAdId,
+                enablePlayReview
             }
         }
     };

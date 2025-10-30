@@ -12,7 +12,7 @@ useDefaultAndroidSdkVersions()
 
 dependencies {
   implementation(project(':clevertap-react-native'))
-  compileOnly("com.clevertap.android:push-templates:1.2.4")
+  compileOnly("com.clevertap.android:push-templates:2.1.0")
 }
 
 android {

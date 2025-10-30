@@ -36,7 +36,7 @@ export const createFeatureProperties = (features: Features): AndroidConfig.Prope
         createGradleProperty(KEYS.MEDIA_ENABLED, String(features.enableMediaForInAppsInbox)),
         createGradleProperty(KEYS.INSTALL_REFERRER_ENABLED, String(features.enableInstallReferrer)),
         createGradleProperty(KEYS.HMS_PUSH_ENABLED, String(features.enableHmsPush)),
-        createGradleProperty(KEYS.GOOGLE_AD_ID_ENABLED, String(features.enableGoogleAdId))
-
+        createGradleProperty(KEYS.GOOGLE_AD_ID_ENABLED, String(features.enableGoogleAdId)),
+        createGradleProperty(KEYS.PLAY_REVIEW_ENABLED, String(features.enablePlayReview))
     ];
 };

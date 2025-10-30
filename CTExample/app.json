@@ -45,7 +45,7 @@
           "encryptionLevel": 1,
           "logLevel": 3,
           "customIdentifiers":"Email,Phone",
-          "encryptionInTransit":"1",
+          "encryptionInTransit":true,
           "ios": {
             "mode": "development",
             "notifications": {
