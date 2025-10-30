@@ -27,8 +27,9 @@ To ensure smooth integration of the CleverTap Expo plugin, please reference the 
 
 | CleverTap Expo Plugin version | Expo SDK version | React Native version | CleverTap React Native SDK version |
 |-------------------------------|------------------|----------------------|------------------------------------|
-| 0.0.1                     | 52.0.0           | 0.77                 | 3.2.0                              |
-| 0.0.2                     | 52.0.0           | 0.77                 | 3.2.0                              |
+| 0.0.1                         | 52.0.0           | 0.77                 | 3.2.0                              |
+| 0.0.2                         | 52.0.0           | 0.77                 | 3.2.0                              |
+| 0.0.3                         | 53.0.0           | 0.79                 | 3.7.0                              |
 
 ## 🚀 Install and Integration
 
@@ -60,6 +61,7 @@ In your `app.json` file, add the CleverTap Expo Plugin configuration. Below is a
           "disableAppLaunchedEvent": false,
           "logLevel": 0, 
           "encryptionLevel": 1, 
+          "encryptionInTransit": true,
           "proxyDomain": "analytics.example.com", 
           "spikyProxyDomain": "spiky.example.com",
           "customIdentifiers": "Email,Phone", 
@@ -72,7 +74,8 @@ In your `app.json` file, add the CleverTap Expo Plugin configuration. Below is a
               "enableMediaForInAppsInbox": true, 
               "enableInstallReferrer": true, 
               "enableHmsPush": false, 
-              "enableGoogleAdId": false 
+              "enableGoogleAdId": false,
+              "enablePlayReview": true
             },
            "customNotificationSound": ["notification_sound.mp3", "alert_tone.mp3","reminder. mp3"], 
            "backgroundSync": "1", 
@@ -120,6 +123,7 @@ The CleverTap Expo plugin supports a wide range of configuration options to cust
 | disableAppLaunchedEvent | boolean | Optional. Set to true to disable automatic App Launched event tracking. | Default is false (App Launched event is tracked). |
 | logLevel | number | Optional. The logging level. | Default is -1 (all logging disabled). Set to 0 for minimal SDK integration logging, 2 for debug output, or 3 for verbose output. |
 | encryptionLevel | number | Optional. Set to 1 to enable encryption of PII data. | Default is 0 (no encryption). |
+| encryptionInTransit | boolean | Optional. Set to true to enable encryption over the network for PII data. | Default is false. |
 | proxyDomain | string | Optional. Your custom proxy domain, e.g., "analytics.yourdomain.com". | Default is null (uses standard CleverTap endpoints). |
 | spikyProxyDomain | string | Optional. Your custom spiky proxy domain for push impression events. | Default is null (uses standard CleverTap endpoints). |
 | customIdentifiers | string | Comma-separated list of custom identifiers to enable custom identity management. Specify which identifiers (e.g., "Email", "Phone", "Identity" or any combinations of them) CleverTap should use for user identification during `onUserLogin()` calls. | Default is Identity,Email. |
@@ -136,6 +140,7 @@ The CleverTap Expo plugin supports a wide range of configuration options to cust
 | android.features.enableInstallReferrer | boolean | Enable install attribution tracking. When enabled, CleverTap will track installation attribution data to help measure campaign effectiveness. | Default is false (install attribution disabled). |
 | android.features.enableHmsPush | boolean | Enable Huawei Push Service (HMS) integration. When enabled, CleverTap will send push notifications through both HMS and FCM, ensuring delivery to Huawei devices that don't support Google services. | Default is false (HMS push disabled). |
 | android.features.enableGoogleAdId | boolean | Enable Google Advertising ID collection. When enabled, CleverTap will use the Google Advertising ID to uniquely identify users instead of generating its own device identifiers. | Default is false (Google Ad ID collection disabled). |
+| android.features.enablePlayReview | boolean | Enable Google Play In-App Review feature. When enabled, CleverTap supports the Google Play In-App Review API as a System In-App Function, allowing users to rate and review your app without leaving the app. This can be triggered as a button action within an in-app message or as a standalone campaign action from the CleverTap dashboard. | Default is false (Play In-App Review disabled). |
 | android.customNotificationSound | string or string[] | Specify custom notification sound file(s) placed in the assets folder. These sound files can then be used when creating notification channels in your app with `CleverTapAPI.createNotificationChannel()`. | Default is null (uses default system sound). |
 | android.backgroundSync | string | Enable CleverTap's Pull Notification via background ping service. When set to "1", this feature enables reaching users on devices that suppress or restrict regular push notifications through GCM/FCM, providing an alternative delivery mechanism. | Default is "0" (background sync disabled). |
 | android.defaultNotificationChannelId | string | Specify a default notification channel ID for push notifications. This channel will be used as a fallback when a push notification specifies a channel that doesn't exist in the app, ensuring notifications are always displayed. | Default is null (falls back to a CleverTap created "Miscellaneous" channel if no valid channel is found). |

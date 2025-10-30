@@ -34,7 +34,8 @@ export const withCleverTapPod: ConfigPlugin<CleverTapPluginProps> = (config, cle
         podfileContents = podfileContents.replace(
           `use_expo_modules!`,
           `use_expo_modules!
-             pod 'clevertap-react-native' , :path => '../node_modules/clevertap-react-native'`
+             pod 'clevertap-react-native' , :path => '../node_modules/clevertap-react-native'
+             pod 'SDWebImage', :modular_headers => true`
         );
         fs.writeFileSync(podfilePath, podfileContents);
       }

@@ -46,6 +46,10 @@ export const withCleverTapInfoPlist: ConfigPlugin<CleverTapPluginProps> = (
       config.modResults.CleverTapEncryptionLevel = clevertapProps.encryptionLevel;
       CleverTapLog.log(`Configuring app with encryption level: ${clevertapProps.encryptionLevel}`);
     }
+    if (clevertapProps.encryptionInTransit) {
+      config.modResults.CleverTapEncryptionInTransitEnabled = clevertapProps.encryptionInTransit;
+      CleverTapLog.log(`Configuring app with encryptionInTransit value: ${clevertapProps.encryptionInTransit}`);
+    }
     if (clevertapProps.ios?.disableIDFV) {
       config.modResults.CleverTapDisableIDFV = clevertapProps.ios?.disableIDFV;
       CleverTapLog.log(`Disabling generation of CleverTap ID basis IDFV value.`);

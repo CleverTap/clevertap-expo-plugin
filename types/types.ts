@@ -41,6 +41,10 @@ export type CleverTapPluginProps = {
    */
   encryptionLevel?: CleverTapEncryptionLevel;
   /**
+   * (optional) Use to enable encryption in transit for all event data sent over the network. Set to true to enable.
+   */
+  encryptionInTransit?: boolean;
+  /**
    * (optional) Use to provide identifiers for setting custom cleverTapID. e.g. "Email,Phone"
    */
   customIdentifiers?: string;
