@@ -19,7 +19,9 @@ import {
 import {
   withCleverTapPod
 } from "./iOS_config/withCleverTapPodfile";
-
+import {
+    withCleverTapBridgingHeader
+} from "./iOS_config/withCleverTapBridgingHeader";
 /**
 * Add 'aps-environment' record with current environment to '<project-name>.entitlements' file
 */
@@ -94,6 +96,7 @@ export const withCleverTapIos: ConfigPlugin<CleverTapPluginProps> = (config, cle
   }
   config = withCleverTapPod(config, clevertapProps);
   config = withCleverTapInfoPlist(config, clevertapProps);
+  config = withCleverTapBridgingHeader(config, clevertapProps);
 
   return config;
 };
