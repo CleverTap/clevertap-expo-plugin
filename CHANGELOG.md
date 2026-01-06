@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+### [Version 0.0.4](https://github.com/CleverTap/clevertap-expo-plugin/releases/tag/0.0.4) (Jan 5, 2025)
+
+> **Note**: This is a beta release. While fully functional, it may contain issues that will be addressed in future releases.
+
+#### Fixed
+- Fixes APNS push token not found issue.
+
 ### [Version 0.0.3](https://github.com/CleverTap/clevertap-expo-plugin/releases/tag/0.0.3) (Oct 30, 2025)
 
 > **Note**: This is a beta release. While fully functional, it may contain issues that will be addressed in future releases.
