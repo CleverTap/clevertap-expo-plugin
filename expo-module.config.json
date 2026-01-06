@@ -3,5 +3,8 @@
     "ios",
     "android",
     "web"
-  ]
+  ],
+  "ios": {
+    "appDelegateSubscribers": ["CleverTapAppDelegate"]
+  }
 }
