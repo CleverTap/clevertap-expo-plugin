@@ -31,6 +31,7 @@ To ensure smooth integration of the CleverTap Expo plugin, please reference the 
 | 0.0.2                         | 52.0.0           | 0.77                 | 3.2.0                              |
 | 0.0.3                         | 53.0.0           | 0.79                 | 3.7.0                              |
 | 0.0.4                         | 53.0.0           | 0.79                 | 3.7.0                              |
+| 0.0.5                         | 54.0.0           | 0.81                 | 4.0.0                              |
 
 ## 🚀 Install and Integration
 
