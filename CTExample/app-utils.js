@@ -855,7 +855,7 @@ export const _handleCleverTapInAppEvent = (eventName, event) => {
     }
     // Following event is only applicable for the android platform
     if (eventName == 'CleverTapInAppNotificationShowed') {
-       let type = event.data.type;
+       let type = Platform.OS === 'android' ? event.data.type : event.type;
        console.log('Value for inApp type:', type);
     }
 };
