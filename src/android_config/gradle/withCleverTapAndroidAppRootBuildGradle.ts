@@ -6,7 +6,7 @@ import { CleverTapPluginProps } from '../../../types/types';
 
 const GOOGLE_SERVICES_CLASSPATH = "com.google.gms:google-services:4.4.2";
 const HMS_CLASSPATH = "com.huawei.agconnect:agcp:1.9.1.301";
-const AGP_CLASSPATH = "com.android.tools.build:gradle:8.6.0"
+const AGP_CLASSPATH = "com.android.tools.build:gradle:8.9.3"
 
 interface ClasspathInfo {
     exists: boolean;
