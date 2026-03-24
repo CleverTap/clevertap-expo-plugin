@@ -1,6 +1,6 @@
 {
   "name": "@clevertap/clevertap-expo-plugin",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "description": "The CleverTap expo plugin enables integration of the CleverTap SDK into your Expo projects, to leverage CleverTap's features in your React Native applications.",
   "main": "./app.plugin.js",
   "scripts": {
