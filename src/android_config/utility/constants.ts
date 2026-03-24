@@ -41,7 +41,7 @@ export const CLEVERTAP_DEPENDENCIES_DEFAULT_VERSIONS: Dependencies = {
         firebaseMessagingVersion: '24.0.0'
     },
     pushTemplates: {
-        clevertapPushTemplatesSdkVersion: '2.2.0'
+        clevertapPushTemplatesSdkVersion: '2.3.0'
     },
     inApp: {
         appCompatVersion: '1.7.0',
@@ -63,7 +63,7 @@ export const CLEVERTAP_DEPENDENCIES_DEFAULT_VERSIONS: Dependencies = {
         installReferrerVersion: '2.2'
     },
     hmsPush: {
-        clevertapHmsSdkVersion: '1.5.0',
+        clevertapHmsSdkVersion: '1.5.1',
         hmsPushVersion: '6.11.0.300'
     },
     googleAdId: {

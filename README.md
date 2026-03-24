@@ -29,7 +29,7 @@ To ensure smooth integration of the CleverTap Expo plugin, please reference the 
 | 0.0.2                         | 52.0.0           | 0.77                 | 3.2.0                              |
 | 0.0.3                         | 53.0.0           | 0.79                 | 3.7.0                              |
 | 0.0.4                         | 53.0.0           | 0.79                 | 3.7.0                              |
-| 1.0.0                         | 54.0.0           | 0.81                 | 4.0.0                              |
+| 1.0.0                         | 55.0.0           | 0.83                 | 4.0.0                              |
 
 ## 🚀 Install and Integration
 
@@ -77,7 +77,8 @@ In your `app.json` file, add the CleverTap Expo Plugin configuration. Below is a
               "enableGoogleAdId": false,
               "enablePlayReview": true
             },
-           "customNotificationSound": ["notification_sound.mp3", "alert_tone.mp3","reminder. mp3"], 
+           "notificationIcon": "./assets/notification-icon.png",
+           "customNotificationSound": ["notification_sound.mp3", "alert_tone.mp3","reminder. mp3"],
            "backgroundSync": "1", 
            "defaultNotificationChannelId": "default_channel", 
            "inAppExcludeActivities": "SplashActivity", 
@@ -141,6 +142,7 @@ The CleverTap Expo plugin supports a wide range of configuration options to cust
 | android.features.enableHmsPush | boolean | Enable Huawei Push Service (HMS) integration. When enabled, CleverTap will send push notifications through both HMS and FCM, ensuring delivery to Huawei devices that don't support Google services. | Default is false (HMS push disabled). |
 | android.features.enableGoogleAdId | boolean | Enable Google Advertising ID collection. When enabled, CleverTap will use the Google Advertising ID to uniquely identify users instead of generating its own device identifiers. | Default is false (Google Ad ID collection disabled). |
 | android.features.enablePlayReview | boolean | Enable Google Play In-App Review feature. When enabled, CleverTap supports the Google Play In-App Review API as a System In-App Function, allowing users to rate and review your app without leaving the app. This can be triggered as a button action within an in-app message or as a standalone campaign action from the CleverTap dashboard. | Default is false (Play In-App Review disabled). |
+| android.notificationIcon | string | Path to notification icon PNG for CleverTap push notifications (e.g. `"./assets/notification-icon.png"`). Required for Expo 55+ where `notification.icon` was removed from app.json. If `expo-notifications` plugin is also configured with an icon, the CleverTap plugin detects it and skips duplicate copy. | Default is null (no custom notification icon). |
 | android.customNotificationSound | string or string[] | Specify custom notification sound file(s) placed in the assets folder. These sound files can then be used when creating notification channels in your app with `CleverTapAPI.createNotificationChannel()`. | Default is null (uses default system sound). |
 | android.backgroundSync | string | Enable CleverTap's Pull Notification via background ping service. When set to "1", this feature enables reaching users on devices that suppress or restrict regular push notifications through GCM/FCM, providing an alternative delivery mechanism. | Default is "0" (background sync disabled). |
 | android.defaultNotificationChannelId | string | Specify a default notification channel ID for push notifications. This channel will be used as a fallback when a push notification specifies a channel that doesn't exist in the app, ensuring notifications are always displayed. | Default is null (falls back to a CleverTap created "Miscellaneous" channel if no valid channel is found). |
@@ -205,17 +207,17 @@ For Firebase Cloud Messaging on Android, place your google-services.json file in
 If you've enabled HMS Push support by setting `android.features.enableHmsPush` to `true`, place your agconnect-services.json file in the assets folder of your project. No specific property needed for agconnect-services.json, just ensure it's placed in the assets folder.
 
 #### Step 6.3: Custom Notification Icon
-You can customize your notification icon using the standard Expo configuration. Add the following to your app.json:
+Configure your notification icon in the CleverTap plugin config under the `android` section:
 ```json
-{
-  "expo": {
-    "notification": {
-      "icon": "./assets/notification-icon.png"
-    }
-  }
+"android": {
+  "notificationIcon": "./assets/notification-icon.png"
 }
 ```
-The CleverTap Expo plugin will automatically use this icon for notifications. Ensure that your icon follows Android's guidelines for notification icons.
+The plugin copies the icon to Android drawable resources and configures CleverTap to use it. Ensure that your icon follows Android's guidelines for notification icons (white on transparent, 96x96 pixels recommended).
+
+> **Expo 55+ Migration:** The `notification.icon` field was removed from `app.json` in Expo SDK 55. Use `android.notificationIcon` in the plugin config instead. For Expo 53/54, the legacy `notification.icon` field still works as a fallback.
+
+> **Using with `expo-notifications`:** If you also use the `expo-notifications` plugin with an icon config, the CleverTap plugin detects the existing drawable and skips the copy. However, you still need to set `android.notificationIcon` for CleverTap to reference the icon in push notifications.
 
 ### Step 7: Additional iOS Configuration for Notification Extensions
 
@@ -350,14 +352,18 @@ To verify your CleverTap integration is working properly:
 
 ### Custom Notification Icons
 
-- **Icon Requirements:** Your notification icon should follow Android's guidelines. More info [here](https://docs.expo.dev/versions/latest/config/app/#icon-1)
+- **Icon Requirements:** Your notification icon should be an all-white PNG with transparent background, 96x96 pixels recommended.
 
-- **Icon Configuration:** Use Expo's standard notification configuration in `app.json`:
+- **Icon Configuration:** Set `android.notificationIcon` in the CleverTap plugin config:
     ```json
-    "notification": {
-      "icon": "./assets/notification-icon.png"
+    "android": {
+      "notificationIcon": "./assets/notification-icon.png"
     }
     ```
+
+- **Expo 55+ Users:** The `notification.icon` field was removed from `app.json` in Expo SDK 55. You **must** use `android.notificationIcon` in the plugin config.
+
+- **Expo 53/54 Users:** The legacy `notification.icon` field in `app.json` still works as a fallback, but we recommend migrating to `android.notificationIcon` for forward compatibility.
 
 ### Feature Dependencies
 
