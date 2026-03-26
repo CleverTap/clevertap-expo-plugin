@@ -95,7 +95,7 @@ function updateRichMediaNSE(
             `CTNotificationServiceExtension`);
 
         fs.writeFileSync(filePath, notificationServiceContent);
-        console.log('Successfully updated rich media support in NotificationServiceExtension.');
+        CleverTapLog.log('Successfully updated rich media support in NotificationServiceExtension.');
     } else {
         console.log('Rich media support already exists, not updating the code.');
     }
@@ -134,7 +134,7 @@ function updatePushImpressionNSE(
 
         // Write the updated content back to the file
         fs.writeFileSync(filePath, notificationServiceContent, 'utf-8');
-        console.log('Successfully updated push impression support in NotificationServiceExtension.');
+        CleverTapLog.log('Successfully updated push impression support in NotificationServiceExtension.');
     } else {
         console.log('Push impression support already exists, not updating the code.');
     }

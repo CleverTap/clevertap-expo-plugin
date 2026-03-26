@@ -1,12 +1,14 @@
 import { ConfigPlugin, withSettingsGradle, withProjectBuildGradle } from '@expo/config-plugins';
 import { mergeContents } from "@expo/config-plugins/build/utils/generateCode";
+import * as fs from 'fs';
+import * as path from 'path';
 
 import { CleverTapLog } from '../../../support/CleverTapLog';
 import { CleverTapPluginProps } from '../../../types/types';
 
 const GOOGLE_SERVICES_CLASSPATH = "com.google.gms:google-services:4.4.2";
 const HMS_CLASSPATH = "com.huawei.agconnect:agcp:1.9.1.301";
-const AGP_CLASSPATH = "com.android.tools.build:gradle:8.6.0"
+
 
 interface ClasspathInfo {
     exists: boolean;
@@ -101,11 +103,19 @@ const withCleverTapRootGradle: ConfigPlugin<CleverTapPluginProps> = (
                     contents = updateClasspathVersion(contents, hmsInfo.lineToReplace!, newLine);
                 }
             }
-            const agpInfo = getClasspathInfo(contents, AGP_CLASSPATH, true);
-            if (agpInfo.exists) {
-                if (agpInfo.currentVersion !== AGP_CLASSPATH.split(':')[2]) {
-                    const newLine = `classpath '${AGP_CLASSPATH}'`;
-                    contents = updateClasspathVersion(contents, agpInfo.lineToReplace!, newLine);
+
+            // The agcp plugin requires com.android.tools.build:gradle with an explicit version
+            // string in the build.gradle text. Expo's template declares it versionless:
+            //   classpath('com.android.tools.build:gradle')
+            // Read the AGP version from the project's version catalog and write it as a literal.
+            const versionlessAgp = /classpath\s*\(\s*['"]com\.android\.tools\.build:gradle['"]\s*\)/;
+            if (versionlessAgp.test(contents)) {
+                const agpVersion = readAgpVersionFromProject(config.modRequest.projectRoot);
+                if (agpVersion) {
+                    contents = contents.replace(
+                        versionlessAgp,
+                        `classpath('com.android.tools.build:gradle:${agpVersion}')`
+                    );
                 }
             }
         }
@@ -120,12 +130,8 @@ const withCleverTapRootGradle: ConfigPlugin<CleverTapPluginProps> = (
         }
         if (enableHmsPush) {
             const hmsInfo = getClasspathInfo(contents, HMS_CLASSPATH);
-            const agpInfo = getClasspathInfo(contents, AGP_CLASSPATH);
             if (!hmsInfo.exists) {
                 neededClasspaths.push(`classpath '${HMS_CLASSPATH}'`);
-            }
-            if (!agpInfo.exists) {
-                neededClasspaths.push(`classpath '${AGP_CLASSPATH}'`);
             }
         }
 
@@ -218,4 +224,32 @@ const addHmsRepositoryToAllAvailableRepoBlocks = (contents: string): string => {
     });
 
     return modifiedContents;
+};
+
+/**
+ * Reads the AGP version from the project's React Native version catalog.
+ * Falls back to reading from node_modules/react-native/gradle/libs.versions.toml.
+ */
+const readAgpVersionFromProject = (projectRoot: string): string | undefined => {
+    const catalogPaths = [
+        path.join(projectRoot, 'node_modules', 'react-native', 'gradle', 'libs.versions.toml'),
+    ];
+
+    for (const catalogPath of catalogPaths) {
+        try {
+            if (fs.existsSync(catalogPath)) {
+                const content = fs.readFileSync(catalogPath, 'utf-8');
+                const match = content.match(/^agp\s*=\s*"([^"]+)"/m);
+                if (match) {
+                    CleverTapLog.log(`Found AGP version ${match[1]} from ${catalogPath}`);
+                    return match[1];
+                }
+            }
+        } catch (e) {
+            CleverTapLog.log(`Failed to read version catalog at ${catalogPath}: ${e}`);
+        }
+    }
+
+    CleverTapLog.log('Could not determine AGP version from version catalog');
+    return undefined;
 };

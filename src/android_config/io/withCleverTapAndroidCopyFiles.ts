@@ -1,8 +1,11 @@
 import { ConfigPlugin, withDangerousMod } from '@expo/config-plugins';
+import { ExpoConfig } from 'expo/config';
 import * as fs from 'fs';
 import * as path from 'path';
 import { CleverTapLog } from '../../../support/CleverTapLog';
 import { CleverTapPluginProps } from '../../../types/types';
+
+const NOTIFICATION_ICON_NAME = 'notification_icon';
 
 // Track previously copied sound files for cleanup
 const CLEVERTAP_SOUND_FILE_MARKER = 'clevertap_copied_sounds.txt';
@@ -156,8 +159,87 @@ export const withCustomNotificationSound: ConfigPlugin<CleverTapPluginProps> = (
       } catch (error) {
         CleverTapLog.error(`Error managing sound files marker: ${error instanceof Error ? error.message : String(error)}`);
       }
-      
+
       return config;
     },
   ]);
+};
+
+/**
+ * Copies notification icon PNG to Android res/drawable if not already present.
+ * Reads from plugin config `android.notificationIcon` (Expo 55+) or falls back
+ * to legacy `config.notification.icon` (Expo 53/54).
+ * Skips copy if expo-notifications or another plugin already placed the icon
+ * in any drawable-* density folder.
+ */
+export const withNotificationIcon: ConfigPlugin<CleverTapPluginProps> = (config, props) => {
+  return withDangerousMod(config, [
+    'android',
+    async (config) => {
+      const iconPath = resolveNotificationIconPath(props, config);
+      if (!iconPath) {
+        return config;
+      }
+
+      const projectRoot = config.modRequest.projectRoot;
+      const sourcePath = path.resolve(projectRoot, iconPath);
+
+      if (!fs.existsSync(sourcePath)) {
+        CleverTapLog.error(`Notification icon not found at ${sourcePath}`);
+        return config;
+      }
+
+      const resDir = path.join(projectRoot, 'android', 'app', 'src', 'main', 'res');
+
+      // Check if any drawable folder already has the notification icon
+      // (e.g., expo-notifications creates density-specific versions)
+      if (notificationIconExistsInDrawables(resDir)) {
+        CleverTapLog.log('Notification icon already exists in drawable resources, skipping copy');
+        return config;
+      }
+
+      // Copy to res/drawable/ as a fallback drawable
+      const drawablePath = path.join(resDir, 'drawable');
+      if (!fs.existsSync(drawablePath)) {
+        fs.mkdirSync(drawablePath, { recursive: true });
+      }
+
+      const destPath = path.join(drawablePath, `${NOTIFICATION_ICON_NAME}.png`);
+      fs.copyFileSync(sourcePath, destPath);
+      CleverTapLog.log(`Copied notification icon to ${destPath}`);
+
+      return config;
+    },
+  ]);
+};
+
+/**
+ * Resolves the notification icon source path from plugin config or legacy config.
+ */
+const resolveNotificationIconPath = (props: CleverTapPluginProps, config: ExpoConfig): string | undefined => {
+  // Prefer plugin config (works on all Expo versions including 55+)
+  if (props.android?.notificationIcon) {
+    return props.android.notificationIcon;
+  }
+  // Fallback: legacy config.notification.icon (Expo 53/54)
+  if ((config as any).notification?.icon) {
+    return (config as any).notification.icon;
+  }
+  return undefined;
+};
+
+/**
+ * Checks if notification_icon already exists in any drawable-* folder.
+ */
+const notificationIconExistsInDrawables = (resDir: string): boolean => {
+  if (!fs.existsSync(resDir)) return false;
+
+  const drawableDirs = fs.readdirSync(resDir).filter(d => d.startsWith('drawable'));
+  for (const dir of drawableDirs) {
+    const iconPath = path.join(resDir, dir, `${NOTIFICATION_ICON_NAME}.png`);
+    if (fs.existsSync(iconPath)) {
+      return true;
+    }
+  }
+  return false;
 };
