@@ -42,10 +42,7 @@
           "accountToken": "YOUR ACCT TOKEN",
           "accountRegion": "YOUR ACCT REGION",
           "disableAppLaunchedEvent": false,
-          "encryptionLevel": 1,
           "logLevel": 3,
-          "customIdentifiers":"Email,Phone",
-          "encryptionInTransit":true,
           "ios": {
             "mode": "development",
             "notifications": {
