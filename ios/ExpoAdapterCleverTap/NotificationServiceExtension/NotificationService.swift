@@ -9,7 +9,7 @@ class NotificationService: UNNotificationServiceExtension {
 }
 
 func getUserDefaults(_ request: UNNotificationRequest) {
-  if let appGroup = Bundle.main.object(forInfoDictionaryKey: "CTEXPO_PUSH_APP_GROUP") as? String {
+  if let appGroup = Bundle.main.object(forInfoDictionaryKey: "CTExpoAppGroup") as? String {
         
         let defaults = UserDefaults(suiteName: appGroup)
         let profilename = defaults?.string(forKey: "CTProfileName")
