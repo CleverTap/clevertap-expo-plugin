@@ -81,7 +81,13 @@ const METADATA_CONFIGS: MetadataConfig[] = [
     },
     {
         key: 'CLEVERTAP_NOTIFICATION_ICON',
-        getValue: (_, config) => config?.notification?.icon ? 'notification_icon.png' : undefined
+        getValue: (props, config) => {
+            // Prefer plugin config (Expo 55+ where notification.icon was removed from app.json)
+            if (props.android?.notificationIcon) return 'notification_icon';
+            // Fallback: legacy config.notification.icon (Expo 53/54)
+            if ((config as any)?.notification?.icon) return 'notification_icon';
+            return undefined;
+        }
     },
     {
         key: 'CLEVERTAP_BACKGROUND_SYNC',

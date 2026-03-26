@@ -34,14 +34,14 @@ export const CLEVERTAP_GRADLE_PROPERTIES_KEYS = {
 
 export const CLEVERTAP_DEPENDENCIES_DEFAULT_VERSIONS: Dependencies = {
     clevertapCore: {
-        clevertapCoreSdkVersion: '7.5.2',
+        clevertapCoreSdkVersion: '8.0.0',
         androidxCoreVersion: '1.13.0'
     },
     pushNotifications: {
         firebaseMessagingVersion: '24.0.0'
     },
     pushTemplates: {
-        clevertapPushTemplatesSdkVersion: '2.1.0'
+        clevertapPushTemplatesSdkVersion: '2.3.0'
     },
     inApp: {
         appCompatVersion: '1.7.0',
@@ -63,7 +63,7 @@ export const CLEVERTAP_DEPENDENCIES_DEFAULT_VERSIONS: Dependencies = {
         installReferrerVersion: '2.2'
     },
     hmsPush: {
-        clevertapHmsSdkVersion: '1.5.0',
+        clevertapHmsSdkVersion: '1.5.1',
         hmsPushVersion: '6.11.0.300'
     },
     googleAdId: {

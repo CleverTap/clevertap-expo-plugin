@@ -1,5 +1,6 @@
 export interface Android{
     features : Features;
+    notificationIcon?: string;  // Path to notification icon PNG (e.g. "./assets/notification-icon.png")
     customNotificationSound?: string | string[];
     backgroundSync?: string;
     defaultNotificationChannelId?: string;
