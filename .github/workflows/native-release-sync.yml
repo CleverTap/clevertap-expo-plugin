@@ -1,0 +1,64 @@
+name: native-release-sync
+
+# Manually-dispatched entry point for syncing the CleverTap Expo plugin with a
+# new clevertap-react-native release and/or a new Expo SDK version. Thin wrapper:
+# collects the target versions and routes to the reusable workflow in the central
+# tooling repo (clevertap-wrapper-tooling). Claude runs headless there, bumps
+# versions, propagates native-integration-step changes, showcases new RN APIs in
+# CTExample, updates the compat matrix + CHANGELOG, compiles CTExample, opens a PR.
+#
+# Unlike the native bridges, the Expo plugin is a config plugin (surfaces no SDK
+# methods); it is driven by clevertap-react-native + Expo SDK versions, and the
+# required native Android/iOS SDK versions are auto-resolved from the RN release.
+#
+# Required repo secrets:
+#   CLEVERTAP_WRAPPER_SYNC_APP_ID, CLEVERTAP_WRAPPER_SYNC_PRIVATE_KEY,
+#   ANTHROPIC_API_KEY, (optional) SLACK_WEBHOOK_URL
+
+on:
+  workflow_dispatch:
+    inputs:
+      clevertap_rn_version:
+        description: 'Target clevertap-react-native version (e.g. 4.2.0).'
+        type: string
+        default: ''
+      expo_sdk_version:
+        description: 'Target Expo SDK version (e.g. 56).'
+        type: string
+        default: ''
+      release_name:
+        description: 'Optional branch suffix (defaults to today YYYY-MM-DD)'
+        type: string
+        default: ''
+      base_ref:
+        description: 'Branch to sync from / open PR against'
+        type: string
+        default: 'develop'
+      model:
+        description: 'Claude model (alias)'
+        type: choice
+        options: [sonnet, opus, haiku]
+        default: sonnet
+      skip_sync:
+        description: 'Skip Claude Sync + post-sync build (pre-sync build still runs). For debugging the pipeline without Claude cost.'
+        type: boolean
+        default: false
+
+jobs:
+  sync:
+    uses: CleverTap/clevertap-wrapper-tooling/.github/workflows/sync.yml@v1
+    with:
+      wrapper:              expo
+      clevertap_rn_version: ${{ inputs.clevertap_rn_version }}
+      expo_sdk_version:     ${{ inputs.expo_sdk_version }}
+      release_name:         ${{ inputs.release_name }}
+      base_ref:             ${{ inputs.base_ref }}
+      model:                ${{ inputs.model }}
+      skip_sync:            ${{ inputs.skip_sync }}
+      # Expo SDK 55+/RN 0.83+ need macos-15's newer Xcode/Swift to build expo-modules-core.
+      runs_on:              macos-15
+    secrets:
+      app_id:            ${{ secrets.CLEVERTAP_WRAPPER_SYNC_APP_ID }}
+      app_private_key:   ${{ secrets.CLEVERTAP_WRAPPER_SYNC_PRIVATE_KEY }}
+      anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
