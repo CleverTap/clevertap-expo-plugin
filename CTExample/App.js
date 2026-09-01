@@ -157,6 +157,7 @@ export default class App extends Component {
         { action: Actions.PUSH_EVENT, name: 'pushEvent' },
         { action: Actions.RECORD_EVENT_WITH_NESTED_PROPERTIES, name: 'recordEvent with nested properties' },
         { action: Actions.PUSH_CHARGED_EVENT, name: 'pushChargedEvent' },
+        { action: Actions.UNMUTE, name: 'unmute' },
       ],
     },
     {
@@ -257,6 +258,7 @@ export default class App extends Component {
           action: Actions.INBOX_NOTIFICATION_CLICKED,
           name: 'pushInboxNotificationClickedEvent',
         },
+        { action: Actions.FETCH_INBOX, name: 'fetchInbox' },
       ],
     },
     {
@@ -317,6 +319,7 @@ export default class App extends Component {
         { action: Actions.IN_APPS_SUSPEND, name: 'suspendInAppNotifications' },
         { action: Actions.IN_APPS_DISCARD, name: 'discardInAppNotifications' },
         { action: Actions.IN_APPS_RESUME, name: 'resumeInAppNotifications' },
+        { action: Actions.IN_APPS_DISMISS_PIP, name: 'dismissPipInApp' },
       ],
     },
     {
@@ -331,6 +334,10 @@ export default class App extends Component {
       subCategory: [
         { action: Actions.DISPLAY_UNIT_ID, name: 'getUnitID' },
         { action: Actions.ALL_DISPLAY_UNITS, name: 'getAllDisplayUnits' },
+        {
+          action: Actions.DISPLAY_UNIT_ELEMENT_CLICKED,
+          name: 'pushDisplayUnitElementClickedEventForID',
+        },
       ],
     },
     {
@@ -475,6 +482,9 @@ export default class App extends Component {
       case Actions.INBOX_ALL_MESSAGES:
         AppUtils.Get_All_InboxMessages();
         break;
+      case Actions.FETCH_INBOX:
+        AppUtils.fetchInbox();
+        break;
       case Actions.INBOX_UNREAD_MESSAGES:
         AppUtils.get_All_InboxUnreadMessages();
         break;
@@ -538,6 +548,9 @@ export default class App extends Component {
       case Actions.ALL_DISPLAY_UNITS:
         AppUtils.getAllDisplayUnits();
         break;
+      case Actions.DISPLAY_UNIT_ELEMENT_CLICKED:
+        AppUtils.pushDisplayUnitElementClickedEventForID();
+        break;
       case Actions.PRODUCT_CONFIG_FETCH:
         AppUtils.fetch();
         break;
@@ -585,6 +598,12 @@ export default class App extends Component {
         break;
       case Actions.IN_APPS_RESUME:
         CleverTap.resumeInAppNotifications();
+        break;
+      case Actions.IN_APPS_DISMISS_PIP:
+        CleverTap.dismissPipInApp();
+        break;
+      case Actions.UNMUTE:
+        CleverTap.unmute();
         break;
       case Actions.ENABLE_PERSONALIZATION:
         AppUtils.enablePersonalization();

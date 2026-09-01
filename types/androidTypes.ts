@@ -7,6 +7,8 @@ export interface Android{
     inAppExcludeActivities?: string;  // Comma-separated activity names
     sslPinning?: string;  // "0" or "1"
     registerActivityLifecycleCallbacks?: boolean;
+    inAppFragmentlessBanners?: boolean;  // Renders custom-HTML header/footer in-apps when the host Activity is not a FragmentActivity
+
 }
 export interface Features {
     

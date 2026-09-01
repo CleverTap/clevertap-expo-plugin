@@ -1,6 +1,20 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+### [Version 1.1.0](https://github.com/CleverTap/clevertap-expo-plugin/releases/tag/1.1.0) (September 1 2026)
+
+#### Added
+- Adds support for Expo SDK [57.0.0](https://expo.dev/changelog/sdk-57) and React Native [0.86](https://github.com/facebook/react-native/releases/tag/v0.86.3)
+- Adds support for CleverTap React Native SDK [4.3.0](https://github.com/CleverTap/clevertap-react-native/blob/master/CHANGELOG.md#version-430-august-20-2026)
+
+#### Android Platform ####
+  - Adds support for CleverTap Android SDK [8.4.1](https://github.com/CleverTap/clevertap-android-sdk/blob/master/docs/CTCORECHANGELOG.md#version-841-august-7-2026)
+  - Adds support for CleverTap Push Templates SDK [2.5.0](https://github.com/CleverTap/clevertap-android-sdk/blob/master/docs/CTPUSHTEMPLATESCHANGELOG.md#version-250-july-28-2026)
+  - Adds `android.inAppFragmentlessBanners` config option, which writes the `CLEVERTAP_INAPP_FRAGMENTLESS_BANNERS` manifest flag so custom-HTML header and footer in-apps render when the host Activity is not a `FragmentActivity`. Off by default.
+
+#### iOS Platform ####
+  - Adds support for CleverTap iOS SDK [7.8.1](https://github.com/CleverTap/clevertap-ios-sdk/blob/master/CHANGELOG.md#version-781-august-7-2026), resolved transitively through `clevertap-react-native`.
+
 ### [Version 1.0.0](https://github.com/CleverTap/clevertap-expo-plugin/releases/tag/1.0.0) (March 26, 2026)
 
 #### Added
