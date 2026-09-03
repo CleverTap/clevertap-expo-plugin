@@ -30,6 +30,7 @@ To ensure smooth integration of the CleverTap Expo plugin, please reference the 
 | 0.0.3                         | 53.0.0           | 0.79                 | 3.7.0                              |
 | 0.0.4                         | 53.0.0           | 0.79                 | 3.7.0                              |
 | 1.0.0                         | 55.0.0           | 0.83                 | 4.0.0                              |
+| 1.1.0                         | 57.0.0           | 0.86                 | 4.3.0                              |
 
 ## 🚀 Install and Integration
 
@@ -83,6 +84,7 @@ In your `app.json` file, add the CleverTap Expo Plugin configuration. Below is a
            "defaultNotificationChannelId": "default_channel", 
            "inAppExcludeActivities": "SplashActivity", 
            "sslPinning": "1", 
+           "inAppFragmentlessBanners": false,
            "registerActivityLifecycleCallbacks": true 
           },
            "ios": {
@@ -148,6 +150,7 @@ The CleverTap Expo plugin supports a wide range of configuration options to cust
 | android.defaultNotificationChannelId | string | Specify a default notification channel ID for push notifications. This channel will be used as a fallback when a push notification specifies a channel that doesn't exist in the app, ensuring notifications are always displayed. | Default is null (falls back to a CleverTap created "Miscellaneous" channel if no valid channel is found). |
 | android.inAppExcludeActivities | string | Comma-separated list of activities where in-app messages should not be shown. | Default is null (shows in-apps in all activities). |
 | android.sslPinning | string | Set to "1" to enable SSL pinning for added security. | Default is "0" (SSL pinning disabled). |
+| android.inAppFragmentlessBanners | boolean | Set to true to let custom-HTML header and footer in-app notifications render when the host Activity is not a `FragmentActivity` (for example Unity or Unreal game engines). Requires CleverTap Android SDK v8.4.1 or above. | Default is false (header/footer in-apps require a `FragmentActivity`). |
 | android.registerActivityLifecycleCallbacks | boolean |  Register activity lifecycle callbacks automatically. When enabled, CleverTap will automatically register for Android activity lifecycle events. This is strongly recommended as many CleverTap features depend on these callbacks to function properly, including session tracking, in-app notifications, and user engagement metrics. | Default is true (lifecycle callbacks enabled). |
 
 #### iOS-Specific Configuration
