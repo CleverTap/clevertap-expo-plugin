@@ -287,6 +287,14 @@ export const Get_All_InboxMessages = () => {
     });
 };
 
+export const fetchInbox = () => {
+    // Trigger an on-demand App Inbox refresh. Throttled to once every 5 minutes.
+    CleverTap.fetchInbox((err, success) => {
+        console.log('Fetch Inbox result: ', success, err);
+        showToast(`Fetch Inbox result: ${success}`);
+    });
+};
+
 export const get_All_InboxUnreadMessages = () => {
     // Get all unread messages
     CleverTap.getUnreadInboxMessages((err, res) => {
@@ -519,6 +527,15 @@ export const getAllDisplayUnits = () => {
         // Uncomment to access payload.
         // printDisplayUnitsPayload(res);
     });
+};
+
+export const pushDisplayUnitElementClickedEventForID = () => {
+    // Records a `Notification Clicked` event for a single element inside a Display Unit.
+    // `wzrk_element_id` comes from the clicked action's `metadata` in the Display Unit payload.
+    CleverTap.pushDisplayUnitElementClickedEventForID('unit_id_1', {
+        wzrk_element_id: 'cta_1',
+    });
+    showToast('Display Unit element clicked event recorded');
 };
 
 // Product Config

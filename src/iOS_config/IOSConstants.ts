@@ -1,6 +1,3 @@
-export const DEPLOYMENT_TARGET = "11.0"; //Used as default value
-export const TARGETED_DEVICE_FAMILY = `"1,2"`; //Used as default value
-
 export const DEFAULT_BUNDLE_VERSION = '1';
 export const DEFAULT_BUNDLE_SHORT_VERSION = '1.0';
 export const TARGET_PODFILE_REGEX = /clevertap-react-native/;

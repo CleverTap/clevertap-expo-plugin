@@ -134,6 +134,10 @@ const METADATA_CONFIGS: MetadataConfig[] = [
     {
         key: 'CLEVERTAP_ENCRYPTION_IN_TRANSIT',
         getValue: (props) => props.encryptionInTransit ? "1" : undefined
+    },
+    {
+        key: 'CLEVERTAP_INAPP_FRAGMENTLESS_BANNERS',
+        getValue: (props) => props.android?.inAppFragmentlessBanners ? "1" : undefined
     }
 ];
 

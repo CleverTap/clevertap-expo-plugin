@@ -4,10 +4,6 @@ export type iOS = {
     */
     mode: string;
     /**
-    * (optional) TARGETED_DEVICE_FAMILY value to be used when adding the iOS NSE and NCE eg: "1,2" for iPhone/ iPad.
-    */
-    deviceFamily?: string;
-    /**
     * (optional) Use to disable the generation of CleverTap ID.
     */
     disableIDFV?: boolean;
