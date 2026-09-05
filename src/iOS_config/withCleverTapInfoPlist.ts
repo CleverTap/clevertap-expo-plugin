@@ -42,7 +42,8 @@ export const withCleverTapInfoPlist: ConfigPlugin<CleverTapPluginProps> = (
       config.modResults.CleverTapDisableAppLaunched = clevertapProps.disableAppLaunchedEvent;
       CleverTapLog.log(`Disabling the "App Launched" event reporting`);
     }
-    if (clevertapProps.encryptionLevel) {
+    // Compare against undefined so level 0 (None) is still written to the plist.
+    if (clevertapProps.encryptionLevel !== undefined) {
       config.modResults.CleverTapEncryptionLevel = clevertapProps.encryptionLevel;
       CleverTapLog.log(`Configuring app with encryption level: ${clevertapProps.encryptionLevel}`);
     }

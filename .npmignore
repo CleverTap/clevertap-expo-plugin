@@ -1,5 +1,6 @@
 node_modules/
 CTExample/
+.claude/
 .expo/
 .idea
 android/.gradle
