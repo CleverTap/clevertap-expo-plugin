@@ -125,7 +125,7 @@ The CleverTap Expo plugin supports a wide range of configuration options to cust
 | accountRegion | string | Optional. Your CleverTap account region, e.g., "in1", "us1", "sg1", etc. | If not specified, region is determined automatically based on your account. |
 | disableAppLaunchedEvent | boolean | Optional. Set to true to disable automatic App Launched event tracking. | Default is false (App Launched event is tracked). |
 | logLevel | number | Optional. The logging level. | Default is -1 (all logging disabled). Set to 0 for minimal SDK integration logging, 2 for debug output, or 3 for verbose output. |
-| encryptionLevel | number | Optional. Set to 1 to enable encryption of PII data. | Default is 0 (no encryption). |
+| encryptionLevel | number | Optional. `0` no encryption, `1` encrypts PII data (Name, Email, Identity, Phone), `2` encrypts all data including non-PII. | Default is 0 (no encryption). |
 | encryptionInTransit | boolean | Optional. Set to true to enable encryption over the network for PII data. | Default is false. |
 | proxyDomain | string | Optional. Your custom proxy domain, e.g., "analytics.yourdomain.com". | Default is null (uses standard CleverTap endpoints). |
 | spikyProxyDomain | string | Optional. Your custom spiky proxy domain for push impression events. | Default is null (uses standard CleverTap endpoints). |
