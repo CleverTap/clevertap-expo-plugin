@@ -60,6 +60,7 @@
           "android": {
             "customNotificationSound": "expo_sound.mp3",
             "registerActivityLifecycleCallbacks": true,
+            "inAppFragmentlessBanners": true,
             "features": {
               "enablePush": true
             }

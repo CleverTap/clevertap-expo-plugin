@@ -37,7 +37,9 @@ export type CleverTapPluginProps = {
    */
   handshakeDomain?: string;
   /**
-   * (optional) Use to set encryption level for PII data. eg: 1/ 0 where 1 means Medium and 0 means None.
+   * (optional) Use to set the encryption level for locally stored data.
+   * `0` None, `1` Medium encrypts PII data (Name, Email, Identity, Phone),
+   * `2` High encrypts all data including non-PII.
    */
   encryptionLevel?: CleverTapEncryptionLevel;
   /**
@@ -53,7 +55,14 @@ export type CleverTapPluginProps = {
   android: Android;
 };
 
+/**
+* Defines the level of encryption applied to data stored by CleverTap.
+* None: No encryption is applied. Data is stored in plain text.
+* Medium: Encrypts personally identifiable information (PII), including Name, Email, Identity, and Phone.
+* High: Encrypts all stored data, including both PII and non-PII data.
+*/
 enum CleverTapEncryptionLevel {
   None = 0,
   Medium = 1,
+  High = 2,
 }
