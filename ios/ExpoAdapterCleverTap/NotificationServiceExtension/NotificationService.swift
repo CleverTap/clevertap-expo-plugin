@@ -20,7 +20,7 @@ func getUserDefaults(_ request: UNNotificationRequest) {
         var profileDict = ["Name": profilename, "Email": profileEmail, "Identity": profileIdentity, "Phone": profilePhone].compactMapValues { $0 }
         
         if !profileDict.isEmpty {
-            CleverTap.sharedInstance()?.profilePush(profileDict)
+            CleverTap.sharedInstance()?.onUserLogin(profileDict)
         }
     }
     CleverTap.sharedInstance()?.recordNotificationViewedEvent(withData: request.content.userInfo)
