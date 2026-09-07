@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-### [Version 1.1.0](https://github.com/CleverTap/clevertap-expo-plugin/releases/tag/1.1.0) (September 4 2026)
+### [Version 1.1.0](https://github.com/CleverTap/clevertap-expo-plugin/releases/tag/1.1.0) (September 7 2026)
 
 #### Added
 - Adds support for Expo SDK [57.0.0](https://expo.dev/changelog/sdk-57) and React Native [0.86](https://github.com/facebook/react-native/releases/tag/v0.86.3)
